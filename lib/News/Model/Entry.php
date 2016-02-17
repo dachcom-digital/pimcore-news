@@ -30,7 +30,17 @@ class Entry extends Concrete {
         return null;
     }
 
-    public function getLatest($category = null, $limit = 0, $sort = [
+    /**
+     * Get News from the Category with Paging
+     *
+     * @param int                                $latest
+     * @param \Pimcore\Model\Object\NewsCategory $category
+     * @param int                                $limit
+     * @param array                              $sort
+     *
+     * @return array
+     */
+    public function getLatest($latest = 0, $category = null, $limit = 0, $sort = [
         'field' => 'date',
         'dir'   => 'asc'
     ]) {
@@ -39,25 +49,27 @@ class Entry extends Concrete {
 
         $list = new Object\NewsEntry\Listing();
 
-        $list->setOrderKey($sort['field']);
-        $list->setOrder($sort['dir']);
+        $where = "name IS NOT NULL";
+
+        if ($latest) {
+            $where .= " AND latest = 1";
+        }
 
         if ($category && $category instanceof \Pimcore\Model\Object\NewsCategory) {
 
-            $list->setCondition("name IS NOT NULL AND o_published = 1 AND latest = 1 AND categories LIKE '%," . $category->getId() . ",%'");
+            $where .= " AND categories LIKE '%," . $category->getId() . ",%' ";
 
         }
-        else {
 
-            $list->setCondition('name IS NOT NULL AND o_published = 1 AND latest = 1');
-
-        }
+        $list->setCondition($where);
 
         if ((int)$limit == 0) {
             $limit = $settings['maxItems'];
         }
 
         $list->setLimit($limit);
+        $list->setOrderKey($sort['field']);
+        $list->setOrder($sort['dir']);
 
         return $list->getObjects();
     }
@@ -65,35 +77,37 @@ class Entry extends Concrete {
     /**
      * Get News from the Category with Paging
      *
+     * @param int   $latest
+     * @param \Pimcore\Model\Object\NewsCategory $category
      * @param int   $page
      * @param int   $itemsPerPage
      * @param array $sort
-     * @param bool  $includeChildCategories
      *
      * @return \Zend_Paginator
      * @throws \Zend_Paginator_Exception
      */
-    public function getEntriesPaging($page = 0, $itemsPerPage = 10, $sort = array(
-        "name"      => "name",
-        "direction" => "asc"
-    ), $includeChildCategories = false) {
+    public function getEntriesPaging($latest = 0, $category = null, $page = 0, $itemsPerPage = 10, $sort = array(
+        'field' => 'date',
+        'dir'   => 'asc'
+    )) {
         $list = new Object\NewsEntry\Listing();
 
-        if (!$includeChildCategories) {
-            $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
-        } else {
-            $categories = $this->getCatChilds();
-            $categoriesWhere = array();
+        $where = "name IS NOT NULL ";
 
-            foreach ($categories as $cat) {
-                $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
-            }
-
-            $list->setCondition("enabled = 1 AND (" . implode(" OR ", $categoriesWhere) . ")");
+        if ($latest) {
+            $where .= " AND latest = 1 ";
         }
 
-        $list->setOrderKey($sort['name']);
-        $list->setOrder($sort['direction']);
+        if ($category) {
+
+            $where .= " AND categories LIKE '%," . $category->getId() . ",%' ";
+
+        }
+
+        $list->setCondition($where);
+
+        $list->setOrderKey($sort['field']);
+        $list->setOrder($sort['dir']);
 
         $paginator = \Zend_Paginator::factory($list);
         $paginator->setCurrentPageNumber($page);

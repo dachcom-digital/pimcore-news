@@ -6,7 +6,7 @@ use Pimcore\Model\Document;
 
 class News extends Document\Tag\Area\AbstractArea {
 
-    public function action () {
+    public function action() {
 
         $news = new \News\Model\Entry();
 
@@ -16,22 +16,41 @@ class News extends Document\Tag\Area\AbstractArea {
         $this->getView()->newsView = $view;
 
         if ($view == 'latest') {
-            $this->getView()->news = $news->getLatest(
-                $this->getView()->href("category")->getElement(),
-                $this->getView()->numeric('limit')->getData()
-            );
-        }
-        else if ($view == 'detail') {
-            $this->getView()->news = $news->getEntriesPaging();
-        }
+            $this->getView()->news = $news->getLatest($this->getView()->checkbox('latest')->getData(), $this->getView()->href("category")->getElement(), $this->getView()->numeric('limit')->getData());
+        } else {
+            if ($view == 'list') {
+                $page = $this->getRequestParam("page", 0);
+                $perPage = $this->getRequestParam("perPage", $this->getView()->numeric('limit')->getData());
 
+                $this->getView()->page = $page;
+                $this->getView()->perPage = $perPage;
+                $this->getView()->category = $this->getView()->href("category")->getElement();
+
+                $this->getView()->paginator = $news->getEntriesPaging($this->getView()->checkbox('latest')->getData(), $this->getView()->href("category")->getElement(), $page, $perPage);
+            }
+        }
     }
 
-    public function getBrickHtmlTagOpen($brick){
+    /**
+     * @param string $paramName
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getRequestParam($paramName, $default = null) {
+        $value = $this->getParam($paramName);
+        if ((null === $value || '' === $value) && (null !== $default)) {
+            $value = $default;
+        }
+
+        return $value;
+    }
+
+    public function getBrickHtmlTagOpen($brick) {
         return '<div class="news-' . $this->getView()->select('view')->getData() . '">';
     }
 
-    public function getBrickHtmlTagClose($brick){
+    public function getBrickHtmlTagClose($brick) {
         return '</div>';
     }
 }
