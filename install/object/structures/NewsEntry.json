@@ -73,7 +73,7 @@
 								"visibleSearch":false
 							},
 							{
-								"fieldtype":"datetime",
+								"fieldtype":"date",
 								"queryColumnType":"bigint(20)",
 								"columnType":"bigint(20)",
 								"phpdocType":"\\Pimcore\\Date",
@@ -432,7 +432,7 @@
 										"mandatory":false,
 										"noteditable":false,
 										"index":false,
-										"locked":false,
+										"locked":null,
 										"style":"",
 										"permissions":null,
 										"datatype":"data",
@@ -496,7 +496,7 @@
 										"mandatory":false,
 										"noteditable":false,
 										"index":false,
-										"locked":null,
+										"locked":false,
 										"style":"",
 										"permissions":null,
 										"datatype":"data",

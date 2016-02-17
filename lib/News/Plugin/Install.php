@@ -31,10 +31,7 @@ class Install {
     public function createConfig() {
 
         Configuration::set("news_latest_settings", [
-            'maxItems' => 3,
-            'paginate' => [
-                'itemsPerPage' => 10
-            ]
+            'maxItems' => 3
         ]);
         Configuration::set("news_list_settings", [
             'maxItems' => 0,
