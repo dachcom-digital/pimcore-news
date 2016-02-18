@@ -77,7 +77,6 @@ class Entry extends Concrete {
     /**
      * Get News from the Category with Paging
      *
-     * @param int   $latest
      * @param \Pimcore\Model\Object\NewsCategory $category
      * @param int   $page
      * @param int   $itemsPerPage
@@ -86,17 +85,13 @@ class Entry extends Concrete {
      * @return \Zend_Paginator
      * @throws \Zend_Paginator_Exception
      */
-    public function getEntriesPaging($latest = 0, $category = null, $page = 0, $itemsPerPage = 10, $sort = array(
+    public function getEntriesPaging($category = null, $page = 0, $itemsPerPage = 10, $sort = array(
         'field' => 'date',
         'dir'   => 'asc'
     )) {
         $list = new Object\NewsEntry\Listing();
 
         $where = "name IS NOT NULL ";
-
-        if ($latest) {
-            $where .= " AND latest = 1 ";
-        }
 
         if ($category) {
 

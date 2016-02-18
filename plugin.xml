@@ -17,8 +17,5 @@
         <pluginJsPaths>
             <path>/plugins/News/static/js/startup.js</path>
         </pluginJsPaths>
-        <pluginCssPaths>
-            <path>/plugins/News/static/css/news.css</path>
-        </pluginCssPaths>
     </plugin>
 </zend-config>
