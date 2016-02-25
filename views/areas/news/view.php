@@ -1,1 +1,1 @@
-<?php $this->template('news/' . $this->newsView . '.php', ['news' => $this->news]);
+<?= $this->template('news/latest.php', ['news' => $this->news]); ?>

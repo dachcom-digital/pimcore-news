@@ -40,7 +40,7 @@ class Entry extends Concrete {
      *
      * @return array
      */
-    public function getLatest($latest = 0, $category = null, $limit = 0, $sort = [
+    public function getLatestNews($latest = 0, $category = null, $limit = 0, $sort = [
         'field' => 'date',
         'dir'   => 'asc'
     ]) {

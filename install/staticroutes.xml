@@ -3,12 +3,12 @@
     <routes>
         <route>
             <name>news_detail</name>
-            <pattern>/\/(.*?)\/(.*?)\/(.*?)\/detail\/(.*?)\-([0-9]+)/</pattern>
-            <reverse>/%country/%lang/%path/detail/%name-%news</reverse>
+            <pattern>/\/(.*?)\/(.*?)\/detail\/(.*?)\-([0-9]+)/</pattern>
+            <reverse>/%lang/%path/detail/%name-%news</reverse>
             <module>News</module>
             <controller>news</controller>
             <action>detail</action>
-            <variables>country,lang,path,name,news</variables>
+            <variables>lang,path,name,news</variables>
             <priority>5</priority>
         </route>
     </routes>

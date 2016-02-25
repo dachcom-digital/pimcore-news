@@ -22,10 +22,17 @@ class Install {
 
     public function isInstalled() {
 
-        $folder = Folder::getByPath("/news");
         $configFile = \Pimcore\Config::locateConfigFile('news_configurations');
 
-        return ($folder && is_file($configFile . '.php'));
+        if (is_file($configFile . '.php')) {
+
+            $isInstalled = Configuration::get("news_is_installed");
+
+            if ($isInstalled) return true;
+
+        }
+
+        return false;
     }
 
     public function createConfig() {
@@ -33,12 +40,15 @@ class Install {
         Configuration::set("news_latest_settings", [
             'maxItems' => 3
         ]);
+
         Configuration::set("news_list_settings", [
             'maxItems' => 0,
             'paginate' => [
                 'itemsPerPage' => 10
             ]
         ]);
+
+        Configuration::set("news_is_installed", true);
     }
 
     public function removeConfig() {

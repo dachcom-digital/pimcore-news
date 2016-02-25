@@ -8,11 +8,12 @@ class News extends Document\Tag\Area\AbstractArea {
 
     public function action() {
 
-        $news = new \News\Model\Entry();
+        $news = new \Pimcore\Model\Object\NewsEntry();
 
-        $this->getView()->newsDetail = $this->getView()->href('detail')->getData();
+        $this->view->detailPage = $this->view->href('detail')->getElement();
 
-        $this->getView()->news = $news->getLatest($this->getView()->checkbox('latest')->getData(), $this->getView()->href("category")->getElement(), $this->getView()->numeric('limit')->getData());
+        $this->view->news = $news->getLatestNews($this->view->checkbox('latest')->getData(), $this->view->href("category")->getElement(), $this->view->numeric('limit')->getData());
+
     }
 
 }

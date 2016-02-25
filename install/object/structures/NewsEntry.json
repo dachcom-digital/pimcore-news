@@ -123,8 +123,8 @@
 									},
 									{
 										"fieldtype":"textarea",
-										"width":"",
-										"height":"",
+										"width":400,
+										"height":160,
 										"queryColumnType":"longtext",
 										"columnType":"longtext",
 										"phpdocType":"string",
@@ -146,7 +146,7 @@
 									{
 										"fieldtype":"wysiwyg",
 										"width":"",
-										"height":"",
+										"height":400,
 										"queryColumnType":"longtext",
 										"columnType":"longtext",
 										"phpdocType":"string",
@@ -432,7 +432,7 @@
 										"mandatory":false,
 										"noteditable":false,
 										"index":false,
-										"locked":null,
+										"locked":false,
 										"style":"",
 										"permissions":null,
 										"datatype":"data",

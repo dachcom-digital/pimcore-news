@@ -1,3 +1,6 @@
+<?php
+$settings = \News\Model\Configuration::get('news_latest_settings');
+?>
 
 <div class="row">
     <div class="col-xs-12">
@@ -7,39 +10,17 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-12">
         <label><?= $this->translate('Max records displayed') ?></label><br/>
         <?php
         if ($this->editmode) {
             if ($this->numeric('limit')->isEmpty()) {
-                $this->numeric('limit')->setDataFromResource('0');
+                $this->numeric('limit')->setDataFromResource($settings['maxItems']);
             }
         }
         echo $this->numeric('limit', [
             'decimalPrecision' => 0,
             'minValue'         => 0
-        ]); ?>
-    </div>
-    <div class="col-xs-6">
-        <label><?= $this->translate('What to display') ?></label><br/>
-        <?php
-        if ($this->editmode) {
-            if ($this->select('view')->isEmpty()) {
-                $this->select('view')->setDataFromResource('list');
-            }
-        }
-        echo $this->select('view', [
-            'store'  => [
-                [
-                    'list',
-                    $this->translate('List')
-                ],
-                [
-                    'latest',
-                    $this->translate('Latest')
-                ]
-            ],
-            'reload' => true
         ]); ?>
     </div>
 </div>
@@ -49,10 +30,18 @@
         <label><?= $this->translate('Category') ?></label><br/>
         <?php
         echo $this->href('category', [
-            'types' => ['object'],
+            'types'   => ['object'],
             'classes' => ['NewsCategory'],
         ]); ?>
     </div>
 </div>
 
-
+<div class="row">
+    <div class="col-xs-12">
+        <label><?= $this->translate('Detail Document') ?></label><br/>
+        <?php
+        echo $this->href('detail', [
+            'types'   => ['document']
+        ]); ?>
+    </div>
+</div>
