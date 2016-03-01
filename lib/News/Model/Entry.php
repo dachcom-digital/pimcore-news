@@ -42,7 +42,7 @@ class Entry extends Concrete {
      */
     public function getLatestNews($latest = 0, $category = null, $limit = 0, $sort = [
         'field' => 'date',
-        'dir'   => 'asc'
+        'dir'   => 'desc'
     ]) {
 
         $settings = Configuration::get('news_latest_settings');
@@ -87,7 +87,7 @@ class Entry extends Concrete {
      */
     public function getEntriesPaging($category = null, $page = 0, $itemsPerPage = 10, $sort = array(
         'field' => 'date',
-        'dir'   => 'asc'
+        'dir'   => 'desc'
     )) {
         $list = new Object\NewsEntry\Listing();
 
