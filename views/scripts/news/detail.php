@@ -69,7 +69,7 @@
                             $video->id = $this->news->getVideo()->getData();
                             $video->title = $this->news->getVideo()->getTitle();
 
-                            if ($this->news->getVideo()->getPoster()) {
+                            if ($this->news->getVideo()->getPoster() instanceof \Pimcore\Model\Asset\Image) {
 
                                 $video->poster = $this->news->getVideo()->getPoster()->getId();
                             }
