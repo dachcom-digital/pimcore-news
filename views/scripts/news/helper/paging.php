@@ -10,7 +10,7 @@
                 <?php } ?>
 
                 <?php if (isset($this->next)) { ?>
-                    <li><a href="<?= $this->url(array('page' => $this->last)); ?>">»</a></li>
+                    <li><a href="<?= $this->url(array('page' => $this->next)); ?>">»</a></li>
                 <?php } ?>
             </ul>
         </div>

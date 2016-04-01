@@ -67,7 +67,7 @@ class Install {
 
         $conf = new \Zend_Config_Xml(PIMCORE_PLUGINS_PATH . '/News/install/staticroutes.xml');
 
-        foreach ($conf->routes->route as $def) {
+        foreach ($conf->routes as $def) {
             if (!Staticroute::getByName($def->name)) {
                 $route = Staticroute::create();
                 $route->setName($def->name);
