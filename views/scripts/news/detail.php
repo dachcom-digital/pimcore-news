@@ -9,7 +9,7 @@
                 <?php $i = 0;
                 foreach ($this->news->getImages() as $image) { ?>
                     <?php if ($image instanceof \Pimcore\Model\Asset\Image) { ?>
-                        <a href="<?= $image->getFullPath(); ?>" class="item<?= (++$i > 1) ? ' hidden' : ''; ?>" data-src="<?= $image->getFullPath(); ?>">
+                        <a href="<?= $image->getFullPath(); ?>" class="item<?= (++$i > 1) ? ' hidden' : ''; ?>" data-src="<?= $image->getThumbnail("contentImage"); ?>">
                             <?php echo $image->getThumbnail("galleryImage")->getHtml(['class' => 'img-responsive']); ?>
                         </a>
                     <?php } ?>
@@ -19,7 +19,7 @@
         <div class="media-gallery">
             <?php foreach ($this->news->getImages() as $image) { ?>
                 <?php if ($image instanceof \Pimcore\Model\Asset\Image) { ?>
-                    <a href="<?= $image->getFullPath(); ?>" class="item" data-src="<?= $image->getFullPath(); ?>">
+                    <a href="<?= $image->getFullPath(); ?>" class="item" data-src="<?= $image->getThumbnail("contentImage"); ?>">
                         <?php echo $image->getThumbnail("galleryImage")->getHtml(['class' => 'img-responsive']); ?>
                     </a>
                 <?php } ?>
@@ -115,16 +115,6 @@
                 </div>
             <?php } ?>
 
-            <?php $href = $this->url([
-                'document' => $this->document,
-            ], 'default', true); ?>
-
-            <div class="backlink">
-                <a href="<?= $href ?>" class="back">
-                    <?= $this->translate('Back to list'); ?>
-                </a>
-            </div>
-
-        </div>
+         </div>
     </div>
 <?php } ?>

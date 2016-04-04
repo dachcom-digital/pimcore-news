@@ -48,6 +48,10 @@ class Install {
             ]
         ]);
 
+        Configuration::set("news_detail_page", [
+            'de' => 1
+        ]);
+
         Configuration::set("news_is_installed", true);
     }
 

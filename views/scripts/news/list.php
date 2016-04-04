@@ -1,3 +1,8 @@
+<?php
+$news_detail_page = \News\Model\Configuration::get('news_detail_page');
+$detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language]);
+?>
+
 <div class="news-list">
 
     <?php if ($this->paginator) { ?>
@@ -12,30 +17,34 @@
 
                 <?php
 
-                $lang = $this->language;
+                if ($detailPage instanceof \Pimcore\Model\Document ) {
 
-                $path = str_replace("/$lang/", '', $this->document->getFullPath());
+                    $href = $this->url([
+                        'document' => $detailPage,
+                        'name' => $news->getName(),
+                        'news' => $news->getId()
+                    ], 'news_detail');
 
-                $href = $this->url([
-                    'lang'    => $this->language,
-                    'path' => $path,
-                    'name' => $news->getName(),
-                    'news' => $news->getId()
-                ], 'news_detail');
+                }
+                else {
+                    $href = null;
+                }
                 ?>
 
                 <div class="row item">
                     <div class="image col-xs-12 col-md-5">
-                        <?php
-                        if ($news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
-                            <a href="<?= $href ?>">
-                                <?= $news->getImage()->getThumbnail("content")->getHtml(['class' => 'img-responsive']); ?>
-                            </a>
-                        <?php } else { ?>
-                            <a href="<?= $href ?>">
-                                <div class="image placeholder"></div>
-                            </a>
+                        <?php if ($this->news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
+
+                            <?php if ($href) { ?>
+                                <a href="<?= $href ?>">
+                                    <?= $this->news->getImage()->getThumbnail("newsList")->getHtml(['class' => 'img-responsive']); ?>
+                                </a>
+                            <?php } else { ?>
+                                <?= $this->news->getImage()->getThumbnail("newsList")->getHtml(['class' => 'img-responsive']); ?>
+                            <?php } ?>
+
                         <?php } ?>
+
                     </div>
                     <div class="col-xs-12 col-md-7">
                         <p class="date"><?= $news->getDate()->get('dd.MM.YYYY'); ?></p>
@@ -44,11 +53,11 @@
 
                         <p><?= $news->getLead(); ?></p>
 
-                        <a href="<?= $href ?>">
-                            <span class="more">
+                        <?php if ($href) { ?>
+                            <a href="<?= $href ?>" class="more">
                                 <?= $this->translate('Read more'); ?>
-                            </span>
-                        </a>
+                            </a>
+                        <?php } ?>
 
                     </div>
                 </div>

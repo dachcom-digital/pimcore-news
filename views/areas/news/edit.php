@@ -35,13 +35,3 @@ $settings = \News\Model\Configuration::get('news_latest_settings');
         ]); ?>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-xs-12">
-        <label><?= $this->translate('Detail Document') ?></label><br/>
-        <?php
-        echo $this->href('detail', [
-            'types'   => ['document']
-        ]); ?>
-    </div>
-</div>

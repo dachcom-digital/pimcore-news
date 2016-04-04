@@ -1,23 +1,26 @@
 <?php if ($this->news) { ?>
-    <?php $cols = (count($this->news) > 1) ? 'col-md-4' : ''; ?>
+    
+    <?php
+    $cols = (count($this->news) > 1) ? 'col-md-4' : '';
+
+    $news_detail_page = \News\Model\Configuration::get('news_detail_page');
+    $detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language]);
+    ?>
 
     <div class="news-latest row">
         <?php foreach ($this->news as $news) { ?>
 
             <?php
-            $href = null;
-
-            if ($this->detailPage) {
-                $lang = $this->language;
-
-                $path = str_replace("/$lang/", '', $this->detailPage->path . $this->detailPage->key);
+            if ($detailPage instanceof \Pimcore\Model\Document ) {
 
                 $href = $this->url([
-                    'lang'    => $this->language,
-                    'path'    => $path,
-                    'name'    => $news->getName(),
-                    'news'    => $news->getId()
+                    'document' => $detailPage,
+                    'name' => $news->getName(),
+                    'news' => $news->getId()
                 ], 'news_detail');
+            }
+            else {
+                $href = null;
             }
             ?>
 

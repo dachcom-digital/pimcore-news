@@ -48,10 +48,21 @@ class News_NewsController extends Action {
 
     public function detailAction() {
 
-        $news = new \News\Model\Entry();
+        $newsEntry = new \News\Model\Entry();
 
-        $this->view->assign('document', $this->getDocument());
-        $this->view->assign('news', $news->getById($this->getParam("news")));
+        $news = $newsEntry->getById($this->getParam('news'));
+
+        if ( !($news instanceof Object\NewsEntry)) {
+
+            throw new Exception("Object with the ID " . $this->getParam('news') . " doesn't exists");
+
+        }
+        else {
+            $this->view->assign('document', $this->getDocument());
+            $this->view->assign('news', $news->getById($this->getParam("news")));
+
+        }
+
 
     }
 
