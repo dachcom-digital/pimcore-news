@@ -94,7 +94,7 @@
                     <h2><?= $this->translate('Downloads'); ?></h2>
                     <ul class="list-unstyled">
                         <?php foreach ($this->news->getDownloads() as $download) { ?>
-                            <?php if ($download instanceof \Pimcore\Model\Asset\Document) {
+                            <?php if ($download instanceof \Pimcore\Model\Asset) {
 
                                 $dPath = $download->getFullPath();
                                 $dSize = $download->getFileSize('kb', 2);
