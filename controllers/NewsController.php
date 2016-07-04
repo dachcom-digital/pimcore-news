@@ -42,6 +42,17 @@ class News_NewsController extends Action {
 
         $newsEntry = new \News\Model\Entry();
 
+        //because this is a virtual document made with static route, we append some document properties with settings, if set.
+        $pageProperties = Configuration::get('news_detail_settings');
+
+        if( !empty($pageProperties) )
+        {
+            foreach( $pageProperties as $pagePropertyName => $pagePropertyData )
+            {
+                $this->document->setProperty($pagePropertyName, $pagePropertyData['type'], $pagePropertyData['data'], false, false);
+            }
+        }
+
         $news = $newsEntry->getById($this->getParam('news'));
 
         if ( !($news instanceof Object\NewsEntry)) {

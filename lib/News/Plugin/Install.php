@@ -49,6 +49,13 @@ class Install {
             ]
         ]);
 
+        Configuration::set('news_detail_settings', [
+            'your_page_property' => [
+                'type' => 'bool',
+                'data' => 0
+            ]
+        ]);
+
         Configuration::set('news_is_installed', true);
     }
 
