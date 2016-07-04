@@ -14,7 +14,7 @@
 
                 $href = $this->url([
                     'lang'    => $this->language,
-                    'name'    => $news->getName(),
+                    'name'    => \Pimcore\File::getValidFilename($news->getName()),
                     'news'    => $news->getId()
                 ], 'news_detail');
 
