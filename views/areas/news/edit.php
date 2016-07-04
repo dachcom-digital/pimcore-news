@@ -1,17 +1,20 @@
 <?php
 $settings = \News\Model\Configuration::get('news_latest_settings');
 ?>
+<div class="toolbox-edit-overlay">
 
-<div class="row">
-    <div class="col-xs-12">
-        <label><?= $this->translate('Top news') ?></label>
+    <div class="t-row">
+        <label><?= $this->translateAdmin('Show only top news') ?></label>
         <?= $this->checkbox('latest'); ?>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <label><?= $this->translate('Max records displayed') ?></label><br/>
+    <div class="t-row">
+        <label><?= $this->translateAdmin('Show Pagination') ?></label>
+        <?= $this->checkbox('showPagination'); ?>
+    </div>
+
+    <div class="t-row">
+        <label><?= $this->translateAdmin('Max records displayed') ?></label>
         <?php
         if ($this->editmode) {
             if ($this->numeric('limit')->isEmpty()) {
@@ -23,15 +26,13 @@ $settings = \News\Model\Configuration::get('news_latest_settings');
             'minValue'         => 0
         ]); ?>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <label><?= $this->translate('Category') ?></label><br/>
-        <?php
-        echo $this->href('category', [
+    <div class="t-row">
+        <label><?= $this->translateAdmin('Category') ?></label>
+        <?= $this->href('category', [
             'types'   => ['object'],
             'classes' => ['NewsCategory'],
         ]); ?>
     </div>
+
 </div>

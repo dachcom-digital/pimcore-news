@@ -7,6 +7,7 @@ use Pimcore\Model\Object;
 use Pimcore\Model\Object\Folder;
 use Pimcore\Model\Staticroute;
 use Pimcore\Model\User;
+use Pimcore\Tool;
 
 class Install {
 
@@ -26,7 +27,7 @@ class Install {
 
         if (is_file($configFile . '.php')) {
 
-            $isInstalled = Configuration::get("news_is_installed");
+            $isInstalled = Configuration::get('news_is_installed');
 
             if ($isInstalled) return true;
 
@@ -37,22 +38,18 @@ class Install {
 
     public function createConfig() {
 
-        Configuration::set("news_latest_settings", [
+        Configuration::set('news_latest_settings', [
             'maxItems' => 3
         ]);
 
-        Configuration::set("news_list_settings", [
+        Configuration::set('news_list_settings', [
             'maxItems' => 0,
             'paginate' => [
                 'itemsPerPage' => 10
             ]
         ]);
 
-        Configuration::set("news_detail_page", [
-            'de' => 1
-        ]);
-
-        Configuration::set("news_is_installed", true);
+        Configuration::set('news_is_installed', true);
     }
 
     public function removeConfig() {
@@ -121,7 +118,7 @@ class Install {
             }
 
             $class->setName($className);
-            $class->setUserOwner($this->_getUser()->getId());
+            $class->setUserOwner($this->_getUserId());
 
             Object\ClassDefinition\Service::importClassDefinitionFromJson($class, $json, true);
 
@@ -133,14 +130,14 @@ class Install {
 
     public function createClasses() {
 
-        $this->createClass("NewsCategory");
-        $this->createClass("NewsEntry");
+        $this->createClass('NewsCategory');
+        $this->createClass('NewsEntry');
     }
 
     public function removeClasses() {
 
-         $this->removeClass("NewsCategory");
-         $this->removeClass("NewsEntry");
+         $this->removeClass('NewsCategory');
+         $this->removeClass('NewsEntry');
     }
 
     /**
@@ -161,16 +158,16 @@ class Install {
      * @return Object\AbstractObject|Folder
      */
     public function createFolders() {
-        $root = Folder::getByPath("/news");
-        $entries = Folder::getByPath("/news/entries");
-        $categories = Folder::getByPath("/news/categories");
+        $root = Folder::getByPath('/news');
+        $entries = Folder::getByPath('/news/entries');
+        $categories = Folder::getByPath('/news/categories');
 
         if (!$root instanceof Folder) {
             $root = Folder::create([
                 'o_parentId'         => 1,
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser()->getId(),
-                'o_userModification' => $this->_getUser()->getId(),
+                'o_userOwner'        => $this->_getUserId(),
+                'o_userModification' => $this->_getUserId(),
                 'o_key'              => 'news',
                 'o_published'        => true,
             ]);
@@ -180,8 +177,8 @@ class Install {
             Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser()->getId(),
-                'o_userModification' => $this->_getUser()->getId(),
+                'o_userOwner'        => $this->_getUserId(),
+                'o_userModification' => $this->_getUserId(),
                 'o_key'              => 'entries',
                 'o_published'        => true,
             ]);
@@ -191,8 +188,8 @@ class Install {
             Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser()->getId(),
-                'o_userModification' => $this->_getUser()->getId(),
+                'o_userOwner'        => $this->_getUserId(),
+                'o_userModification' => $this->_getUserId(),
                 'o_key'              => 'categories',
                 'o_published'        => true,
             ]);
@@ -212,14 +209,17 @@ class Install {
     }
 
     /**
-     * @return User
+     * @return \Int User Id
      */
-    protected function _getUser() {
-        if (!$this->_user) {
-            $this->_user = \Zend_Registry::get('pimcore_admin_user');
+    protected function _getUserId()
+    {
+        $userId = 0;
+        $user = Tool\Admin::getCurrentUser();
+        if ($user) {
+            $userId = $user->getId();
         }
 
-        return $this->_user;
+        return $userId;
     }
 
     /**

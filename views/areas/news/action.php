@@ -10,7 +10,17 @@ class News extends Document\Tag\Area\AbstractArea {
 
         $news = new \Pimcore\Model\Object\NewsEntry();
 
-        $this->view->news = $news->getLatestNews($this->view->checkbox('latest')->getData(), $this->view->href("category")->getElement(), $this->view->numeric('limit')->getData());
+        $pageRequest = $this->getParam('page');
+
+        $showLatest = $this->view->checkbox('latest')->getData() === '1';
+        $showPagination = $this->view->checkbox('showPagination')->getData() === '1';
+
+        $category = $this->view->href('category')->getElement();
+        $itemsPerPage = $this->view->numeric('limit')->getData();
+        $page = !empty($pageRequest) ? (int) $pageRequest : 0;
+
+        $this->view->assign('showPagination', $showPagination);
+        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage,array('field'=>'date','dir'=>'desc'), $showLatest));
 
     }
 

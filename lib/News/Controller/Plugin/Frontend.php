@@ -9,7 +9,9 @@ class Frontend extends \Zend_Controller_Plugin_Abstract {
      */
     protected $initialized = false;
 
-    public function preDispatch() {
+    public function preDispatch(\Zend_Controller_Request_Abstract $request) {
+
+        parent::preDispatch($request);
 
         /** @var \Pimcore\Controller\Action\Helper\ViewRenderer $renderer */
         $renderer = \Zend_Controller_Action_HelperBroker::getExistingHelper('ViewRenderer');

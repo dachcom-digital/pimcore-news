@@ -1,8 +1,3 @@
-<?php
-$news_detail_page = \News\Model\Configuration::get('news_detail_page');
-$detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language]);
-?>
-
 <div class="news-list">
 
     <?php if ($this->paginator) { ?>
@@ -13,22 +8,16 @@ $detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language
 
         <div>
 
-            <?php foreach ($this->paginator as $news) { ?>
+            <?php foreach($this->paginator as $news) { ?>
 
                 <?php
 
-                if ($detailPage instanceof \Pimcore\Model\Document ) {
+                $href = $this->url([
+                    'lang'    => $this->language,
+                    'name'    => $news->getName(),
+                    'news'    => $news->getId()
+                ], 'news_detail');
 
-                    $href = $this->url([
-                        'document' => $detailPage,
-                        'name' => $news->getName(),
-                        'news' => $news->getId()
-                    ], 'news_detail');
-
-                }
-                else {
-                    $href = null;
-                }
                 ?>
 
                 <div class="row item">
@@ -37,10 +26,10 @@ $detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language
 
                             <?php if ($href) { ?>
                                 <a href="<?= $href ?>">
-                                    <?= $this->news->getImage()->getThumbnail("newsList")->getHtml(['class' => 'img-responsive']); ?>
+                                    <?= $this->news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
                                 </a>
                             <?php } else { ?>
-                                <?= $this->news->getImage()->getThumbnail("newsList")->getHtml(['class' => 'img-responsive']); ?>
+                                <?= $this->news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
                             <?php } ?>
 
                         <?php } ?>
@@ -66,11 +55,9 @@ $detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language
 
         </div>
 
-        <?php if ($this->itemsPerPage) { ?>
-            <div class="paginator">
-                <?=$this->paginationControl($this->paginator, 'Sliding', 'news/helper/paging.php', array( 'appendQueryString' => true)); ?>
-            </div>
-        <?php } ?>
+        <div class="paginator">
+            <?=$this->paginationControl($this->paginator, 'Sliding', 'news/helper/paging.php', array( 'appendQueryString' => true)); ?>
+        </div>
 
     <?php } else { ?>
 

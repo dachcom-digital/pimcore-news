@@ -1,56 +1,76 @@
-<?php if ($this->news) { ?>
-    
-    <?php
-    $cols = (count($this->news) > 1) ? 'col-md-4' : '';
+<div class="news-list area">
 
-    $news_detail_page = \News\Model\Configuration::get('news_detail_page');
-    $detailPage = \Pimcore\Model\Document::getById($news_detail_page[$this->language]);
-    ?>
+    <?php if ($this->paginator) { ?>
 
-    <div class="news-latest row">
-        <?php foreach ($this->news as $news) { ?>
+        <div class="news-list-content">
 
-            <?php
-            if ($detailPage instanceof \Pimcore\Model\Document ) {
+            <?php foreach ($this->paginator as $news) { ?>
+
+                <?php
 
                 $href = $this->url([
-                    'document' => $detailPage,
+                    'lang' => $this->language,
                     'name' => $news->getName(),
                     'news' => $news->getId()
                 ], 'news_detail');
-            }
-            else {
-                $href = null;
-            }
-            ?>
 
-            <div class="col-xs-12 <?= $cols ?>">
-                <div class="image">
-                    <?php if ($news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
-                        <?php if ($href) { ?>
-                            <a href="<?= $href ?>">
-                                <?= $news->getImage()->getThumbnail("content")->getHtml(['class' => 'img-responsive']); ?>
-                            </a>
-                        <?php } else { ?>
-                            <?= $news->getImage()->getThumbnail("content")->getHtml(['class' => 'img-responsive']); ?>
-                        <?php } ?>
+                ?>
 
-                    <?php } ?>
+                <div class="row item">
+
+                    <div class="col-xs-12">
+
+                        <div class="news-item">
+
+                            <div class="row">
+
+                                <div class="image col-xs-12 col-md-5">
+                                    <?php if ($news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
+                                        <a href="<?= $href ?>">
+                                            <?= $news->getImage()->getThumbnail('contentImage')->getHtml(['class' => 'img-responsive']); ?>
+                                        </a>
+                                    <?php } ?>
+                                </div>
+
+                                <div class="col-xs-12 col-md-7">
+                                    <p class="date"><?= $news->getDate()->get('dd.MM.YYYY'); ?></p>
+
+                                    <h2><?= $news->getName(); ?></h2>
+
+                                    <p><?= $news->getLead(); ?></p>
+
+                                    <a href="<?= $href ?>" class="col-xs-12">
+                                        <span class="more">
+                                            <?= $this->translate('Read more'); ?>
+                                        </span>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <h3><?= $news->getName(); ?></h3>
+            <?php } ?>
 
-                <p><?= $news->getLead(); ?></p>
+        </div>
 
-                <?php if ($href) { ?>
-                    <a href="<?= $href ?>" class="hidden-xs hidden-ty more">
-                        <?= $this->translate('Read more'); ?>
-                    </a>
-                <?php } ?>
+        <?php if ($this->showPagination) { ?>
+
+            <div class="preloader"></div>
+
+            <div class="paginator">
+                <?= $this->paginationControl($this->paginator, 'Sliding', 'news/helper/paging.php', array('appendQueryString' => true)); ?>
             </div>
 
         <?php } ?>
-    </div>
-<?php } else { ?>
-    <?= $this->translate('No News found'); ?>
-<?php } ?>
+
+    <?php } else { ?>
+
+        <?= $this->translate('No News found') ?>
+
+    <?php } ?>
+</div>
