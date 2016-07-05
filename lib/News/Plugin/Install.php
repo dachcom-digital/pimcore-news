@@ -3,9 +3,11 @@
 namespace News\Plugin;
 
 use News\Model\Configuration;
+
 use Pimcore\Model\Object;
 use Pimcore\Model\Object\Folder;
 use Pimcore\Model\Staticroute;
+use Pimcore\Model\Translation\Admin;
 use Pimcore\Model\User;
 use Pimcore\Tool;
 
@@ -16,27 +18,32 @@ class Install {
      */
     protected $_user;
 
-    /**
-     * @var \Zend_EventManager_EventManager
-     */
-    private static $eventManager;
-
-    public function isInstalled() {
-
+    public function isInstalled()
+    {
         $configFile = \Pimcore\Config::locateConfigFile('news_configurations');
 
-        if (is_file($configFile . '.php')) {
-
+        if (is_file($configFile . '.php'))
+        {
             $isInstalled = Configuration::get('news_is_installed');
 
-            if ($isInstalled) return true;
-
+            if ($isInstalled)
+            {
+                return TRUE;
+            }
         }
 
-        return false;
+        return FALSE;
     }
 
-    public function createConfig() {
+    public function createConfig()
+    {
+        $configFile = \Pimcore\Config::locateConfigFile('news_configurations');
+
+        if (is_file($configFile . '.BACKUP'))
+        {
+            rename($configFile . '.BACKUP', $configFile . '.php');
+            return TRUE;
+        }
 
         Configuration::set('news_latest_settings', [
             'maxItems' => 3
@@ -56,27 +63,39 @@ class Install {
             ]
         ]);
 
-        Configuration::set('news_is_installed', true);
+        Configuration::set('news_is_installed', TRUE);
+
+        return TRUE;
+
     }
 
-    public function removeConfig() {
-
+    public function removeConfig()
+    {
         $configFile = \Pimcore\Config::locateConfigFile('news_configurations');
 
-        if (is_file($configFile . '.php')) {
+        if (is_file($configFile . '.php'))
+        {
             rename($configFile . '.php', $configFile . '.BACKUP');
         }
+    }
+
+    public function installAdminTranslations()
+    {
+        $csv = PIMCORE_PLUGINS_PATH . '/News/install/translations/data.csv';
+        Admin::importTranslationsFromFile($csv, true, \Pimcore\Tool\Admin::getLanguages());
     }
 
     /**
      * Creates News Static Routes
      */
-    public function createStaticRoutes() {
-
+    public function createStaticRoutes()
+    {
         $conf = new \Zend_Config_Xml(PIMCORE_PLUGINS_PATH . '/News/install/staticroutes.xml');
 
         foreach ($conf->routes as $def) {
-            if (!Staticroute::getByName($def->name)) {
+
+            if (!Staticroute::getByName($def->name))
+            {
                 $route = Staticroute::create();
                 $route->setName($def->name);
                 $route->setPattern($def->pattern);
@@ -94,12 +113,16 @@ class Install {
     /**
      * Remove News Static Routes
      */
-    public function removeStaticRoutes() {
+    public function removeStaticRoutes()
+    {
         $conf = new \Zend_Config_Xml(PIMCORE_PLUGINS_PATH . '/News/install/staticroutes.xml');
 
-        foreach ($conf->routes->route as $def) {
-            $route = Staticroute::getByName($def->name);
-            if ($route) {
+        foreach ($conf->routes as $routeData)
+        {
+            $route = Staticroute::getByName($routeData->name);
+
+            if ($route)
+            {
                 $route->delete();
             }
         }
@@ -113,14 +136,17 @@ class Install {
      *
      * @return mixed|Object\ClassDefinition
      */
-    protected function createClass($className, $updateClass = false) {
+    protected function createClass($className, $updateClass = false)
+    {
         $class = Object\ClassDefinition::getByName($className);
 
-        if (!$class || $updateClass) {
+        if (!$class || $updateClass)
+        {
             $jsonFile = PIMCORE_PLUGINS_PATH . "/News/install/object/structures/$className.json";
             $json = file_get_contents($jsonFile);
 
-            if (!$class) {
+            if (!$class)
+            {
                 $class = Object\ClassDefinition::create();
             }
 
@@ -135,41 +161,24 @@ class Install {
         return $class;
     }
 
-    public function createClasses() {
-
+    public function createClasses()
+    {
         $this->createClass('NewsCategory');
         $this->createClass('NewsEntry');
-    }
-
-    public function removeClasses() {
-
-         $this->removeClass('NewsCategory');
-         $this->removeClass('NewsEntry');
-    }
-
-    /**
-     * Removes a class definition
-     *
-     * @param $name
-     */
-    protected function removeClass($name) {
-        $class = Object\ClassDefinition::getByName($name);
-
-        if ($class) {
-            $class->delete();
-        }
     }
 
     /**
      * Create needed News Folders
      * @return Object\AbstractObject|Folder
      */
-    public function createFolders() {
+    public function createFolders()
+    {
         $root = Folder::getByPath('/news');
         $entries = Folder::getByPath('/news/entries');
         $categories = Folder::getByPath('/news/categories');
 
-        if (!$root instanceof Folder) {
+        if (!$root instanceof Folder)
+        {
             $root = Folder::create([
                 'o_parentId'         => 1,
                 'o_creationDate'     => time(),
@@ -180,7 +189,8 @@ class Install {
             ]);
         }
 
-        if (!$entries instanceof Folder) {
+        if (!$entries instanceof Folder)
+        {
             Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
@@ -191,7 +201,8 @@ class Install {
             ]);
         }
 
-        if (!$categories instanceof Folder) {
+        if (!$categories instanceof Folder)
+        {
             Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
@@ -202,17 +213,7 @@ class Install {
             ]);
         }
 
-        return $root;
-    }
-
-    /**
-     * Remove News Folders
-     */
-    public function removeFolders() {
-         $blogFolder = Folder::getByPath('/news');
-         if ($blogFolder) {
-             $blogFolder->delete();
-        }
+        return TRUE;
     }
 
     /**
@@ -222,21 +223,12 @@ class Install {
     {
         $userId = 0;
         $user = Tool\Admin::getCurrentUser();
-        if ($user) {
+
+        if ($user)
+        {
             $userId = $user->getId();
         }
 
         return $userId;
-    }
-
-    /**
-     * @return \Zend_EventManager_EventManager
-     */
-    public static function getEventManager() {
-        if (!self::$eventManager) {
-            self::$eventManager = new \Zend_EventManager_EventManager();
-        }
-
-        return self::$eventManager;
     }
 }

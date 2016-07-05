@@ -1,0 +1,6 @@
+"news", "News"
+"news_name","News Plugin"
+"news_installed_successfully","News Plugin wurde erfolgreich installiert. Bitte Pimcore neuladen!"
+"news_install_failed","News Plugin konnte nicht installiert werden. Bitte überprüfe die Log-Dateien."
+"news_uninstalled_successfully","News Plugin wurde erfolgreich deinstalliert. Bitte Pimcore neuladen!"
+"news_uninstall_failed","News Plugin konnte nicht deinstalliert werden. Bitte überprüfe die Log-Dateien."
