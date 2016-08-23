@@ -12,11 +12,6 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
      */
     protected static $_translate;
 
-    /**
-     * @var string
-     */
-    private static $layout = 'news';
-
     public function preDispatch($e) {
 
         $e->getTarget()->registerPlugin(new Controller\Plugin\Frontend());
@@ -25,24 +20,6 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
     public function init()
     {
         parent::init();
-    }
-
-    /**
-     * Get News default layout
-     * @return string
-     */
-    public static function getLayout() {
-        return self::$layout;
-    }
-
-    /**
-     * Set News default layout
-     *
-     * @param $layout
-     */
-    public static function setLayout($layout)
-    {
-        self::$layout = $layout;
     }
 
     /**

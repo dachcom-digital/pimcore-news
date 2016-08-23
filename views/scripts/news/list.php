@@ -22,14 +22,14 @@
 
                 <div class="row item">
                     <div class="image col-xs-12 col-md-5">
-                        <?php if ($this->news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
+                        <?php if ($news->getImage() instanceof \Pimcore\Model\Asset\Image) { ?>
 
                             <?php if ($href) { ?>
                                 <a href="<?= $href ?>">
-                                    <?= $this->news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
+                                    <?= $news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
                                 </a>
                             <?php } else { ?>
-                                <?= $this->news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
+                                <?= $news->getImage()->getThumbnail('newsList')->getHtml(['class' => 'img-responsive']); ?>
                             <?php } ?>
 
                         <?php } ?>

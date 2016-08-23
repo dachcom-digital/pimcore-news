@@ -1,17 +1,17 @@
 <?php
 
+use Pimcore\Model\Object;
+
 use News\Plugin;
 use News\Model\Configuration;
-use Pimcore\Model\Object;
-use Website\Controller\Action;
+use News\Controller\Action;
 
 class News_NewsController extends Action {
 
     public function init() {
-        parent::init();
 
+        parent::init();
         $this->enableLayout();
-        $this->setLayout(Plugin::getLayout());
 
     }
 
