@@ -6,7 +6,7 @@
                     <li><a href="<?= $this->url(array('page' => $this->first)); ?>">«</a></li>
                 <?php } ?>
                 <?php foreach ($this->pagesInRange as $page) { ?>
-                    <li class="<?=$page == $this->current ? "active" : ""?>"><a href="<?= $this->url(array('page' => $page)); ?>"><?=$page?></a></li>
+                    <li class="<?=$page == $this->current ? 'active' : ''?>"><a href="<?= $this->url(array('page' => $page)); ?>"><?=$page?></a></li>
                 <?php } ?>
 
                 <?php if (isset($this->next)) { ?>

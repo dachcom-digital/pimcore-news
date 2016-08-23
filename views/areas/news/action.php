@@ -16,11 +16,14 @@ class News extends Document\Tag\Area\AbstractArea {
         $showPagination = $this->view->checkbox('showPagination')->getData() === '1';
 
         $category = $this->view->href('category')->getElement();
+
         $itemsPerPage = $this->view->numeric('limit')->getData();
         $page = !empty($pageRequest) ? (int) $pageRequest : 0;
 
         $this->view->assign('showPagination', $showPagination);
-        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage,array('field'=>'date','dir'=>'desc'), $showLatest));
+        $this->view->assign('category', $category);
+
+        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage, array('field' => 'date', 'dir' => 'desc'), $showLatest));
 
     }
 

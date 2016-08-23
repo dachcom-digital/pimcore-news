@@ -12,7 +12,7 @@
                     'lang' => $this->language,
                     'name' => \Pimcore\File::getValidFilename($news->getName()),
                     'news' => $news->getId()
-                ], 'news_detail');
+                ], 'news_detail', TRUE);
 
                 ?>
 
@@ -63,7 +63,7 @@
             <div class="preloader"></div>
 
             <div class="paginator">
-                <?= $this->paginationControl($this->paginator, 'Sliding', 'news/helper/paging.php', array('appendQueryString' => true)); ?>
+                <?= $this->paginationControl($this->paginator, 'Sliding', 'news/helper/paging.php', array( )); ?>
             </div>
 
         <?php } ?>
