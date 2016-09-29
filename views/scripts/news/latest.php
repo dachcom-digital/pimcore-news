@@ -33,7 +33,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-7">
-                                    <p class="date"><?= $news->getDate()->get('dd.MM.YYYY'); ?></p>
+                                    <p class="date"><?= $news->getDate()->format('d.m.Y'); ?></p>
 
                                     <h2><?= $news->getName(); ?></h2>
 

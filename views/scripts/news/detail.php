@@ -17,15 +17,15 @@
                     <?php } ?>
                 </div>
             <?php } else { ?>
-            <div class="media-gallery">
-                <?php foreach ($this->news->getImages() as $image) { ?>
-                    <?php if ($image instanceof \Pimcore\Model\Asset\Image) { ?>
-                        <a href="<?= $image->getFullPath(); ?>" class="item" data-src="<?= $image->getThumbnail('contentImage'); ?>">
-                            <?php echo $image->getThumbnail('galleryImage')->getHtml(['class' => 'img-responsive']); ?>
-                        </a>
+                <div class="media-gallery">
+                    <?php foreach ($this->news->getImages() as $image) { ?>
+                        <?php if ($image instanceof \Pimcore\Model\Asset\Image) { ?>
+                            <a href="<?= $image->getFullPath(); ?>" class="item" data-src="<?= $image->getThumbnail('contentImage'); ?>">
+                                <?php echo $image->getThumbnail('galleryImage')->getHtml(['class' => 'img-responsive']); ?>
+                            </a>
+                        <?php } ?>
                     <?php } ?>
-                <?php } ?>
-
+                </div>
             <?php } ?>
 
         <?php } ?>
