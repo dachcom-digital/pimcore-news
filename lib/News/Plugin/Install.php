@@ -51,6 +51,13 @@ class Install {
             'maxItems' => 0,
             'paginate' => [
                 'itemsPerPage' => 10
+            ],
+            'layouts' => [
+                'default' => 'list',
+                'items' => [
+                    ['list', 'List' ],
+                    ['latest', 'Latest' ]
+                ]
             ]
         ]);
 

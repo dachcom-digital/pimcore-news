@@ -4,8 +4,27 @@ $settings = \News\Model\Configuration::get('news_list_settings');
 <div class="toolbox-edit-overlay">
 
     <div class="t-row">
-        <label><?= $this->translateAdmin('show only top news') ?></label>
-        <?= $this->checkbox('latest'); ?>
+
+        <div class="t-col-half">
+            <label><?= $this->translateAdmin('show only top news') ?></label>
+            <?= $this->checkbox('latest'); ?>
+        </div>
+
+        <div class="t-col-half">
+            <label><?= $this->translateAdmin('layout') ?></label>
+            <?php
+            if ($this->editmode) {
+                if ($this->select('layout')->isEmpty()) {
+                    $this->select('layout')->setDataFromResource($settings['layouts']['default']);
+                }
+            }
+            echo $this->select("layout", [
+                "store" => $settings['layouts']['items']
+            ]); ?>
+
+        </div>
+
+
     </div>
 
     <div class="t-row">
