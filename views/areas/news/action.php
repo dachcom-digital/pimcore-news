@@ -18,13 +18,26 @@ class News extends Document\Tag\Area\AbstractArea {
         $category = $this->view->href('category')->getElement();
 
         $itemsPerPage = $this->view->numeric('limit')->getData();
-        $page = !empty($pageRequest) ? (int) $pageRequest : 0;
+
+        if ( $showPagination && ( empty($itemsPerPage) || $itemsPerPage >= $showPagination ) ) {
+            $itemsPerPage = $this->view->numeric('itemsPerPage')->getData();
+        }
+        else {
+            $showPagination = false;
+        }
+
+        $page = !empty($pageRequest) ? (int)$pageRequest : 0;
+
+        $sortBy = $this->view->select('sortby')->getData() ?: 'date';
+        $orderBy = $this->view->select('orderby')->getData() ?: 'desc';
 
         $this->view->assign('showPagination', $showPagination);
         $this->view->assign('category', $category);
 
-        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage, array('field' => 'date', 'dir' => 'desc'), $showLatest));
-
+        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage, [
+            'field' => $sortBy,
+            'dir'   => $orderBy
+        ], $showLatest));
     }
 
 }

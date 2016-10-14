@@ -13,6 +13,7 @@ class Entry extends Concrete {
      * @return array
      */
     public static function getAll() {
+
         $list = new Object\NewsEntry\Listing();
 
         return $list->getObjects();
@@ -23,6 +24,7 @@ class Entry extends Concrete {
      * @return bool|\Pimcore\Model\Asset
      */
     public function getImage() {
+
         if (count($this->getImages()) > 0) {
             return $this->getImages()[0];
         }
@@ -34,25 +36,24 @@ class Entry extends Concrete {
      * Get News from the Category with Paging
      *
      * @param \Pimcore\Model\Object\NewsCategory $category
-     * @param int   $page
-     * @param int   $itemsPerPage
-     * @param array $sort
+     * @param int                                $page
+     * @param int                                $itemsPerPage
+     * @param array                              $sort
+     * @param bool                               $showOnlyTopNews
      *
      * @return \Zend_Paginator
-     * @throws \Zend_Paginator_Exception
      */
-    public function getEntriesPaging($category = null, $page = 0, $itemsPerPage = 10, $sort = array('field'=>'date','dir'=>'desc'), $showOnlyTopNews = FALSE) {
+    public function getEntriesPaging($category = null, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
 
         $list = new Object\NewsEntry\Listing();
 
         $where = "name IS NOT NULL ";
 
-        if ($category)
-        {
+        if ($category) {
             $where .= " AND categories LIKE '%," . $category->getId() . ",%' ";
         }
 
-        if ($showOnlyTopNews === TRUE) {
+        if ($showOnlyTopNews === true) {
             $where .= " AND latest = 1";
         }
 

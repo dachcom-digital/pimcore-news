@@ -1,1 +1,1 @@
-<?= $this->template('news/latest.php', ['news' => $this->news]); ?>
+<?= $this->template('news/list.php', ['news' => $this->news]); ?>

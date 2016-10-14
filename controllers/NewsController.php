@@ -15,32 +15,6 @@ class News_NewsController extends Action {
 
     }
 
-    public function listAction()
-    {
-        $news = new \News\Model\Entry();
-        $settings = Configuration::get('news_list_settings');
-
-        $itemsPerPage = (int) $settings['maxItems']['paginate']['itemsPerPage'];
-
-        if ($this->document->getProperty('news_list_items_per_page'))
-        {
-            $itemsPerPage = (int) $this->document->getProperty('news_list_items_per_page');
-        }
-
-        $category = NULL;
-
-        if ($this->document->getProperty('news_category') && $this->document->getProperty('news_category') instanceof Object\NewsCategory)
-        {
-            $category = $this->document->getProperty('news_category');
-        }
-
-        $this->view->assign('itemsPerPage', $itemsPerPage);
-        $this->view->assign('category', $category);
-
-        $this->view->assign('paginator', $news->getEntriesPaging($category, $this->getRequestParam('page', 0), $itemsPerPage));
-
-    }
-
     public function detailAction()
     {
         $newsEntry = new \News\Model\Entry();

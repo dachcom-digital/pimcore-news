@@ -45,11 +45,9 @@ class Install {
             return TRUE;
         }
 
-        Configuration::set('news_latest_settings', [
-            'maxItems' => 3
-        ]);
-
         Configuration::set('news_list_settings', [
+            'sortby' => 'date',
+            'orderby' => 'desc',
             'maxItems' => 0,
             'paginate' => [
                 'itemsPerPage' => 10
