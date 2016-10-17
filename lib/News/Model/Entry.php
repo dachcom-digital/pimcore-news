@@ -36,6 +36,7 @@ class Entry extends Concrete {
      * Get News from the Category with Paging
      *
      * @param \Pimcore\Model\Object\NewsCategory $category
+     * @param bool                               $includeSubCategories
      * @param int                                $page
      * @param int                                $itemsPerPage
      * @param array                              $sort
@@ -43,29 +44,74 @@ class Entry extends Concrete {
      *
      * @return \Zend_Paginator
      */
-    public function getEntriesPaging($category = null, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
+    public function getEntriesPaging($category = null, $includeSubCategories = false, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
 
         $list = new Object\NewsEntry\Listing();
 
-        $where = "name IS NOT NULL ";
+        $where = 'name IS NOT NULL ';
 
-        if ($category) {
-            $where .= " AND categories LIKE '%," . $category->getId() . ",%' ";
-        }
 
         if ($showOnlyTopNews === true) {
-            $where .= " AND latest = 1";
+            $where .= 'AND latest = 1 ';
+        }
+
+        if ($category) {
+
+            $categories = $this->getCategories($category, $includeSubCategories);
+
+            if (!empty($categories)) {
+
+                $list->onCreateQuery(function (\Zend_Db_Select $query) use ($list, $categories) {
+                    $query->join(
+                        ['relations' => 'object_relations_' . $list->getClassId()],
+                        "relations.src_id = o_id AND relations.fieldname = 'categories'",
+                        ''
+                    );
+                });
+
+                $where .= 'AND relations.dest_id IN (' . implode(',', $categories) . ')';
+
+            }
+
         }
 
         $list->setCondition($where);
 
         $list->setOrderKey($sort['field']);
         $list->setOrder($sort['dir']);
+        $list->setGroupBy('o_id');
 
         $paginator = \Zend_Paginator::factory($list);
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($itemsPerPage);
 
         return $paginator;
+    }
+
+    /**
+     * @param \Pimcore\Model\Object\NewsCategory $category
+     * @param bool                               $includeSubCategories
+     *
+     * @return array|null
+     */
+    private function getCategories($category, $includeSubCategories = false) {
+
+        if (!$category) return null;
+
+        $categorise = [];
+
+        if (!$includeSubCategories) {
+            $categorise[] = $category->getId();
+        }
+        else {
+            $entries = new Object\NewsCategory\Listing();
+            $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
+
+            foreach ($entries as $entry) {
+                $categorise[] = $entry->getId();
+            }
+        }
+
+        return array_values($categorise);
     }
 }

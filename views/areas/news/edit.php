@@ -102,15 +102,23 @@ $settings = \News\Model\Configuration::get('news_list_settings');
     </div>
 
     <div class="t-row">
-        <label><?= $this->translateAdmin('category') ?></label>
-        <?= $this->href('category', [
-            'types'   => ['object'],
-            'subtypes' => [
-                'object' => ['object']
-            ],
-            'classes' => ['NewsCategory'],
-            'width'   => '100%'
-        ]); ?>
+
+        <div class="t-col-half">
+            <label><?= $this->translateAdmin('category') ?></label>
+            <?= $this->href('category', [
+                'types'   => ['object'],
+                'subtypes' => [
+                    'object' => ['object']
+                ],
+                'classes' => ['NewsCategory'],
+                'width'   => '100%'
+            ]); ?>
+        </div>
+
+        <div class="t-col-half">
+            <label><?= $this->translateAdmin('include subcategories') ?></label>
+            <?= $this->checkbox('includeSubCategories'); ?>
+        </div>
 
     </div>
 

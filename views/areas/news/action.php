@@ -14,8 +14,9 @@ class News extends Document\Tag\Area\AbstractArea {
 
         $showLatest = $this->view->checkbox('latest')->getData() === '1';
         $showPagination = $this->view->checkbox('showPagination')->getData() === '1';
+        $includeSubCategories = $this->view->checkbox('includeSubCategories')->getData() === '1';
 
-        $category = $this->view->href('category')->getElement();
+        $rootCategory = $this->view->href('category')->getElement();
 
         $itemsPerPage = $this->view->numeric('limit')->getData();
 
@@ -32,9 +33,9 @@ class News extends Document\Tag\Area\AbstractArea {
         $orderBy = $this->view->select('orderby')->getData() ?: 'desc';
 
         $this->view->assign('showPagination', $showPagination);
-        $this->view->assign('category', $category);
+        $this->view->assign('category', $rootCategory);
 
-        $this->view->assign('paginator', $news->getEntriesPaging($category, $page, $itemsPerPage, [
+        $this->view->assign('paginator', $news->getEntriesPaging($rootCategory, $includeSubCategories, $page, $itemsPerPage, [
             'field' => $sortBy,
             'dir'   => $orderBy
         ], $showLatest));
