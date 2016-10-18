@@ -98,20 +98,20 @@ class Entry extends Concrete {
 
         if (!$category) return null;
 
-        $categorise = [];
+        $categories = [];
 
         if (!$includeSubCategories) {
-            $categorise[] = $category->getId();
+            $categories[] = $category->getId();
         }
         else {
             $entries = new Object\NewsCategory\Listing();
             $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
 
             foreach ($entries as $entry) {
-                $categorise[] = $entry->getId();
+                $categories[] = $entry->getId();
             }
         }
 
-        return array_values($categorise);
+        return array_values($categories);
     }
 }
