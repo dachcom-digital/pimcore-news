@@ -50,7 +50,7 @@ class News_NewsController extends Action {
             'news'    => $news->getId()
         ], 'news_detail', TRUE);
 
-        $this->view->headTitle()->setTitle($news->getName());
+        // $this->view->headTitle()->setTitle($news->getName());
         $this->view->headMeta()->appendName('og:title', $news->getName());
         $this->view->headMeta()->appendName('og:url', $this->view->serverUrl() . $href);
         $this->view->headMeta()->appendName('og:type', 'article');

@@ -58,7 +58,7 @@ class AbstractModel extends Model\AbstractModel {
 
                 return $object;
             } catch (\Exception $e) {
-                \Logger::warning($e->getMessage());
+                \Pimcore\Logger::warning($e->getMessage());
             }
         }
 
@@ -100,7 +100,7 @@ class AbstractModel extends Model\AbstractModel {
 
                 return $object;
             } catch (\Exception $e) {
-                \Logger::warning($e->getMessage());
+                \Pimcore\Logger::warning($e->getMessage());
             }
         }
 

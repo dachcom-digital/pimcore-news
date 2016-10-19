@@ -119,6 +119,25 @@
 
         <?php } ?>
 
+
+        <?php if ($this->news->getLinks()) { ?>
+
+            <h4><?= $this->translate('Links'); ?></h4>
+
+            <div class="link-list">
+
+                <ul class="list-unstyled">
+
+                    <?php foreach ($this->news->getLinks() as $link) { ?>
+                        <li class="item"><?= $link['url']->getData(); ?></li>
+                    <?php } ?>
+
+                </ul>
+
+            </div>
+
+        <?php } ?>
+
          </div>
     </div>
 

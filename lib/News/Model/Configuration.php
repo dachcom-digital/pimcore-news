@@ -57,7 +57,7 @@ class Configuration extends AbstractModel {
                 $configurationEntry->setId(intval($id));
                 $configurationEntry->getDao()->getById();
             } catch (\Exception $e) {
-                \Logger::error($e);
+                \Pimcore\Logger::error($e);
 
                 return null;
             }
@@ -92,7 +92,7 @@ class Configuration extends AbstractModel {
         try {
             $configurationEntry->getDao()->getByKey($key);
         } catch (\Exception $e) {
-            \Logger::warn($e);
+            \Pimcore\Logger::warn($e);
 
             return null;
         }
