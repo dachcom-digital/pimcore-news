@@ -57,7 +57,7 @@ class Entry extends Concrete {
 
         if ($category) {
 
-            $categories = $this->getCategories($category, $includeSubCategories);
+            $categories = $this->getCategoriesRecursive($category, $includeSubCategories);
 
             if (!empty($categories)) {
 
@@ -94,7 +94,7 @@ class Entry extends Concrete {
      *
      * @return array|null
      */
-    private function getCategories($category, $includeSubCategories = false) {
+    private function getCategoriesRecursive($category, $includeSubCategories = false) {
 
         if (!$category) return null;
 
