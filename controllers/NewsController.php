@@ -75,7 +75,7 @@ class News_NewsController extends Action {
         $title = !empty( $mT ) ? $mT : $news->getName();
         $description = !empty( $mD ) ? $mD : ( $news->getLead() ? $news->getLead() : $news->getDescription() );
 
-        $description = trim( substr($description, 0, 200) );
+        $description = trim( substr($description, 0, 160) );
 
         $ogTitle = $title;
         $ogDescription = $description;
