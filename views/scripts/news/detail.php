@@ -119,7 +119,6 @@
 
         <?php } ?>
 
-
         <?php if ($this->news->getLinks()) { ?>
 
             <h4><?= $this->translate('Links'); ?></h4>
@@ -138,7 +137,6 @@
 
         <?php } ?>
 
-         </div>
     </div>
 
 <?php } ?>
