@@ -16,7 +16,6 @@ class News_NewsController extends Action {
 
     public function detailAction()
     {
-
         $newsEntry = new \News\Model\Entry();
 
         //because this is a virtual document made with static route, we append some document properties with settings, if set.
@@ -42,26 +41,7 @@ class News_NewsController extends Action {
             $this->view->assign('news', $news);
         }
 
-        /** @var \Pimcore\View $view */
-
-        $href = $this->view->url([
-            'lang'    => $this->view->language,
-            'name'    => \Pimcore\File::getValidFilename($news->getName()),
-            'news'    => $news->getId()
-        ], 'news_detail', TRUE);
-
-        // $this->view->headTitle()->setTitle($news->getName());
-        $this->view->headMeta()->appendName('og:title', $news->getName());
-        $this->view->headMeta()->appendName('og:url', $this->view->serverUrl() . $href);
-        $this->view->headMeta()->appendName('og:type', 'article');
-
-        if ($news->getLead()) {
-            $this->view->headMeta()->appendName('og:description', $this->view->formatHelper()->truncate( $news->getLead(), 150) );
-        }
-
-        if ($news->getImage() instanceof \Pimcore\Model\Asset\Image) {
-            $this->view->headMeta()->appendName('og:image', $this->view->serverUrl() . $news->getImage()->getThumbnail('contentImage'));
-        }
+        $this->_setSEOMeta( $news );
 
     }
 
@@ -80,6 +60,92 @@ class News_NewsController extends Action {
         }
 
         return $value;
+    }
+
+    /**
+     * @param \Pimcore\Model\Object\NewsEntry $news
+     */
+    private function _setSEOMeta( $news )
+    {
+        $href = $this->view->url([
+            'lang'    => $this->view->language,
+            'name'    => \Pimcore\File::getValidFilename($news->getName()),
+            'news'    => $news->getId()
+        ], 'news_detail', TRUE);
+
+        $mT = $news->getMetaTitle();
+        $mD = $news->getMetaDescription();
+
+        $title = !empty( $mT ) ? $mT : $news->getName();
+        $description = !empty( $mD ) ? $mD : ( $news->getLead() ? $news->getLead() : $news->getDescription() );
+
+        $description = trim( substr($description, 0, 160) );
+
+        $ogTitle = $title;
+        $ogDescription = $description;
+        $ogUrl = $this->view->serverUrl() . $href;
+        $ogType = 'article';
+
+        $ogImage = NULL;
+
+        if ($news->getImage() instanceof \Pimcore\Model\Asset\Image)
+        {
+            $ogImage = $this->view->serverUrl() . $news->getImage()->getThumbnail('contentImage');
+        }
+
+        $params = [
+            'title'             => $title,
+            'description'       => $description,
+            'og:title'          => $ogTitle,
+            'og:description'    => $ogDescription,
+            'og:url'            => $ogDescription,
+            'og:image'          => $ogImage
+        ];
+
+        $cmdEv = \Pimcore::getEventManager()->trigger('news.head.meta', NULL, $params);
+
+        if ($cmdEv->stopped())
+        {
+            $customMeta = $cmdEv->last();
+
+            if( is_array( $customMeta ) )
+            {
+                $title = $customMeta['title'];
+                $description = $customMeta['description'];
+                $ogTitle = $customMeta['og:title'];
+                $ogDescription = $customMeta['og:description'];
+                $ogUrl = $customMeta['og:url'];
+                $ogImage = $customMeta['og:image'];
+            }
+        }
+
+        $this->view->headTitle( $title );
+        $this->view->headMeta()->setName('description', $description);
+
+        if( !empty($ogTitle))
+        {
+            $this->view->headMeta()->appendName('og:title', $ogTitle);
+        }
+
+        if( !empty($ogDescription))
+        {
+            $this->view->headMeta()->appendName('og:description', $ogDescription);
+        }
+
+        if( !empty($ogUrl))
+        {
+            $this->view->headMeta()->appendName('og:url', $ogUrl);
+        }
+
+        if( !empty($ogType))
+        {
+            $this->view->headMeta()->appendName('og:type', $ogType);
+        }
+
+        if ( !is_null( $ogImage ) )
+        {
+            $this->view->headMeta()->appendName('og:image', $ogImage);
+        }
     }
 
 }
