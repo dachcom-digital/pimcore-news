@@ -67,11 +67,7 @@ class News_NewsController extends Action {
      */
     private function _setSEOMeta( $news )
     {
-        $href = $this->view->url([
-            'lang'    => $this->view->language,
-            'name'    => \Pimcore\File::getValidFilename($news->getName()),
-            'news'    => $news->getId()
-        ], 'news_detail', TRUE);
+        $href = $this->view->newsHelper()->getDetailUrl( $news );
 
         $mT = $news->getMetaTitle();
         $mD = $news->getMetaDescription();
@@ -79,7 +75,7 @@ class News_NewsController extends Action {
         $title = !empty( $mT ) ? $mT : $news->getName();
         $description = !empty( $mD ) ? $mD : ( $news->getLead() ? $news->getLead() : $news->getDescription() );
 
-        $description = trim( substr($description, 0, 160) );
+        $description = trim( substr($description, 0, 200) );
 
         $ogTitle = $title;
         $ogDescription = $description;

@@ -6,15 +6,7 @@
 
             <?php foreach ($this->paginator as $news) { ?>
 
-                <?php
-
-                $href = $this->url([
-                    'lang' => $this->language,
-                    'name' => \Pimcore\File::getValidFilename($news->getName()),
-                    'news' => $news->getId()
-                ], 'news_detail', TRUE);
-
-                ?>
+                <?php $href = $this->newsHelper()->getDetailUrl( $news ); ?>
 
                 <div class="row item">
 
@@ -36,7 +28,6 @@
                                     <p class="date"><?= $news->getDate()->format('d.m.Y'); ?></p>
 
                                     <h2><?= $news->getName(); ?></h2>
-
                                     <p><?= $news->getLead(); ?></p>
 
                                     <a href="<?= $href ?>" class="col-xs-12">

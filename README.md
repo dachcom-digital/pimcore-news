@@ -20,3 +20,5 @@ $params = [
 ];
         
 ```
+**news.detail.url**  
+Use this event to manipulate the news detail url.

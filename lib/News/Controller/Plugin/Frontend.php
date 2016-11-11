@@ -22,6 +22,7 @@ class Frontend extends \Zend_Controller_Plugin_Abstract {
 
         $view->addScriptPath(PIMCORE_PLUGINS_PATH . '/News/views/scripts');
         $view->addScriptPath(PIMCORE_PLUGINS_PATH . '/News/views/layouts');
+        $view->addHelperPath(PIMCORE_PLUGINS_PATH . '/News/lib/News/Helper/View', 'News\Helper\View');
 
         $this->initialized = true;
 
