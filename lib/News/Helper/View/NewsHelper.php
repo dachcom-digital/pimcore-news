@@ -30,8 +30,7 @@ class NewsHelper extends \Zend_View_Helper_Abstract {
         {
             $params = array_merge( [
                 'lang'      => $this->view->language,
-                'name'      => \Pimcore\File::getValidFilename($news->getName()),
-                'news'      => $news->getId()
+                'news'      => $news->getDetailUrl($this->view->language)
             ], $additionalUrlParams );
 
             $href = $this->view->url($params, 'news_detail', TRUE);

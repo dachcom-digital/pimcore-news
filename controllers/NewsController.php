@@ -18,6 +18,9 @@ class News_NewsController extends Action {
     {
         $newsEntry = new \News\Model\Entry();
 
+        $newsFragment = $this->getParam('news');
+        $language = $this->getParam('lang');
+
         //because this is a virtual document made with static route, we append some document properties with settings, if set.
         $pageProperties = Configuration::get('news_detail_settings');
 
@@ -29,11 +32,24 @@ class News_NewsController extends Action {
             }
         }
 
-        $news = $newsEntry->getById($this->getParam('news'));
+        /** @var Object\NewsEntry $solution */
+        $news = Object\NewsEntry::getByLocalizedfields( 'detailUrl', $newsFragment, $language, ['limit' => 1] );
 
-        if ( !($news instanceof Object\NewsEntry))
+        //maybe we have an old url like "news-title-xy-12" => only if activated in settings!
+        if ( !($news instanceof Object\NewsEntry) && Configuration::get('use_id_in_url_fallback') === TRUE )
         {
-            throw new Exception('Object with the ID ' . $this->getParam('news') . ' doesn\'t exists');
+            preg_match('/[0-9]+$/', $newsFragment, $versionMatch);
+
+            if( !empty( $versionMatch) && !empty( $versionMatch[0] ) )
+            {
+                $newsId = (int) $versionMatch[0];
+                $news = $newsEntry->getById( $newsId );
+            }
+        }
+
+        if ( !($news instanceof Object\NewsEntry) )
+        {
+            throw new Exception('News (' . $newsFragment . ') couldn\'t be found');
         }
         else
         {

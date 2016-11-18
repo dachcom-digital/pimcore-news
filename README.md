@@ -5,7 +5,6 @@ Pimcore News Plugin
 * Pimcore 4.3
 
 ## Events
-
 **news.head.meta**  
 Use this event to override news detail meta tags.
 

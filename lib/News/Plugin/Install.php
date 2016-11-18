@@ -68,6 +68,7 @@ class Install {
             ]
         ]);
 
+        Configuration::set('use_id_in_url_fallback', FALSE);
         Configuration::set('news_is_installed', TRUE);
 
         return TRUE;

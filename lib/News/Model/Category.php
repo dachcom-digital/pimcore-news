@@ -12,9 +12,9 @@ class Category extends Concrete {
      * Get all Categories
      * @return array
      */
-    public static function getAll() {
+    public static function getAll()
+    {
         $list = new Object\NewsCategory\Listing();
-
         return $list->getObjects();
     }
 
@@ -22,62 +22,25 @@ class Category extends Concrete {
      * Get localizedfields -
      * @return array
      */
-    public function getLocalizedfields() {
-        $preValue = $this->preGetValue("localizedfields");
+    public function getLocalizedfields()
+    {
+        $preValue = $this->preGetValue('localizedfields');
         if ($preValue !== null && !\Pimcore::inAdmin()) {
             return $preValue;
         }
-        $data = $this->getClass()->getFieldDefinition("localizedfields")->preGetData($this);
+        $data = $this->getClass()->getFieldDefinition('localizedfields')->preGetData($this);
 
         return $data;
-    }
-
-
-    public function update() {
-
-        $segments = array();
-
-        $getParents = $this->getHierarchy();
-
-        $i = 1;
-        foreach ($getParents as $category) {
-
-            $localizedFields = $category->getLocalizedfields()->getItems();
-
-            foreach ($localizedFields as $lang => $field) {
-
-                if (count($getParents) == $i) {
-                    $segments[$lang][] = $field['name'];
-                } else {
-                    $segments[$lang][] = $field['friendlyUrl'];
-                }
-            }
-
-            $i++;
-        }
-
-        foreach ($segments as $lang => $segment) {
-
-            if (!empty($segment[(count($segment) - 1)])) {
-
-                $this->setFriendlyUrl(implode('/', array_map(function ($item) {
-                    return \News\Utility::getRealFriendlyName($item);
-                }, $segment)), $lang);
-            } else {
-                $this->setFriendlyUrl(null, $lang);
-            }
-        }
-
-        parent::update();
     }
 
     /**
      * Get first level of categories
      * @return array
      */
-    public static function getFirstLevel() {
+    public static function getFirstLevel()
+    {
         $list = new Object\NewsCategory\Listing();
-        $list->setCondition("parentCategory__id is null");
+        $list->setCondition('parentCategory__id is null');
 
         return $list->getObjects();
     }
@@ -89,7 +52,8 @@ class Category extends Concrete {
      *
      * @return array
      */
-    public static function getAllChildCategories(Category $category) {
+    public static function getAllChildCategories(Category $category)
+    {
         $allChildren = array($category->getId());
 
         $loopChilds = function (Category $child) use (&$loopChilds, &$allChildren) {
@@ -114,7 +78,8 @@ class Category extends Concrete {
      *
      * @return array
      */
-    public function getEntries($includeChildCategories = false) {
+    public function getEntries($includeChildCategories = false)
+    {
         $list = new Object\NewsCategory\Listing();
 
         if (!$includeChildCategories) {
@@ -147,7 +112,8 @@ class Category extends Concrete {
     public function getEntriesPaging($page = 0, $itemsPerPage = 10, $sort = array(
         "name"      => "name",
         "direction" => "asc"
-    ), $includeChildCategories = false) {
+    ), $includeChildCategories = false)
+    {
         $list = new Object\NewsCategory\Listing();
 
         if (!$includeChildCategories) {
@@ -181,7 +147,8 @@ class Category extends Concrete {
      *
      * @return bool
      */
-    public function inCategory(Category $category, $level = 0) {
+    public function inCategory(Category $category, $level = 0)
+    {
         $mostTop = $this->getHierarchy();
         $mostTop = $mostTop[$level];
 
@@ -194,7 +161,8 @@ class Category extends Concrete {
      * Get Level of Category
      * @return int
      */
-    public function getLevel() {
+    public function getLevel()
+    {
         return count($this->getHierarchy());
     }
 
@@ -202,7 +170,8 @@ class Category extends Concrete {
      * Returns all Children from this Category
      * @return array
      */
-    public function getCatChilds() {
+    public function getCatChilds()
+    {
         return self::getAllChildCategories($this);
     }
 
@@ -210,7 +179,8 @@ class Category extends Concrete {
      * Get Category hierarchy
      * @return array
      */
-    public function getHierarchy() {
+    public function getHierarchy()
+    {
         $hierarchy = array();
 
         $category = $this;
@@ -228,7 +198,8 @@ class Category extends Concrete {
      * Get all child Categories
      * @return array
      */
-    public function getChildCategories() {
+    public function getChildCategories()
+    {
         $list = new Object\NewsCategory\Listing();
         $list->setCondition("parentCategory__id = ?", array($this->getId()));
 
@@ -241,7 +212,8 @@ class Category extends Concrete {
      * @throws \News\Exception
      * @return Category
      */
-    public function getParentCategory() {
+    public function getParentCategory()
+    {
         throw new \News\Exception("getParentCategory is not supported for " . get_class($this));
     }
 }

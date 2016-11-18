@@ -20,6 +20,15 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
     public function init()
     {
         parent::init();
+
+        \Pimcore::getEventManager()->attach(
+            'object.postAdd',
+            array('\\News\\Events\\SeoUrl', 'setObjectFrontendUrl')
+        );
+        \Pimcore::getEventManager()->attach(
+            'object.postUpdate',
+            array('\\News\\Events\\SeoUrl', 'setObjectFrontendUrl')
+        );
     }
 
     /**

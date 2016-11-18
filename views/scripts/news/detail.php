@@ -1,6 +1,7 @@
 <?php if ($this->news) { ?>
 
     <div class="news-detail">
+        
         <h1><?= $this->news->getName(); ?></h1>
 
         <?php if (count($this->news->getImages()) > 0) { ?>

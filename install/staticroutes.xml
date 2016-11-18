@@ -3,13 +3,13 @@
     <routes>
         <route>
             <name>news_detail</name>
-            <pattern>/(\w+)\/news\/(.*?)\-([0-9]+)+$/</pattern>
-            <reverse>/%lang/news/%name-%news</reverse>
+            <pattern>/(\w+)\/news\/(.*?)$/</pattern>
+            <reverse>/%lang/news/%news</reverse>
             <module>News</module>
             <controller>news</controller>
             <action>detail</action>
-            <variables>lang,path,news</variables>
-            <priority>5</priority>
+            <variables>lang,news</variables>
+            <priority>0</priority>
         </route>
     </routes>
 </zend-config>
