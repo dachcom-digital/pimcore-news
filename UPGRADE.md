@@ -1,6 +1,6 @@
 # Upgrade Notes
 
-**Update from Version 1.1.4 to Version 1.2 **  
+### Update from Version 1.1.4 to Version 1.2
 
 - Update the [static route](install/staticroutes.xml)!
 - Re-import classes from `install/object/structures`!
