@@ -4,10 +4,9 @@
 
 - Update the [static route](install/staticroutes.xml)!
 - Re-import classes from `install/object/structures`!
+- use Carbon Date (instead of `$news->getDate()->get('dd.MM.YYYY');` use `$news->getDate()->format('d.m.Y');`)
 - Do not use the url helper for creating news detail urls. just use the view helper instead:
 
 ```
-$url = $this->newsHelper()->getDetailUrl( $this->news )
-        
+$url = $this->newsHelper()->getDetailUrl( $this->news );
 ```
-- use Carbon Date (instead of `$news->getDate()->get('dd.MM.YYYY');` use `$news->getDate()->format('d.m.Y');` )
