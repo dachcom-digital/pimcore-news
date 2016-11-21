@@ -88,6 +88,42 @@ class Entry extends Concrete {
         return $paginator;
     }
 
+
+    public function getJsonLDData() {
+
+        $data = [
+            '@context' => 'http://schema.org/',
+            '@type' => 'NewsArticle',
+            'datePublished' => $this->getDate()->format('Y-m-d'),
+            'headline' => $this->getName(),
+            'description' => $this->getLead(),
+            'articleBody' => $this->getDescription()
+        ];
+
+        if ( $this->getAuthor() ) {
+            $data['author'] = $this->getAuthor();
+        }
+
+        if (count($this->getImages()) > 0) {
+
+            $image = $this->getImages()[0];
+
+            if ($image instanceof \Pimcore\Model\Asset\Image) {
+                $data['image'] = [
+                    '@type' => 'ImageObject',
+                    'url' => \Pimcore\Tool::getHostUrl() . $image->getThumbnail("galleryImage")->getPath(),
+                    'width' => $image->getThumbnail("galleryImage")->getWidth(),
+                    'height' => $image->getThumbnail("galleryImage")->getHeight(),
+                ];
+            }
+
+        }
+
+        return $data;
+
+    }
+
+
     /**
      * @param \Pimcore\Model\Object\NewsCategory $category
      * @param bool                               $includeSubCategories
