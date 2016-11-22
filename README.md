@@ -8,11 +8,11 @@ Pimcore News Plugin
 **Handcrafted Installation**   
 1. Download Plugin  
 2. Rename it to `News`  
-3. Place it in your plugins directory  
+3. Place it in your plugin directory  
 4. Activate & install it through backend 
 
 **Composer Installation**  
-1. Add code below to your `composer.json`  
+1. Add code below to your `composer.json`    
 2. Activate & install it through backend
 
 ```json

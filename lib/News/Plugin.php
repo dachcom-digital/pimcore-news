@@ -23,11 +23,11 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
 
         \Pimcore::getEventManager()->attach(
             'object.postAdd',
-            array('\\News\\Events\\SeoUrl', 'setObjectFrontendUrl')
+            array('\\News\\Event\\SeoUrl', 'setObjectFrontendUrl')
         );
         \Pimcore::getEventManager()->attach(
             'object.postUpdate',
-            array('\\News\\Events\\SeoUrl', 'setObjectFrontendUrl')
+            array('\\News\\Event\\SeoUrl', 'setObjectFrontendUrl')
         );
     }
 

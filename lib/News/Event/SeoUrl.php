@@ -1,6 +1,6 @@
 <?php
 
-namespace News\Events;
+namespace News\Event;
 
 use Pimcore\Model\Object;
 
