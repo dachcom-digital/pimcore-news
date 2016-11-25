@@ -20,19 +20,6 @@ class Entry extends Concrete {
     }
 
     /**
-     * Get Image for Product
-     * @return bool|\Pimcore\Model\Asset
-     */
-    public function getImage() {
-
-        if (count($this->getImages()) > 0) {
-            return $this->getImages()[0];
-        }
-
-        return null;
-    }
-
-    /**
      * Get News from the Category with Paging
      *
      * @param \Pimcore\Model\Object\NewsCategory $category
@@ -44,12 +31,11 @@ class Entry extends Concrete {
      *
      * @return \Zend_Paginator
      */
-    public function getEntriesPaging($category = null, $includeSubCategories = false, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
+    public static function getEntriesPaging($category = null, $includeSubCategories = false, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
 
         $list = new Object\NewsEntry\Listing();
 
-        $where = 'name IS NOT NULL ';
-
+        $where = 'name <> "" ';
 
         if ($showOnlyTopNews === true) {
             $where .= 'AND latest = 1 ';
@@ -57,7 +43,7 @@ class Entry extends Concrete {
 
         if ($category) {
 
-            $categories = $this->getCategoriesRecursive($category, $includeSubCategories);
+            $categories = self::getCategoriesRecursive($category, $includeSubCategories);
 
             if (!empty($categories)) {
 
@@ -88,6 +74,45 @@ class Entry extends Concrete {
         return $paginator;
     }
 
+    /**
+     * @param \Pimcore\Model\Object\NewsCategory $category
+     * @param bool                               $includeSubCategories
+     *
+     * @return array|null
+     */
+    private static function getCategoriesRecursive($category, $includeSubCategories = false) {
+
+        if (!$category) return null;
+
+        $categories = [];
+
+        if (!$includeSubCategories) {
+            $categories[] = $category->getId();
+        }
+        else {
+            $entries = new Object\NewsCategory\Listing();
+            $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
+
+            foreach ($entries as $entry) {
+                $categories[] = $entry->getId();
+            }
+        }
+
+        return array_values($categories);
+    }
+
+    /**
+     * Get Image for Product
+     * @return bool|\Pimcore\Model\Asset
+     */
+    public function getImage() {
+
+        if (count($this->getImages()) > 0) {
+            return $this->getImages()[0];
+        }
+
+        return null;
+    }
 
     public function getJsonLDData() {
 
@@ -123,31 +148,4 @@ class Entry extends Concrete {
 
     }
 
-
-    /**
-     * @param \Pimcore\Model\Object\NewsCategory $category
-     * @param bool                               $includeSubCategories
-     *
-     * @return array|null
-     */
-    private function getCategoriesRecursive($category, $includeSubCategories = false) {
-
-        if (!$category) return null;
-
-        $categories = [];
-
-        if (!$includeSubCategories) {
-            $categories[] = $category->getId();
-        }
-        else {
-            $entries = new Object\NewsCategory\Listing();
-            $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
-
-            foreach ($entries as $entry) {
-                $categories[] = $entry->getId();
-            }
-        }
-
-        return array_values($categories);
-    }
 }
