@@ -28,12 +28,14 @@ class NewsHelper extends \Zend_View_Helper_Abstract {
 
         if( is_null($href) )
         {
+            $staticRouteName = $news->getEntryType() === 'press' ? 'press_detail' : 'news_detail';
+
             $params = array_merge( [
                 'lang'      => $this->view->language,
                 'news'      => $news->getDetailUrl($this->view->language)
             ], $additionalUrlParams );
 
-            $href = $this->view->url($params, 'news_detail', TRUE);
+            $href = $this->view->url($params, $staticRouteName, TRUE);
 
         }
 
