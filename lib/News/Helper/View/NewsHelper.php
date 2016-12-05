@@ -51,4 +51,38 @@ class NewsHelper extends \Zend_View_Helper_Abstract {
         return $absPath;
 
     }
+
+    /**
+     * @param       $news
+     *
+     * @return string
+     */
+    public function getBackUrl( $news ) {
+
+        $categories = $news->getCategories();
+        $backLink = '';
+        if ( count($categories) > 0 ) {
+            $backLinkPage = $categories[0]->getBackLinkTarget();
+
+            if ( $backLinkPage instanceof \Pimcore\Model\Document\Page ) {
+                $backLink = $backLinkPage->getFullPath();
+            }
+        }
+
+        if ( empty($backLink) ) {
+
+            if (
+                isset($_SERVER['HTTP_REFERER'])
+                && preg_match('@^[^/]+://[^/]+@', $_SERVER['HTTP_REFERER'])
+                && strpos($_SERVER['HTTP_REFERER'], $this->view->serverUrl() ) !== FALSE
+            ) {
+                $backLink = $_SERVER['HTTP_REFERER'];
+            }
+
+        }
+
+        return $backLink;
+
+    }
+
 }

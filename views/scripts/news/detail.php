@@ -138,6 +138,14 @@
 
         <?php } ?>
 
+        <?php
+        $backLink = $this->newsHelper()->getBackUrl( $this->news );
+        ?>
+
+        <?php if ( !empty($backLink) ) { ?>
+            <a href="<?=$backLink?>" class="back"><?= $this->translate('Back to List'); ?></a>
+        <?php } ?>
+
     </div>
 
 <?php } ?>
