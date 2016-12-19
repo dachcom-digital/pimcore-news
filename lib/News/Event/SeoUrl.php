@@ -38,7 +38,6 @@ class SeoUrl
     {
         $languages = \Pimcore\Tool::getValidLanguages();
 
-        $needUpdate = FALSE;
         $fromCopy = FALSE;
 
         $objectClass = 'Object\\' . $className;
@@ -58,9 +57,12 @@ class SeoUrl
             {
                 $object->setDetailUrl('', $language);
             }
+        }
 
-            $object->save();
-            return FALSE;
+        $oldObject = NULL;
+        if ( $object->getId() ) {
+            $oldObject = \Pimcore::getDiContainer()->make(get_class($object));
+            $oldObject->getDao()->getById($object->getId());
         }
 
         foreach( $languages as $language )
@@ -82,14 +84,15 @@ class SeoUrl
                 $realUrl = self::slugify($title, $language);
             }
 
-            $storedUrlWithoutVersion = substr( $storedUrl, 0, strlen($realUrl) );
-
             $versionUrl = $realUrl;
 
-            if( $storedUrlWithoutVersion !== $realUrl )
-            {
-                $needUpdate = TRUE;
+            $oldTitle = NULL;
+            if ( $oldObject instanceof $objectClass ) {
+                $oldTitle = $oldObject->getName($language);
+            }
 
+            if( $oldTitle !== $title )
+            {
                 $sameUrlObject = $objectClass::getByLocalizedfields(
                     'detailUrl', $realUrl, $language,
                     ['limit' => 1, 'condition' => ' AND ooo_id != ' . (int) $object->getId() . ' AND name <> ""']
@@ -119,11 +122,6 @@ class SeoUrl
                 $object->setDetailUrl($versionUrl, $language);
             }
 
-        }
-
-        if( $needUpdate )
-        {
-            $object->save();
         }
 
     }
@@ -174,5 +172,4 @@ class SeoUrl
         return trim($string, '-');
 
     }
-
 }
