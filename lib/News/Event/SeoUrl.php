@@ -79,9 +79,7 @@ class SeoUrl
 
             if( !empty($title) )
             {
-                $title = preg_replace('/[^a-zA-Z0-9-äöüÄÜÖß ]/', '', $title);
-                $realUrl = \Pimcore\File::getValidFilename($title);
-                $realUrl = trim(preg_replace('/-+/', '-', $realUrl), '-');
+                $realUrl = self::slugify($title, $language);
             }
 
             $storedUrlWithoutVersion = substr( $storedUrl, 0, strlen($realUrl) );
@@ -154,4 +152,27 @@ class SeoUrl
 
         return count( $duplicateUrlObjects ) === 1;
     }
+
+    /**
+     * @param $string
+     * @param $language
+     *
+     * @return string
+     */
+    private static function slugify($string, $language) {
+
+        if ( $language === 'de' ) {
+            $string = preg_replace(['/ä/i', '/ö/i', '/ü/i', '/ß/'], ['ae', 'oe', 'ue', 'ss'], $string);
+        }
+
+        $string = preg_replace(['/®/', '/©/'], '', $string);
+
+        $string = transliterator_transliterate("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
+        // Remove repeating hyphens and spaces (e.g. 'foo---bar' becomes 'foo-bar')
+        $string = preg_replace('/[-\s]+/', '-', $string);
+
+        return trim($string, '-');
+
+    }
+
 }
