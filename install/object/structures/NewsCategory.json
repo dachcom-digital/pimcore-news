@@ -157,6 +157,46 @@
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
+									},
+									{
+										"fieldtype":"href",
+										"width":"",
+										"assetUploadPath":"",
+										"relationType":true,
+										"queryColumnType":{
+											"id":"int(11)",
+											"type":"enum('document','asset','object')"
+										},
+										"phpdocType":"\\Pimcore\\Model\\Document\\Page | \\Pimcore\\Model\\Document\\Snippet | \\Pimcore\\Model\\Document | \\Pimcore\\Model\\Asset | \\Pimcore\\Model\\Object\\AbstractObject",
+										"objectsAllowed":false,
+										"assetsAllowed":false,
+										"assetTypes":[
+
+										],
+										"documentsAllowed":true,
+										"documentTypes":[
+											{
+												"documentTypes":"page"
+											}
+										],
+										"lazyLoading":true,
+										"classes":[
+
+										],
+										"name":"backLinkTarget",
+										"title":"Back Link Target",
+										"tooltip":"",
+										"mandatory":false,
+										"noteditable":false,
+										"index":false,
+										"locked":false,
+										"style":"",
+										"permissions":null,
+										"datatype":"data",
+										"columnType":null,
+										"invisible":false,
+										"visibleGridView":false,
+										"visibleSearch":false
 									}
 								],
 								"name":"localizedfields",
