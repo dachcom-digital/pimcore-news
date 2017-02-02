@@ -32,7 +32,7 @@
         <?php } ?>
 
         <p class="date">
-            <?= $this->news->getDate()->get('dd.MM.YYYY'); ?>
+            <?= $this->news->getDate()->format('d.m.Y'); ?>
         </p>
 
         <?php if ($this->news->getLead()) { ?>

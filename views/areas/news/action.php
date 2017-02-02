@@ -11,34 +11,54 @@ class News extends Document\Tag\Area\AbstractArea {
     {
         $pageRequest = $this->getParam('page');
 
-        $showLatest = $this->view->checkbox('latest')->getData() === '1';
-        $showPagination = $this->view->checkbox('showPagination')->getData() === '1';
-        $includeSubCategories = $this->view->checkbox('includeSubCategories')->getData() === '1';
+        $querySettings = [];
 
-        $rootCategory = $this->view->href('category')->getElement();
-        $itemsPerPage = $this->view->numeric('limit')->getData();
 
-        if ( $showPagination && ( empty($itemsPerPage) || $itemsPerPage >= $showPagination ) )
-        {
-            $itemsPerPage = $this->view->numeric('itemsPerPage')->getData();
+        if ($this->view->href('category')->getElement()) {
+
+            $querySettings['category'] = $this->view->href('category')->getElement();
+
+            $this->view->assign('category', $this->view->href('category')->getElement());
+
+            if ($this->view->checkbox('includeSubCategories')->getData() === '1') {
+
+                $querySettings['includeSubCategories'] = true;
+
+            }
+
         }
-        else
-        {
-            $showPagination = false;
+
+        if ($this->view->checkbox('showPagination')->getData() === '1') {
+
+            $this->view->assign('showPagination', true);
+
+            $limit = (int)$this->view->numeric('limit')->getData();
+            $itemsPerPage = (int)$this->view->numeric('itemsPerPage')->getData();
+
+            if ( ( empty($limit) || $itemsPerPage > $limit ) ) {
+
+                $querySettings['itemsPerPage'] = $itemsPerPage;
+
+            }
+            else if ( !empty($limit) ) {
+
+                $querySettings['itemsPerPage'] = $limit;
+
+            }
+
         }
 
-        $page = !empty($pageRequest) ? (int)$pageRequest : 0;
+        $querySettings['page'] = (int)$pageRequest;
 
-        $sortBy = $this->view->select('sortby')->getData() ?: 'date';
-        $orderBy = $this->view->select('orderby')->getData() ?: 'desc';
+        if ($this->view->checkbox('latest')->getData() === '1') {
+            $querySettings['where']['latest = ?'] = 1;
+        }
 
-        $this->view->assign('showPagination', $showPagination);
-        $this->view->assign('category', $rootCategory);
+        $querySettings['sort']['field'] = $this->view->select('sortby')->getData() ?: 'date';
+        $querySettings['sort']['dir'] = $this->view->select('orderby')->getData() ?: 'desc';
 
-        $newsObjects = Object\NewsEntry::getEntriesPaging($rootCategory, $includeSubCategories, $page, $itemsPerPage, [
-            'field' => $sortBy,
-            'dir'   => $orderBy
-        ], $showLatest);
+
+        $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 
         $this->view->assign('paginator', $newsObjects);
     }

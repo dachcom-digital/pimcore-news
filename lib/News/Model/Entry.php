@@ -5,6 +5,7 @@ namespace News\Model;
 use Pimcore\Model\Object;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Object\Concrete;
+use Pimcore\Model\Object\NewsCategory;
 
 class Entry extends Concrete {
 
@@ -22,54 +23,55 @@ class Entry extends Concrete {
     /**
      * Get News from the Category with Paging
      *
-     * @param \Pimcore\Model\Object\NewsCategory $category
-     * @param bool                               $includeSubCategories
-     * @param int                                $page
-     * @param int                                $itemsPerPage
-     * @param array                              $sort
-     * @param bool                               $showOnlyTopNews
+     * @param array $params
      *
      * @return \Zend_Paginator
      */
-    public static function getEntriesPaging($category = null, $includeSubCategories = false, $page = 0, $itemsPerPage = 10, $sort = ['field' => 'date', 'dir'   => 'desc'], $showOnlyTopNews = false) {
+    public static function getEntriesPaging(array $params = []) {
 
-        $list = new Object\NewsEntry\Listing();
+        $settings = array_merge([
+            'sort' => [
+                'field' => 'date',
+                'dir' => 'desc'
+            ],
+            'page' => 0,
+            'itemsPerPage' => 10,
+            'category' => null,
+            'includeSubCategories' => false,
+            'where' => []
 
-        $where = 'name <> "" ';
+        ], $params);
 
-        if ($showOnlyTopNews === true) {
-            $where .= 'AND latest = 1 ';
+        $newsListing = new Object\NewsEntry\Listing();
+        $newsListing->setOrderKey($settings['sort']['field']);
+        $newsListing->setOrder($settings['sort']['dir']);
+        $newsListing->addConditionParam('name <> ""');
+        $newsListing->setGroupBy('o_id');
+
+        if (count($settings['where'])) {
+
+            foreach ($settings['where'] as $condition => $val) {
+                $newsListing->addConditionParam($condition, $val);
+            }
         }
 
-        if ($category) {
+        if ($settings['category'] && $settings['category'] instanceof \News\Model\Category) {
 
-            $categories = self::getCategoriesRecursive($category, $includeSubCategories);
+            $categories = self::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
 
             if (!empty($categories)) {
 
-                $list->onCreateQuery(function (\Zend_Db_Select $query) use ($list, $categories) {
-                    $query->join(
-                        ['relations' => 'object_relations_' . $list->getClassId()],
-                        "relations.src_id = o_id AND relations.fieldname = 'categories'",
-                        ''
-                    );
+                $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories) {
+                    $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
                 });
 
-                $where .= 'AND relations.dest_id IN (' . implode(',', $categories) . ')';
-
+                $newsListing->addConditionParam('relations.dest_id IN (?)',  implode(',', $categories));
             }
-
         }
 
-        $list->setCondition($where);
-
-        $list->setOrderKey($sort['field']);
-        $list->setOrder($sort['dir']);
-        $list->setGroupBy('o_id');
-
-        $paginator = \Zend_Paginator::factory($list);
-        $paginator->setCurrentPageNumber($page);
-        $paginator->setItemCountPerPage($itemsPerPage);
+        $paginator = \Zend_Paginator::factory($newsListing);
+        $paginator->setCurrentPageNumber($settings['page']);
+        $paginator->setItemCountPerPage($settings['itemsPerPage']);
 
         return $paginator;
     }
@@ -82,14 +84,15 @@ class Entry extends Concrete {
      */
     private static function getCategoriesRecursive($category, $includeSubCategories = false) {
 
-        if (!$category) return null;
+        if (!$category) {
+            return null;
+        }
 
         $categories = [];
 
         if (!$includeSubCategories) {
             $categories[] = $category->getId();
-        }
-        else {
+        } else {
             $entries = new Object\NewsCategory\Listing();
             $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
 
@@ -117,15 +120,15 @@ class Entry extends Concrete {
     public function getJsonLDData() {
 
         $data = [
-            '@context' => 'http://schema.org/',
-            '@type' => 'NewsArticle',
+            '@context'      => 'http://schema.org/',
+            '@type'         => 'NewsArticle',
             'datePublished' => $this->getDate()->format('Y-m-d'),
-            'headline' => $this->getName(),
-            'description' => $this->getLead(),
-            'articleBody' => $this->getDescription()
+            'headline'      => $this->getName(),
+            'description'   => $this->getLead(),
+            'articleBody'   => $this->getDescription()
         ];
 
-        if ( $this->getAuthor() ) {
+        if ($this->getAuthor()) {
             $data['author'] = $this->getAuthor();
         }
 
@@ -135,17 +138,15 @@ class Entry extends Concrete {
 
             if ($image instanceof \Pimcore\Model\Asset\Image) {
                 $data['image'] = [
-                    '@type' => 'ImageObject',
-                    'url' => \Pimcore\Tool::getHostUrl() . $image->getThumbnail("galleryImage")->getPath(),
-                    'width' => $image->getThumbnail("galleryImage")->getWidth(),
+                    '@type'  => 'ImageObject',
+                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail("galleryImage")->getPath(),
+                    'width'  => $image->getThumbnail("galleryImage")->getWidth(),
                     'height' => $image->getThumbnail("galleryImage")->getHeight(),
                 ];
             }
-
         }
 
         return $data;
-
     }
 
 }
