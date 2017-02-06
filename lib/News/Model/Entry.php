@@ -7,16 +7,15 @@ use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Object\Concrete;
 use Pimcore\Model\Object\NewsCategory;
 
-class Entry extends Concrete {
-
+class Entry extends Concrete
+{
     /**
      * Get all News
      * @return array
      */
-    public static function getAll() {
-
+    public static function getAll()
+    {
         $list = new Object\NewsEntry\Listing();
-
         return $list->getObjects();
     }
 
@@ -27,18 +26,18 @@ class Entry extends Concrete {
      *
      * @return \Zend_Paginator
      */
-    public static function getEntriesPaging(array $params = []) {
-
+    public static function getEntriesPaging(array $params = [])
+    {
         $settings = array_merge([
-            'sort' => [
+            'sort'                 => [
                 'field' => 'date',
-                'dir' => 'desc'
+                'dir'   => 'desc'
             ],
-            'page' => 0,
-            'itemsPerPage' => 10,
-            'category' => null,
-            'includeSubCategories' => false,
-            'where' => []
+            'page'                 => 0,
+            'itemsPerPage'         => 10,
+            'category'             => NULL,
+            'includeSubCategories' => FALSE,
+            'where'                => []
 
         ], $params);
 
@@ -65,7 +64,7 @@ class Entry extends Concrete {
                     $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
                 });
 
-                $newsListing->addConditionParam('relations.dest_id IN (?)',  implode(',', $categories));
+                $newsListing->addConditionParam('relations.dest_id IN (?)', implode(',', $categories));
             }
         }
 
@@ -82,10 +81,10 @@ class Entry extends Concrete {
      *
      * @return array|null
      */
-    private static function getCategoriesRecursive($category, $includeSubCategories = false) {
-
+    private static function getCategoriesRecursive($category, $includeSubCategories = FALSE)
+    {
         if (!$category) {
-            return null;
+            return NULL;
         }
 
         $categories = [];
@@ -108,17 +107,17 @@ class Entry extends Concrete {
      * Get Image for Product
      * @return bool|\Pimcore\Model\Asset
      */
-    public function getImage() {
-
+    public function getImage()
+    {
         if (count($this->getImages()) > 0) {
             return $this->getImages()[0];
         }
 
-        return null;
+        return NULL;
     }
 
-    public function getJsonLDData() {
-
+    public function getJsonLDData()
+    {
         $data = [
             '@context'      => 'http://schema.org/',
             '@type'         => 'NewsArticle',

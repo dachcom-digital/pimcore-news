@@ -5,14 +5,16 @@ namespace Pimcore\Model\Document\Tag\Area;
 use Pimcore\Model\Document;
 use Pimcore\Model\Object;
 
-class News extends Document\Tag\Area\AbstractArea {
-
+class News extends Document\Tag\Area\AbstractArea
+{
+    /**
+     *
+     */
     public function action()
     {
         $pageRequest = $this->getParam('page');
 
         $querySettings = [];
-
 
         if ($this->view->href('category')->getElement()) {
 
@@ -22,30 +24,24 @@ class News extends Document\Tag\Area\AbstractArea {
 
             if ($this->view->checkbox('includeSubCategories')->getData() === '1') {
 
-                $querySettings['includeSubCategories'] = true;
-
+                $querySettings['includeSubCategories'] = TRUE;
             }
-
         }
 
         if ($this->view->checkbox('showPagination')->getData() === '1') {
 
-            $this->view->assign('showPagination', true);
+            $this->view->assign('showPagination', TRUE);
 
             $limit = (int)$this->view->numeric('limit')->getData();
             $itemsPerPage = (int)$this->view->numeric('itemsPerPage')->getData();
 
-            if ( ( empty($limit) || $itemsPerPage > $limit ) ) {
+            if ((empty($limit) || $itemsPerPage > $limit)) {
 
                 $querySettings['itemsPerPage'] = $itemsPerPage;
-
-            }
-            else if ( !empty($limit) ) {
+            } else if (!empty($limit)) {
 
                 $querySettings['itemsPerPage'] = $limit;
-
             }
-
         }
 
         $querySettings['page'] = (int)$pageRequest;
@@ -56,7 +52,6 @@ class News extends Document\Tag\Area\AbstractArea {
 
         $querySettings['sort']['field'] = $this->view->select('sortby')->getData() ?: 'date';
         $querySettings['sort']['dir'] = $this->view->select('orderby')->getData() ?: 'desc';
-
 
         $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 

@@ -6,8 +6,8 @@ use Pimcore\Model\Object;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Object\Concrete;
 
-class Category extends Concrete {
-
+class Category extends Concrete
+{
     /**
      * Get all Categories
      * @return array
@@ -15,6 +15,7 @@ class Category extends Concrete {
     public static function getAll()
     {
         $list = new Object\NewsCategory\Listing();
+
         return $list->getObjects();
     }
 
@@ -25,7 +26,7 @@ class Category extends Concrete {
     public function getLocalizedfields()
     {
         $preValue = $this->preGetValue('localizedfields');
-        if ($preValue !== null && !\Pimcore::inAdmin()) {
+        if ($preValue !== NULL && !\Pimcore::inAdmin()) {
             return $preValue;
         }
         $data = $this->getClass()->getFieldDefinition('localizedfields')->preGetData($this);
@@ -54,7 +55,7 @@ class Category extends Concrete {
      */
     public static function getAllChildCategories(Category $category)
     {
-        $allChildren = array($category->getId());
+        $allChildren = [$category->getId()];
 
         $loopChilds = function (Category $child) use (&$loopChilds, &$allChildren) {
             $childs = $child->getChildCategories();
@@ -78,7 +79,7 @@ class Category extends Concrete {
      *
      * @return array
      */
-    public function getEntries($includeChildCategories = false)
+    public function getEntries($includeChildCategories = FALSE)
     {
         $list = new Object\NewsCategory\Listing();
 
@@ -86,7 +87,7 @@ class Category extends Concrete {
             $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
         } else {
             $categories = $this->getCatChilds();
-            $categoriesWhere = array();
+            $categoriesWhere = [];
 
             foreach ($categories as $cat) {
                 $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
@@ -109,18 +110,22 @@ class Category extends Concrete {
      * @return \Zend_Paginator
      * @throws \Zend_Paginator_Exception
      */
-    public function getEntriesPaging($page = 0, $itemsPerPage = 10, $sort = array(
-        "name"      => "name",
-        "direction" => "asc"
-    ), $includeChildCategories = false)
-    {
+    public function getEntriesPaging(
+        $page = 0,
+        $itemsPerPage = 10,
+        $sort = [
+            "name"      => "name",
+            "direction" => "asc"
+        ],
+        $includeChildCategories = FALSE
+    ) {
         $list = new Object\NewsCategory\Listing();
 
         if (!$includeChildCategories) {
             $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
         } else {
             $categories = $this->getCatChilds();
-            $categoriesWhere = array();
+            $categoriesWhere = [];
 
             foreach ($categories as $cat) {
                 $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
@@ -181,7 +186,7 @@ class Category extends Concrete {
      */
     public function getHierarchy()
     {
-        $hierarchy = array();
+        $hierarchy = [];
 
         $category = $this;
 
@@ -201,7 +206,7 @@ class Category extends Concrete {
     public function getChildCategories()
     {
         $list = new Object\NewsCategory\Listing();
-        $list->setCondition("parentCategory__id = ?", array($this->getId()));
+        $list->setCondition("parentCategory__id = ?", [$this->getId()]);
 
         return $list->getObjects();
     }

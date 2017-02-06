@@ -2,15 +2,18 @@
 
 namespace News\Controller\Plugin;
 
-class Frontend extends \Zend_Controller_Plugin_Abstract {
-
+class Frontend extends \Zend_Controller_Plugin_Abstract
+{
     /**
      * @var bool
      */
-    protected $initialized = false;
+    protected $initialized = FALSE;
 
-    public function preDispatch(\Zend_Controller_Request_Abstract $request) {
-
+    /**
+     * @param \Zend_Controller_Request_Abstract $request
+     */
+    public function preDispatch(\Zend_Controller_Request_Abstract $request)
+    {
         parent::preDispatch($request);
 
         /** @var \Pimcore\Controller\Action\Helper\ViewRenderer $renderer */
@@ -24,8 +27,7 @@ class Frontend extends \Zend_Controller_Plugin_Abstract {
         $view->addScriptPath(PIMCORE_PLUGINS_PATH . '/News/views/layouts');
         $view->addHelperPath(PIMCORE_PLUGINS_PATH . '/News/lib/News/Helper/View', 'News\Helper\View');
 
-        $this->initialized = true;
-
+        $this->initialized = TRUE;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace News\Plugin;
 
-class Update {
+class Update
+{
 
 }

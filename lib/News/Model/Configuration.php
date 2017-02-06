@@ -4,8 +4,8 @@ namespace News\Model;
 
 use Pimcore\Tool;
 
-class Configuration extends AbstractModel {
-
+class Configuration extends AbstractModel
+{
     /**
      * @var integer
      */
@@ -35,14 +35,15 @@ class Configuration extends AbstractModel {
      * this is a small per request cache to know which configuration is which is, this info is used in self::getByKey()
      * @var array
      */
-    protected static $nameIdMappingCache = array();
+    protected static $nameIdMappingCache = [];
 
     /**
      * @param integer $id
      *
      * @return Configuration
      */
-    public static function getById($id) {
+    public static function getById($id)
+    {
         $cacheKey = "news_configuration_" . $id;
 
         try {
@@ -59,7 +60,7 @@ class Configuration extends AbstractModel {
             } catch (\Exception $e) {
                 \Pimcore\Logger::error($e);
 
-                return null;
+                return NULL;
             }
         }
 
@@ -72,7 +73,8 @@ class Configuration extends AbstractModel {
      *
      * @return mixed|null
      */
-    public static function get($key, $returnObject = false) {
+    public static function get($key, $returnObject = FALSE)
+    {
         $cacheKey = $key . "~~~";
 
         // check if pimcore already knows the id for this $name, if yes just return it
@@ -83,7 +85,7 @@ class Configuration extends AbstractModel {
                 return $entry;
             }
 
-            return $entry instanceof Configuration ? $entry->getData() : null;
+            return $entry instanceof Configuration ? $entry->getData() : NULL;
         }
 
         // create a tmp object to obtain the id
@@ -94,7 +96,7 @@ class Configuration extends AbstractModel {
         } catch (\Exception $e) {
             \Pimcore\Logger::warn($e);
 
-            return null;
+            return NULL;
         }
 
         // to have a singleton in a way. like all instances of Element\ElementInterface do also, like Object\AbstractObject
@@ -107,7 +109,7 @@ class Configuration extends AbstractModel {
                 return $entry;
             }
 
-            return $entry instanceof Configuration ? $entry->getData() : null;
+            return $entry instanceof Configuration ? $entry->getData() : NULL;
         }
     }
 
@@ -117,8 +119,9 @@ class Configuration extends AbstractModel {
      * @param $key
      * @param $data
      */
-    public static function set($key, $data) {
-        $configEntry = self::get($key, true);
+    public static function set($key, $data)
+    {
+        $configEntry = self::get($key, TRUE);
 
         if (!$configEntry) {
             $configEntry = new self();
@@ -132,70 +135,80 @@ class Configuration extends AbstractModel {
     /**
      * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @param int $id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
     /**
      * @return string
      */
-    public function getKey() {
+    public function getKey()
+    {
         return $this->key;
     }
 
     /**
      * @param string $key
      */
-    public function setKey($key) {
+    public function setKey($key)
+    {
         $this->key = $key;
     }
 
     /**
      * @return string
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 
     /**
      * @param string $data
      */
-    public function setData($data) {
+    public function setData($data)
+    {
         $this->data = $data;
     }
 
     /**
      * @return int
      */
-    public function getCreationDate() {
+    public function getCreationDate()
+    {
         return $this->creationDate;
     }
 
     /**
      * @param int $creationDate
      */
-    public function setCreationDate($creationDate) {
+    public function setCreationDate($creationDate)
+    {
         $this->creationDate = $creationDate;
     }
 
     /**
      * @return int
      */
-    public function getModificationDate() {
+    public function getModificationDate()
+    {
         return $this->modificationDate;
     }
 
     /**
      * @param int $modificationDate
      */
-    public function setModificationDate($modificationDate) {
+    public function setModificationDate($modificationDate)
+    {
         $this->modificationDate = $modificationDate;
     }
 }

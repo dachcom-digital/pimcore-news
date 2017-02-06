@@ -6,12 +6,12 @@ use Pimcore\Cache;
 use Pimcore\Model;
 use Pimcore\Tool;
 
-class AbstractModel extends Model\AbstractModel {
-
+class AbstractModel extends Model\AbstractModel
+{
     /**
      * @var array
      */
-    protected $localizedValues = array();
+    protected $localizedValues = [];
 
     /**
      * @var LocalizedFields
@@ -25,11 +25,12 @@ class AbstractModel extends Model\AbstractModel {
      *
      * @return null|AbstractModel
      */
-    public static function getById($id) {
+    public static function getById($id)
+    {
         $id = intval($id);
 
         if ($id < 1) {
-            return null;
+            return NULL;
         }
 
         $className = get_called_class();
@@ -62,7 +63,7 @@ class AbstractModel extends Model\AbstractModel {
             }
         }
 
-        return null;
+        return NULL;
     }
 
     /**
@@ -73,7 +74,8 @@ class AbstractModel extends Model\AbstractModel {
      *
      * @return null|AbstractModel
      */
-    public static function getByField($field, $value) {
+    public static function getByField($field, $value)
+    {
         //Todo: what if a object changes and is still in cache?
 
         $className = get_called_class();
@@ -104,7 +106,7 @@ class AbstractModel extends Model\AbstractModel {
             }
         }
 
-        return null;
+        return NULL;
     }
 
     /**
@@ -112,28 +114,31 @@ class AbstractModel extends Model\AbstractModel {
      *
      * @return string
      */
-    protected static function getCacheKey($className, $append) {
+    protected static function getCacheKey($className, $append)
+    {
         return "news_" . str_replace("\\", "_", $className) . "_" . $append;
     }
 
     /**
      *
      */
-    public function save() {
+    public function save()
+    {
         $this->getDao()->save();
 
         $cacheKey = self::getCacheKey(get_called_class(), $this->getId());
 
         //unset object in cache
         Cache::clearTag($cacheKey);
-        \Zend_Registry::set($cacheKey, null);
+        \Zend_Registry::set($cacheKey, NULL);
     }
 
     /**
      * Get LocalizedFields Provider
      * @return LocalizedFields|null
      */
-    public function getLocalizedFields() {
+    public function getLocalizedFields()
+    {
         if (count($this->localizedValues) > 0) {
             if (is_null($this->localizedFields)) {
                 $this->localizedFields = new LocalizedFields($this->localizedValues);
@@ -143,14 +148,15 @@ class AbstractModel extends Model\AbstractModel {
             return $this->localizedFields;
         }
 
-        return null;
+        return NULL;
     }
 
     /**
      * Get LocalizedFields Provider
      * @return LocalizedFields|null
      */
-    public function setLocalizedFields($localizedFields) {
+    public function setLocalizedFields($localizedFields)
+    {
         $this->localizedFields = $localizedFields;
     }
 
@@ -162,7 +168,8 @@ class AbstractModel extends Model\AbstractModel {
      *
      * @return $this
      */
-    public function setValue($key, $value) {
+    public function setValue($key, $value)
+    {
         if ($this->getLocalizedFields()) {
             $mykey = explode(".", $key); //0 => key, 1 => language
 
@@ -193,7 +200,8 @@ class AbstractModel extends Model\AbstractModel {
         return $finalVars;
     }*/
 
-    public function __wakeup() {
+    public function __wakeup()
+    {
         if ($this->getLocalizedFields()) {
             $this->getLocalizedFields()->setObject($this);
         }

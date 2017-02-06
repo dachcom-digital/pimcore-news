@@ -5,23 +5,27 @@ namespace News\Model;
 use Pimcore\Model;
 use Pimcore\Tool;
 
-class LocalizedFields extends Model\AbstractModel {
-
+class LocalizedFields extends Model\AbstractModel
+{
     const STRICT_DISABLED = 0;
+
 
     const STRICT_ENABLED = 1;
 
-    private static $getFallbackValues = false;
+    /**
+     * @var bool
+     */
+    private static $getFallbackValues = FALSE;
 
     /**
      * @var array
      */
-    public $items = array();
+    public $items = [];
 
     /**
      * @var array
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * @var AbstractModel
@@ -36,35 +40,40 @@ class LocalizedFields extends Model\AbstractModel {
     /**
      * @param boolean $getFallbackValues
      */
-    public static function setGetFallbackValues($getFallbackValues) {
+    public static function setGetFallbackValues($getFallbackValues)
+    {
         self::$getFallbackValues = $getFallbackValues;
     }
 
     /**
      * @return boolean
      */
-    public static function getGetFallbackValues() {
+    public static function getGetFallbackValues()
+    {
         return self::$getFallbackValues;
     }
 
     /**
      * @return boolean
      */
-    public static function isStrictMode() {
+    public static function isStrictMode()
+    {
         return self::$strictMode;
     }
 
     /**
      * @param boolean $strictMode
      */
-    public static function setStrictMode($strictMode) {
+    public static function setStrictMode($strictMode)
+    {
         self::$strictMode = $strictMode;
     }
 
     /**
      * @return boolean
      */
-    public static function doGetFallbackValues() {
+    public static function doGetFallbackValues()
+    {
         return self::$getFallbackValues;
     }
 
@@ -74,7 +83,8 @@ class LocalizedFields extends Model\AbstractModel {
      * @param      $fields
      * @param null $items
      */
-    public function __construct($fields, $items = null) {
+    public function __construct($fields, $items = NULL)
+    {
         if ($items) {
             $this->setItems($items);
         }
@@ -87,7 +97,8 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return void
      */
-    public function addItem($item) {
+    public function addItem($item)
+    {
         $this->items[] = $item;
     }
 
@@ -96,14 +107,16 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return void
      */
-    public function setItems($items) {
+    public function setItems($items)
+    {
         $this->items = $items;
     }
 
     /**
      * @return array
      */
-    public function getItems() {
+    public function getItems()
+    {
         return $this->items;
     }
 
@@ -112,14 +125,16 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return void
      */
-    public function setFields($fields) {
+    public function setFields($fields)
+    {
         $this->fields = $fields;
     }
 
     /**
      * @return array
      */
-    public function getFields() {
+    public function getFields()
+    {
         return $this->fields;
     }
 
@@ -128,14 +143,16 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return void
      */
-    public function setObject(AbstractModel $object) {
+    public function setObject(AbstractModel $object)
+    {
         $this->object = $object;
     }
 
     /**
      * @return AbstractModel
      */
-    public function getObject() {
+    public function getObject()
+    {
         return $this->object;
     }
 
@@ -146,7 +163,8 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return string
      */
-    public function getLanguage($language = null) {
+    public function getLanguage($language = NULL)
+    {
         if ($language) {
             return (string)$language;
         }
@@ -168,7 +186,8 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return bool
      */
-    public function languageExists($language) {
+    public function languageExists($language)
+    {
         return array_key_exists($language, $this->getItems());
     }
 
@@ -179,8 +198,9 @@ class LocalizedFields extends Model\AbstractModel {
      *
      * @return null
      */
-    public function getLocalizedValue($name, $language = null, $ignoreFallbackLanguage = false) {
-        $data = null;
+    public function getLocalizedValue($name, $language = NULL, $ignoreFallbackLanguage = FALSE)
+    {
+        $data = NULL;
         $language = $this->getLanguage($language);
 
         if ($this->languageExists($language)) {
@@ -211,7 +231,8 @@ class LocalizedFields extends Model\AbstractModel {
      * @return void
      * @throws \Exception
      */
-    public function setLocalizedValue($name, $value, $language = null) {
+    public function setLocalizedValue($name, $value, $language = NULL)
+    {
         if (self::$strictMode) {
             if (!$language || !in_array($language, Tool::getValidLanguages())) {
                 throw new \Exception("Language " . $language . " not accepted in strict mode");
@@ -220,7 +241,7 @@ class LocalizedFields extends Model\AbstractModel {
 
         $language = $this->getLanguage($language);
         if (!$this->languageExists($language)) {
-            $this->items[$language] = array();
+            $this->items[$language] = [];
         }
 
         $this->items[$language][$name] = $value;
@@ -229,7 +250,8 @@ class LocalizedFields extends Model\AbstractModel {
     /**
      * @return array
      */
-    public function __sleep() {
-        return array("items");
+    public function __sleep()
+    {
+        return ["items"];
     }
 }

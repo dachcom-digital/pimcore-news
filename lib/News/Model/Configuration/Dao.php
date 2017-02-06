@@ -4,12 +4,13 @@ namespace News\Model\Configuration;
 
 use Pimcore\Model;
 
-class Dao extends Model\Dao\PhpArrayTable {
-
+class Dao extends Model\Dao\PhpArrayTable
+{
     /**
      *
      */
-    public function configure() {
+    public function configure()
+    {
         parent::configure();
         $this->setFile('news_configurations');
     }
@@ -19,8 +20,9 @@ class Dao extends Model\Dao\PhpArrayTable {
      *
      * @throws \Exception
      */
-    public function getById($id = null) {
-        if ($id != null) {
+    public function getById($id = NULL)
+    {
+        if ($id != NULL) {
             $this->model->setId($id);
         }
 
@@ -38,8 +40,9 @@ class Dao extends Model\Dao\PhpArrayTable {
      *
      * @throws \Exception
      */
-    public function getByKey($key = null) {
-        if ($key != null) {
+    public function getByKey($key = NULL)
+    {
+        if ($key != NULL) {
             $this->model->setKey($key);
         }
 
@@ -47,10 +50,10 @@ class Dao extends Model\Dao\PhpArrayTable {
 
         $data = $this->db->fetchAll(function ($row) use ($key) {
             if ($row['key'] == $key) {
-                return true;
+                return TRUE;
             }
 
-            return false;
+            return FALSE;
         });
 
         if (count($data) && $data[0]['id']) {
@@ -63,7 +66,8 @@ class Dao extends Model\Dao\PhpArrayTable {
     /**
      * @throws \Exception
      */
-    public function save() {
+    public function save()
+    {
         $ts = time();
         if (!$this->model->getCreationDate()) {
             $this->model->setCreationDate($ts);
@@ -100,7 +104,8 @@ class Dao extends Model\Dao\PhpArrayTable {
      * Deletes object from database
      * @return void
      */
-    public function delete() {
+    public function delete()
+    {
         $this->db->delete($this->model->getId());
     }
 }
