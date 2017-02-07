@@ -1,5 +1,5 @@
 {
-    "name": "dachcom-digital/pimcore-news",
+    "name": "dachcom-digital/news",
     "type": "pimcore-plugin",
     "license": "Simple BSD",
     "description": "Pimcore News Plugin",
