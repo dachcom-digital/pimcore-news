@@ -1,18 +1,20 @@
 {
     "name": "dachcom-digital/news",
     "type": "pimcore-plugin",
-    "license": "Simple BSD",
-    "description": "Pimcore News Plugin",
-    "keywords": [
-        "pimcore",
-        "news"
-    ],
+    "license": "GPL-3.0+",
+    "description": "Pimcore 4.x News Plugin",
+    "keywords": ["pimcore", "news"],
     "homepage": "https://github.com/dachcom-digital/pimcore-news",
     "authors": [
         {
             "name": "DACHCOM.DIGITAL Walter Canal",
             "email": "wcanal@dachcom.ch",
             "homepage": "http://www.dachcom.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "DACHCOM.DIGITAL Stefan Hagspiel",
+            "homepage": "http://www.dachcom-digital.ch",
             "role": "Developer"
         }
     ],
