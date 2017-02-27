@@ -28,11 +28,12 @@ class News extends Document\Tag\Area\AbstractArea
             }
         }
 
+        $limit = (int)$this->view->numeric('limit')->getData();
+
         if ($this->view->checkbox('showPagination')->getData() === '1') {
 
             $this->view->assign('showPagination', TRUE);
 
-            $limit = (int)$this->view->numeric('limit')->getData();
             $itemsPerPage = (int)$this->view->numeric('itemsPerPage')->getData();
 
             if ((empty($limit) || $itemsPerPage > $limit)) {
@@ -42,6 +43,9 @@ class News extends Document\Tag\Area\AbstractArea
 
                 $querySettings['itemsPerPage'] = $limit;
             }
+        }
+        else if (!empty($limit)) {
+            $querySettings['itemsPerPage'] = $limit;
         }
 
         $querySettings['page'] = (int)$pageRequest;
