@@ -43,7 +43,6 @@ class SeoUrl
         $fromCopy = FALSE;
 
         $objectClass = 'Object\\' . $className;
-
         foreach ($languages as $language) {
             if (self::isFromCopy($object, $objectClass, $language) === TRUE) {
                 $fromCopy = TRUE;
@@ -53,6 +52,7 @@ class SeoUrl
 
         if ($fromCopy) {
             foreach ($languages as $language) {
+                //always reset stored url if element just has been copied.
                 $object->setDetailUrl('', $language);
             }
         }
@@ -66,27 +66,29 @@ class SeoUrl
         foreach ($languages as $language) {
             $realUrl = '';
 
-            //always reset stored url if element just has been copied.
-            $storedUrl = $object->getDetailUrl($language);
+            $currentDetailUrl = $object->getDetailUrl($language);
             $title = $object->getName($language);
 
             //skip all empty!
-            if (empty($title) && empty($storedUrl)) {
+            if (empty($title) && empty($currentDetailUrl)) {
                 continue;
             }
 
             if (!empty($title)) {
-                $realUrl = self::slugify($title, $language);
+                $realUrl = self::slugify(empty($currentDetailUrl) ? $title : $currentDetailUrl, $language);
+                if (empty($currentDetailUrl)) {
+                    $currentDetailUrl = $realUrl;
+                }
             }
 
             $versionUrl = $realUrl;
 
-            $oldTitle = NULL;
+            $oldDetailUrl = NULL;
             if ($oldObject instanceof $objectClass) {
-                $oldTitle = $oldObject->getName($language);
+                $oldDetailUrl = $oldObject->getDetailUrl($language);
             }
 
-            if ($oldTitle !== $title) {
+            if ($oldDetailUrl !== $currentDetailUrl) {
                 $sameUrlObject = $objectClass::getByLocalizedfields(
                     'detailUrl', $realUrl, $language,
                     ['limit' => 1, 'condition' => ' AND ooo_id != ' . (int)$object->getId() . ' AND name <> ""']
@@ -125,6 +127,7 @@ class SeoUrl
     private static function isFromCopy($obj, $objectClass, $language)
     {
         //always check if there is double data!!!
+        $name = $obj->getName($language);
         $url = $obj->getDetailUrl($language);
 
         if (empty($url)) {
@@ -133,7 +136,7 @@ class SeoUrl
 
         $duplicateUrlObjects = $objectClass::getByLocalizedfields(
             'detailUrl', $url, $language,
-            ['limit' => 1, 'condition' => ' AND ooo_id != ' . (int)$obj->getId()]
+            ['limit' => 1, 'condition' => ' AND name = "' . $name . '" AND ooo_id != ' . (int)$obj->getId()]
         );
 
         return count($duplicateUrlObjects) === 1;
@@ -147,12 +150,14 @@ class SeoUrl
      */
     private static function slugify($string, $language)
     {
+        //remove dashes first
+        $string = preg_replace('/[-\s]+/', ' ', $string);
+
         if ($language === 'de') {
             $string = preg_replace(['/ä/i', '/ö/i', '/ü/i', '/ß/'], ['ae', 'oe', 'ue', 'ss'], $string);
         }
 
         $string = preg_replace(['/®/', '/©/'], '', $string);
-
         $string = transliterator_transliterate("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
         // Remove repeating hyphens and spaces (e.g. 'foo---bar' becomes 'foo-bar')
         $string = preg_replace('/[-\s]+/', '-', $string);

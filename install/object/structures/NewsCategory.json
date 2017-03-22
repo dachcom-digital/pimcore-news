@@ -76,6 +76,7 @@
 										"classes":"NewsCategory"
 									}
 								],
+								"pathFormatterClass":null,
 								"name":"parentCategory",
 								"title":"Parent Category",
 								"tooltip":"",
@@ -143,6 +144,7 @@
 										"classes":[
 
 										],
+										"pathFormatterClass":null,
 										"name":"backLinkTarget",
 										"title":"Back Link Target",
 										"tooltip":"",
@@ -167,6 +169,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -193,8 +196,8 @@
 						"type":null,
 						"region":"",
 						"title":"SEO",
-						"width":"",
-						"height":"",
+						"width":null,
+						"height":null,
 						"collapsible":false,
 						"collapsed":false,
 						"bodyStyle":"",
@@ -262,7 +265,7 @@
 										"title":"Detail Url",
 										"tooltip":"",
 										"mandatory":false,
-										"noteditable":true,
+										"noteditable":false,
 										"index":true,
 										"locked":false,
 										"style":"",
@@ -272,6 +275,25 @@
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
+									},
+									{
+										"fieldtype":"text",
+										"html":"Please <b>reload<\/b> your object after changing the detail url.<div>Keep in mind that changing the detail url itself will change the url to your detail page.<\/div>",
+										"name":"info",
+										"type":null,
+										"region":null,
+										"title":"",
+										"width":null,
+										"height":null,
+										"collapsible":false,
+										"collapsed":false,
+										"bodyStyle":"background:#efefef;padding:10px;",
+										"datatype":"layout",
+										"permissions":null,
+										"childs":[
+
+										],
+										"locked":false
 									}
 								],
 								"name":"localizedfields",
@@ -282,6 +304,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,

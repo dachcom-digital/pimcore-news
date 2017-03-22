@@ -252,6 +252,7 @@
 										"classes":[
 
 										],
+										"pathFormatterClass":null,
 										"name":"redirectLink",
 										"title":"Redirect Link",
 										"tooltip":"",
@@ -276,6 +277,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -371,7 +373,7 @@
 										"title":"Detail Url",
 										"tooltip":"",
 										"mandatory":false,
-										"noteditable":true,
+										"noteditable":false,
 										"index":true,
 										"locked":false,
 										"style":"",
@@ -381,6 +383,25 @@
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
+									},
+									{
+										"fieldtype":"text",
+										"html":"Please <b>reload<\/b> your object after changing the detail url.<div>Keep in mind that changing the detail url itself will change the url to your detail page.<\/div>",
+										"name":"info",
+										"type":null,
+										"region":null,
+										"title":"",
+										"width":null,
+										"height":null,
+										"collapsible":false,
+										"collapsed":false,
+										"bodyStyle":"background:#efefef;padding:10px;",
+										"datatype":"layout",
+										"permissions":null,
+										"childs":[
+
+										],
+										"locked":false
 									}
 								],
 								"name":"localizedfields",
@@ -391,6 +412,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -439,6 +461,7 @@
 										"classes":"NewsCategory"
 									}
 								],
+								"pathFormatterClass":null,
 								"name":"categories",
 								"title":"Categories",
 								"tooltip":"",
@@ -504,6 +527,7 @@
 										"classes":[
 
 										],
+										"pathFormatterClass":null,
 										"name":"images",
 										"title":"Images",
 										"tooltip":"",
@@ -549,6 +573,7 @@
 										"classes":[
 
 										],
+										"pathFormatterClass":null,
 										"name":"downloads",
 										"title":"Downloads",
 										"tooltip":"",
@@ -595,6 +620,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -665,6 +691,7 @@
 											}
 										],
 										"layout":null,
+										"fieldDefinitionsCache":null,
 										"name":"Links",
 										"title":"Links",
 										"tooltip":"",
@@ -689,6 +716,7 @@
 								"height":"",
 								"maxTabs":null,
 								"labelWidth":null,
+								"fieldDefinitionsCache":null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -739,6 +767,7 @@
 								"labelWidth":250,
 								"localized":true,
 								"storeId":1,
+								"fieldDefinitionsCache":null,
 								"allowedGroupIds":null,
 								"tooltip":"",
 								"mandatory":false,

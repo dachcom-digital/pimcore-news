@@ -17,12 +17,12 @@ Pimcore News Plugin
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "1.1.4",
+    "dachcom-digital/news" : "~1.2.0",
 }
 ```
 
-## Important (!) to know
-* The detail url is based on the title for each language. So if you update your title, the url to your news will be updated also.
+## Important to know
+* The detail url is based on the title for each language. If the detail url field is empty, the title will be transformed to a valid url slug.
 
 ## Good to know
 * News can be placed at any place on your website through the news area element. Use it as list, latest or even as a custom layout.
@@ -31,7 +31,6 @@ Pimcore News Plugin
 
 ## Extend News  
 **Data**  
-
 * *Meta Information* Tab: Extend News with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.  
 * *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
 
