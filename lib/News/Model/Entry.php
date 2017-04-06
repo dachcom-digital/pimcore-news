@@ -15,8 +15,9 @@ class Entry extends Concrete
      */
     public static function getAll()
     {
-        $list = new Object\NewsEntry\Listing();
-        return $list->getObjects();
+        $newsListing = Object\NewsEntry::getList();
+        static::modifyListing($newsListing);
+        return $newsListing->getObjects();
     }
 
     /**
@@ -41,7 +42,7 @@ class Entry extends Concrete
 
         ], $params);
 
-        $newsListing = new Object\NewsEntry\Listing();
+        $newsListing = Object\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
         $newsListing->addConditionParam('name <> ""');
@@ -56,23 +57,41 @@ class Entry extends Concrete
 
         if ($settings['category'] && $settings['category'] instanceof \News\Model\Category) {
 
-            $categories = self::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
+            $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
 
             if (!empty($categories)) {
 
                 $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories) {
                     $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
+                    static::modifyQuery($query, $newsListing);
                 });
 
                 $newsListing->addConditionParam('relations.dest_id IN (?)', implode(',', $categories));
             }
         }
 
+        static::modifyListing($newsListing);
+
         $paginator = \Zend_Paginator::factory($newsListing);
         $paginator->setCurrentPageNumber($settings['page']);
         $paginator->setItemCountPerPage($settings['itemsPerPage']);
 
         return $paginator;
+    }
+
+    /**
+     * @param \Zend_Db_Select $query
+     * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     */
+    protected static function modifyQuery($query, $listing)
+    {
+    }
+
+    /**
+     * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     */
+    protected static function modifyListing($listing)
+    {
     }
 
     /**
@@ -92,7 +111,7 @@ class Entry extends Concrete
         if (!$includeSubCategories) {
             $categories[] = $category->getId();
         } else {
-            $entries = new Object\NewsCategory\Listing();
+            $entries = NewsCategory::getList();
             $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
 
             foreach ($entries as $entry) {
@@ -135,7 +154,7 @@ class Entry extends Concrete
 
             $image = $this->getImages()[0];
 
-            if ($image instanceof \Pimcore\Model\Asset\Image) {
+            if ($image instanceof Image) {
                 $data['image'] = [
                     '@type'  => 'ImageObject',
                     'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail("galleryImage")->getPath(),

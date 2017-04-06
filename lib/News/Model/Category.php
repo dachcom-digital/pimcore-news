@@ -14,8 +14,7 @@ class Category extends Concrete
      */
     public static function getAll()
     {
-        $list = new Object\NewsCategory\Listing();
-
+        $list = Object\NewsCategory::getList();
         return $list->getObjects();
     }
 
@@ -40,7 +39,7 @@ class Category extends Concrete
      */
     public static function getFirstLevel()
     {
-        $list = new Object\NewsCategory\Listing();
+        $list = Object\NewsCategory::getList();
         $list->setCondition('parentCategory__id is null');
 
         return $list->getObjects();
@@ -81,7 +80,7 @@ class Category extends Concrete
      */
     public function getEntries($includeChildCategories = FALSE)
     {
-        $list = new Object\NewsCategory\Listing();
+        $list = Object\NewsCategory::getList();
 
         if (!$includeChildCategories) {
             $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
@@ -119,7 +118,7 @@ class Category extends Concrete
         ],
         $includeChildCategories = FALSE
     ) {
-        $list = new Object\NewsCategory\Listing();
+        $list = Object\NewsCategory::getList();
 
         if (!$includeChildCategories) {
             $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
@@ -205,7 +204,7 @@ class Category extends Concrete
      */
     public function getChildCategories()
     {
-        $list = new Object\NewsCategory\Listing();
+        $list = Object\NewsCategory::getList();
         $list->setCondition("parentCategory__id = ?", [$this->getId()]);
 
         return $list->getObjects();
