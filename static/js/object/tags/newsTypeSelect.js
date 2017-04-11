@@ -71,16 +71,29 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
             //changedEntryType only exists if object just has been reloaded!
             if(typeof obj.options === 'object' && obj.options.changedEntryType !== undefined) {
                 this.component.setValue(obj.options.changedEntryType);
-            //happens after a new object has been created.
+                //happens after a new object has been created.
             } else if( this.component.getValue() === null) {
                 var firstRecord = this.component.getStore().getAt(0);
-                console.warn("set empty type:", firstRecord.get('value'));
                 this.component.setValue(firstRecord.get('value'));
+            }
+
+            if(this.component.getStore().getCount() === 1) {
+                this.component.setReadOnly(true);
             }
 
         }.bind(this));
 
         this.component.addListener('beforeselect', function (combo, record, index, e) {
+
+            var currentLayout = obj.data.currentLayoutId;
+
+            if(currentLayout === '') {
+                currentLayout = null;
+            }
+
+            if(record.data.customLayoutId === currentLayout) {
+                return true;
+            }
 
             if (this.canContinue) {
                 this.canContinue = false;
@@ -94,7 +107,7 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
                             if (buttonId === 'yes') {
                                 this.canContinue = true;
                                 combo.select(record);
-                                combo.fireEvent('select', combo, record);
+                                combo.fireEvent('select', combo, record, true);
                             } else {
                                 this.canContinue = false;
                             }
@@ -107,7 +120,17 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
             }
         });
 
-        this.component.addListener('select', function (combo, record, index, e) {
+        this.component.addListener('select', function (combo, record) {
+
+            var currentLayout = obj.data.currentLayoutId;
+
+            if(currentLayout === '') {
+                currentLayout = null;
+            }
+
+            if(record.data.customLayoutId === currentLayout) {
+                return true;
+            }
 
             var clId = null, options = {};
 
