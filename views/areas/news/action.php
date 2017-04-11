@@ -30,7 +30,8 @@ class News extends Document\Tag\Area\AbstractArea
         }
 
         //set entry type
-        $querySettings['entryType'] = $view->select('entryType')->getData() ?: 'all';
+        $entryType = $view->select('entryType')->getData() ?: 'all';
+        $querySettings['entryType'] = $entryType;
 
         //set limit
         $limit = (int)$view->numeric('limit')->getData();
@@ -88,8 +89,8 @@ class News extends Document\Tag\Area\AbstractArea
         $mainClasses[] = 'area';
         $mainClasses[] = 'news-' . $view->select('layout')->getData();
 
-        if($querySettings['entryType'] !== 'all') {
-            $mainClasses[] = 'entry-type-' . str_replace(['_',' '],['-'], strtolower($querySettings['entryType']));
+        if($entryType !== 'all') {
+            $mainClasses[] = 'entry-type-' . str_replace(['_',' '],['-'], strtolower($entryType));
         }
 
         $view->assign([
@@ -97,6 +98,7 @@ class News extends Document\Tag\Area\AbstractArea
             'category'       => $category,
             'showPagination' => $showPagination,
             'paginator'      => $newsObjects,
+            'entryType'      => $entryType,
             'editSettings'   => $adminSettings
         ]);
     }
