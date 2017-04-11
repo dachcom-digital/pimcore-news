@@ -23,7 +23,7 @@ class NewsTypes
             $validLayouts = Object\Service::getValidLayouts($object);
         }
 
-        foreach ($newsTypes as &$type) {
+        foreach ($newsTypes as $typeId => &$type) {
 
             $customLayoutId = NULL;
 
@@ -40,14 +40,14 @@ class NewsTypes
                 }
             }
 
-            //check if valid, in case object has been passed
-            if (!is_null($customLayoutId) && !is_null($validLayouts)) {
-                if (!isset($validLayouts[$customLayoutId])) {
-                    $customLayoutId = NULL;
-                }
-            }
+            //remove types if user is not allowed to use it!
+            $allowMasterLayout = isset($validLayouts[0]);
 
-            $type['customLayoutId'] = $customLayoutId;
+            if ((!$allowMasterLayout || !is_null($customLayoutId)) && !is_null($validLayouts) && !isset($validLayouts[$customLayoutId])) {
+                unset($newsTypes[ $typeId]);
+            } else {
+                $type['customLayoutId'] = $customLayoutId;
+            }
         }
 
         return $newsTypes;
