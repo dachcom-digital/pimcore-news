@@ -118,19 +118,10 @@
 								"visibleSearch":false
 							},
 							{
-								"fieldtype":"select",
-								"options":[
-									{
-										"key":"News",
-										"value":"news"
-									},
-									{
-										"key":"Press",
-										"value":"press"
-									}
-								],
+								"fieldtype":"newsTypeSelect",
+								"options":null,
 								"width":300,
-								"defaultValue":"news",
+								"defaultValue":null,
 								"queryColumnType":"varchar(190)",
 								"columnType":"varchar(190)",
 								"phpdocType":"string",
@@ -794,7 +785,7 @@
 						"name":"Relations",
 						"type":null,
 						"region":null,
-						"title":"Relationen & Settings",
+						"title":"Relations & Settings",
 						"width":null,
 						"height":null,
 						"collapsible":false,
@@ -807,10 +798,10 @@
 								"fieldtype":"objectbricks",
 								"phpdocType":"\\Pimcore\\Model\\Object\\Objectbrick",
 								"allowedTypes":[
-									"NewsSettings"
+
 								],
 								"name":"Relations",
-								"title":"Relationen & Settings",
+								"title":"Relations & Settings",
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,

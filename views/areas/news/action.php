@@ -2,6 +2,8 @@
 
 namespace Pimcore\Model\Document\Tag\Area;
 
+use News\Model\Configuration;
+use News\Tool\NewsTypes;
 use Pimcore\Model\Document;
 use Pimcore\Model\Object;
 
@@ -12,54 +14,100 @@ class News extends Document\Tag\Area\AbstractArea
      */
     public function action()
     {
-        $pageRequest = $this->getParam('page');
-
+        $view = $this->getView();
         $querySettings = [];
 
-        if ($this->view->href('category')->getElement()) {
+        //set category
+        $category = NULL;
+        if ($view->href('category')->getElement()) {
 
-            $querySettings['category'] = $this->view->href('category')->getElement();
+            $querySettings['category'] = $view->href('category')->getElement();
+            $category = $view->href('category')->getElement();
 
-            $this->view->assign('category', $this->view->href('category')->getElement());
-
-            if ($this->view->checkbox('includeSubCategories')->getData() === '1') {
-
+            if ($view->checkbox('includeSubCategories')->getData() === '1') {
                 $querySettings['includeSubCategories'] = TRUE;
             }
         }
 
-        $limit = (int)$this->view->numeric('limit')->getData();
+        //set entry type
+        $querySettings['entryType'] = $view->select('entryType')->getData() ?: 'all';
 
-        if ($this->view->checkbox('showPagination')->getData() === '1') {
+        //set limit
+        $limit = (int)$view->numeric('limit')->getData();
 
-            $this->view->assign('showPagination', TRUE);
+        //set pagination
+        $showPagination = FALSE;
+        if ($view->checkbox('showPagination')->getData() === '1') {
 
-            $itemsPerPage = (int)$this->view->numeric('itemsPerPage')->getData();
+            $showPagination = TRUE;
+            $itemsPerPage = (int)$view->numeric('itemsPerPage')->getData();
 
-            if ((empty($limit) || $itemsPerPage > $limit)) {
-
+            if (empty($limit) || $itemsPerPage > $limit) {
                 $querySettings['itemsPerPage'] = $itemsPerPage;
             } else if (!empty($limit)) {
-
                 $querySettings['itemsPerPage'] = $limit;
             }
-        }
-        else if (!empty($limit)) {
+        } else if (!empty($limit)) {
             $querySettings['itemsPerPage'] = $limit;
         }
 
-        $querySettings['page'] = (int)$pageRequest;
+        //set paged
+        $querySettings['page'] = (int)$this->getParam('page');
 
-        if ($this->view->checkbox('latest')->getData() === '1') {
+        //only latest
+        if ($view->checkbox('latest')->getData() === '1') {
             $querySettings['where']['latest = ?'] = 1;
         }
 
-        $querySettings['sort']['field'] = $this->view->select('sortby')->getData() ?: 'date';
-        $querySettings['sort']['dir'] = $this->view->select('orderby')->getData() ?: 'desc';
+        //set sort
+        $querySettings['sort']['field'] = $view->select('sortby')->getData() ?: 'date';
+        $querySettings['sort']['dir'] = $view->select('orderby')->getData() ?: 'desc';
 
+        //load Query
         $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 
-        $this->view->assign('paginator', $newsObjects);
+        //load settings for edit.php in edit-mode
+        $adminSettings = [];
+        if ($view->editmode === TRUE) {
+
+            $adminSettings['listSettings'] = Configuration::get('news_list_settings');
+            foreach ($adminSettings['listSettings']['layouts']['items'] as $index => $item) {
+                $adminSettings['listSettings']['layouts']['items'][$index] = [$item[0], $view->translateAdmin($item[1])];
+            }
+
+            $newsTypes = NewsTypes::getTypesFromConfig();
+            $adminSettings['entryTypes']['store'] = [['all', $view->translateAdmin('all entry types')]];
+            $adminSettings['entryTypes']['default'] = 'all';
+            foreach ($newsTypes as $typeKey => $typeData) {
+                $adminSettings['entryTypes']['store'][] = [$typeKey, $view->translateAdmin($typeData['name'])];
+            }
+        }
+
+        $mainClasses = [];
+
+        $mainClasses[] = 'area';
+        $mainClasses[] = 'news-' . $view->select('layout')->getData();
+
+        if($querySettings['entryType'] !== 'all') {
+            $mainClasses[] = 'entry-type-' . str_replace(['_',' '],['-'], strtolower($querySettings['entryType']));
+        }
+
+        $view->assign([
+            'mainClasses'    => implode(' ', $mainClasses),
+            'category'       => $category,
+            'showPagination' => $showPagination,
+            'paginator'      => $newsObjects,
+            'editSettings'   => $adminSettings
+        ]);
     }
 
+    public function getBrickHtmlTagOpen($brick)
+    {
+        return '';
+    }
+
+    public function getBrickHtmlTagClose($brick)
+    {
+        return '';
+    }
 }

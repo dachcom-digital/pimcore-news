@@ -1,7 +1,7 @@
 <?php if ($this->news) { ?>
 
     <div class="news-detail">
-        
+
         <h1><?= $this->news->getName(); ?></h1>
 
         <?php if (count($this->news->getImages()) > 0) { ?>
@@ -61,9 +61,9 @@
                             'width'      => '100%',
                             'height'     => 'auto',
                             'attributes' => [
-                                'class'            => 'video-js',
-                                'preload'          => 'auto',
-                                'controls'         => ''
+                                'class'    => 'video-js',
+                                'preload'  => 'auto',
+                                'controls' => ''
                             ]
                         ]);
 
@@ -139,11 +139,11 @@
         <?php } ?>
 
         <?php
-        $backLink = $this->newsHelper()->getBackUrl( $this->news );
+        $backLink = $this->newsHelper()->getBackUrl($this->news);
         ?>
 
-        <?php if ( !empty($backLink) ) { ?>
-            <a href="<?=$backLink?>" class="back"><?= $this->translate('Back to List'); ?></a>
+        <?php if (!empty($backLink)) { ?>
+            <a href="<?= $backLink ?>" class="back"><?= $this->translate('Back to List'); ?></a>
         <?php } ?>
 
     </div>

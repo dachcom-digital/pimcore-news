@@ -17,6 +17,7 @@ class Entry extends Concrete
     {
         $newsListing = Object\NewsEntry::getList();
         static::modifyListing($newsListing);
+
         return $newsListing->getObjects();
     }
 
@@ -36,6 +37,7 @@ class Entry extends Concrete
             ],
             'page'                 => 0,
             'itemsPerPage'         => 10,
+            'entryType'            => 'all',
             'category'             => NULL,
             'includeSubCategories' => FALSE,
             'where'                => []
@@ -48,6 +50,19 @@ class Entry extends Concrete
         $newsListing->addConditionParam('name <> ""');
         $newsListing->setGroupBy('o_id');
 
+        if ($settings['entryType'] !== 'all') {
+            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        }
+
+        $categories = NULL;
+        if ($settings['category'] && $settings['category'] instanceof Category) {
+            $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
+        }
+
+        //add optional category selector
+        static::addCategorySelectorToQuery($newsListing, $categories);
+
+        //add additional where clauses.
         if (count($settings['where'])) {
 
             foreach ($settings['where'] as $condition => $val) {
@@ -55,21 +70,7 @@ class Entry extends Concrete
             }
         }
 
-        if ($settings['category'] && $settings['category'] instanceof \News\Model\Category) {
-
-            $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
-
-            if (!empty($categories)) {
-
-                $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories) {
-                    $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
-                    static::modifyQuery($query, $newsListing);
-                });
-
-                $newsListing->addConditionParam('relations.dest_id IN (?)', implode(',', $categories));
-            }
-        }
-
+        //allow listing modification.
         static::modifyListing($newsListing);
 
         $paginator = \Zend_Paginator::factory($newsListing);
@@ -80,7 +81,29 @@ class Entry extends Concrete
     }
 
     /**
-     * @param \Zend_Db_Select $query
+     * add query join if categories available.
+     *
+     * @param Object\NewsEntry\Listing $newsListing
+     * @param null                     $categories
+     */
+    private static function addCategorySelectorToQuery($newsListing, $categories = NULL)
+    {
+        $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories) {
+            if (!empty($categories)) {
+                $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
+            }
+
+            //allow query modification.
+            static::modifyQuery($query, $newsListing);
+        });
+
+        if (!empty($categories)) {
+            $newsListing->addConditionParam('relations.dest_id IN (?)', implode(',', $categories));
+        }
+    }
+
+    /**
+     * @param \Zend_Db_Select                         $query
      * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
      */
     protected static function modifyQuery($query, $listing)
@@ -112,7 +135,7 @@ class Entry extends Concrete
             $categories[] = $category->getId();
         } else {
             $entries = NewsCategory::getList();
-            $entries->setCondition("o_path LIKE '" . $category->getPath() . "%'");
+            $entries->setCondition('o_path LIKE "' . $category->getPath() . '%"');
 
             foreach ($entries as $entry) {
                 $categories[] = $entry->getId();
@@ -157,9 +180,9 @@ class Entry extends Concrete
             if ($image instanceof Image) {
                 $data['image'] = [
                     '@type'  => 'ImageObject',
-                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail("galleryImage")->getPath(),
-                    'width'  => $image->getThumbnail("galleryImage")->getWidth(),
-                    'height' => $image->getThumbnail("galleryImage")->getHeight(),
+                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail('galleryImage')->getPath(),
+                    'width'  => $image->getThumbnail('galleryImage')->getWidth(),
+                    'height' => $image->getThumbnail('galleryImage')->getHeight(),
                 ];
             }
         }

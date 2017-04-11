@@ -72,6 +72,15 @@ class Install
             ]
         ]);
 
+        Configuration::set('entry_types', [
+            'news' => [
+                'name' => 'News',
+                'route' => 'news_detail',
+                'customLayoutId' => NULL
+            ]
+        ]);
+
+
         Configuration::set('use_id_in_url_fallback', FALSE);
         Configuration::set('news_is_installed', TRUE);
 

@@ -19,7 +19,7 @@ class Category extends Concrete
     }
 
     /**
-     * Get localizedfields -
+     * Get localized fields -
      * @return array
      */
     public function getLocalizedfields()
@@ -28,21 +28,20 @@ class Category extends Concrete
         if ($preValue !== NULL && !\Pimcore::inAdmin()) {
             return $preValue;
         }
-        $data = $this->getClass()->getFieldDefinition('localizedfields')->preGetData($this);
 
+        $data = $this->getClass()->getFieldDefinition('localizedfields')->preGetData($this);
         return $data;
     }
 
     /**
      * Get first level of categories
-     * @return array
-     */
-    public static function getFirstLevel()
-    {
-        $list = Object\NewsCategory::getList();
-        $list->setCondition('parentCategory__id is null');
 
-        return $list->getObjects();
+     * @return $this
+     */
+    public function getFirstLevel()
+    {
+        $mostTop = $this->getHierarchy();
+        return $mostTop[0];
     }
 
     /**
@@ -56,17 +55,16 @@ class Category extends Concrete
     {
         $allChildren = [$category->getId()];
 
-        $loopChilds = function (Category $child) use (&$loopChilds, &$allChildren) {
-            $childs = $child->getChildCategories();
+        $loopChildren = function (Category $child) use (&$loopChildren, &$allChildren) {
+            $children = $child->getChildCategories();
 
-            foreach ($childs as $child) {
+            foreach ($children as $child) {
                 $allChildren[] = $child->getId();
-
-                $loopChilds($child);
+                $loopChildren($child);
             }
         };
 
-        $loopChilds($category);
+        $loopChildren($category);
 
         return $allChildren;
     }
@@ -83,16 +81,16 @@ class Category extends Concrete
         $list = Object\NewsCategory::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
+            $list->setCondition('enabled = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
 
             foreach ($categories as $cat) {
-                $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
+                $categoriesWhere[] = 'categories LIKE ",' . $cat . ',%"';
             }
 
-            $list->setCondition("enabled = 1 AND (" . implode(" OR ", $categoriesWhere) . ")");
+            $list->setCondition('enabled = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         return $list->getObjects();
@@ -113,8 +111,8 @@ class Category extends Concrete
         $page = 0,
         $itemsPerPage = 10,
         $sort = [
-            "name"      => "name",
-            "direction" => "asc"
+            'name'      => 'name',
+            'direction' => 'asc'
         ],
         $includeChildCategories = FALSE
     ) {
@@ -130,7 +128,7 @@ class Category extends Concrete
                 $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
             }
 
-            $list->setCondition("enabled = 1 AND (" . implode(" OR ", $categoriesWhere) . ")");
+            $list->setCondition('enabled = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         $list->setOrderKey($sort['name']);
@@ -147,7 +145,7 @@ class Category extends Concrete
      * Checks if category is child of hierachy
      *
      * @param Category $category
-     * @param int      $level to check hierachy (0 = topMost)
+     * @param int      $level to check hierarchy (0 = topMost)
      *
      * @return bool
      */
@@ -156,9 +154,8 @@ class Category extends Concrete
         $mostTop = $this->getHierarchy();
         $mostTop = $mostTop[$level];
 
-        $childs = self::getAllChildCategories($mostTop);
-
-        return in_array($category->getId(), $childs);
+        $children = self::getAllChildCategories($mostTop);
+        return in_array($category->getId(), $children);
     }
 
     /**
@@ -191,8 +188,7 @@ class Category extends Concrete
 
         do {
             $hierarchy[] = $category;
-
-            $category = $category->getParentCategory();
+            $category = $category->getParent();
         } while ($category instanceof Category);
 
         return array_reverse($hierarchy);
@@ -205,19 +201,8 @@ class Category extends Concrete
     public function getChildCategories()
     {
         $list = Object\NewsCategory::getList();
-        $list->setCondition("parentCategory__id = ?", [$this->getId()]);
+        $list->setCondition('o_parentId = ?', [$this->getId()]);
 
         return $list->getObjects();
-    }
-
-    /**
-     * returns parent category
-     * this method has to be overwritten in Pimcore Object
-     * @throws \News\Exception
-     * @return Category
-     */
-    public function getParentCategory()
-    {
-        throw new \News\Exception("getParentCategory is not supported for " . get_class($this));
     }
 }

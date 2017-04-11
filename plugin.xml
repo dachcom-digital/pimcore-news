@@ -9,6 +9,7 @@
         <pluginClassName>\News\Plugin</pluginClassName>
         <pluginIncludePaths>
             <path>/News/lib</path>
+            <path>/News/models</path>
             <path>/News/lib/News/Model</path>
         </pluginIncludePaths>
         <pluginNamespaces>
@@ -17,5 +18,9 @@
         <pluginJsPaths>
             <path>/plugins/News/static/js/startup.js</path>
         </pluginJsPaths>
+        <pluginJsPaths-extjs6>
+            <path>/plugins/News/static/js/object/data/newsTypeSelect.js</path>
+            <path>/plugins/News/static/js/object/tags/newsTypeSelect.js</path>
+        </pluginJsPaths-extjs6>
     </plugin>
 </zend-config>

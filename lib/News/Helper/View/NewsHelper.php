@@ -2,6 +2,9 @@
 
 namespace News\Helper\View;
 
+use News\Tool\NewsTypes;
+use Pimcore\Model\Document;
+
 class NewsHelper extends \Zend_View_Helper_Abstract
 {
     /**
@@ -13,7 +16,7 @@ class NewsHelper extends \Zend_View_Helper_Abstract
     }
 
     /**
-     * @param       $news
+     * @param \Pimcore\Model\Object\NewsEntry $news
      * @param array $additionalUrlParams
      *
      * @return string
@@ -23,13 +26,13 @@ class NewsHelper extends \Zend_View_Helper_Abstract
         $href = NULL;
         $isRedirectLink = FALSE;
 
-        if ($news->getRedirectLink() instanceof \Pimcore\Model\Document) {
+        if ($news->getRedirectLink() instanceof Document) {
             $href = $news->getRedirectLink()->getFullPath();
             $isRedirectLink = TRUE;
         }
 
         if (is_null($href)) {
-            $staticRouteName = $news->getEntryType() === 'press' ? 'press_detail' : 'news_detail';
+            $staticRouteName = NewsTypes::getRouteName($news->getEntryType());
 
             $params = array_merge([
                 'lang' => $this->view->language,
@@ -40,7 +43,6 @@ class NewsHelper extends \Zend_View_Helper_Abstract
         }
 
         $absPath = $this->view->serverUrl() . $href;
-
         $cmdEv = \Pimcore::getEventManager()->trigger('news.detail.url', NULL, ['url' => $absPath, 'isRedirectLink' => $isRedirectLink]);
 
         if ($cmdEv->stopped()) {
@@ -57,13 +59,12 @@ class NewsHelper extends \Zend_View_Helper_Abstract
      */
     public function getBackUrl($news)
     {
-
         $categories = $news->getCategories();
         $backLink = '';
         if (count($categories) > 0) {
             $backLinkPage = $categories[0]->getBackLinkTarget();
 
-            if ($backLinkPage instanceof \Pimcore\Model\Document\Page) {
+            if ($backLinkPage instanceof Document\Page) {
                 $backLink = $backLinkPage->getFullPath();
             }
         }

@@ -39,7 +39,7 @@ class AbstractModel extends Model\AbstractModel
         try {
             $object = \Zend_Registry::get($cacheKey);
             if (!$object) {
-                throw new \Exception($className . " in registry is null");
+                throw new \Exception($className . ' in registry is null');
             }
 
             return $object;
@@ -116,7 +116,7 @@ class AbstractModel extends Model\AbstractModel
      */
     protected static function getCacheKey($className, $append)
     {
-        return "news_" . str_replace("\\", "_", $className) . "_" . $append;
+        return 'news_' . str_replace("\\", '_', $className) . '_' . $append;
     }
 
     /**
@@ -171,34 +171,16 @@ class AbstractModel extends Model\AbstractModel
     public function setValue($key, $value)
     {
         if ($this->getLocalizedFields()) {
-            $mykey = explode(".", $key); //0 => key, 1 => language
+            $mykey = explode('.', $key); //0 => key, 1 => language
 
             if (in_array($mykey [0], $this->localizedValues)) {
                 $this->getLocalizedFields()->setLocalizedValue($mykey [0], $value, $mykey [1]);
-
                 return $this;
             }
         }
 
         return parent::setValue($key, $value);
     }
-
-    /**
-     * @return array
-     */
-    /*public function __sleep() {
-        $vars = parent::__sleep();
-        $blockedVars = array("localizedValues", "localizedFields");
-        $finalVars = array();
-
-        foreach ($vars as $key) {
-            if (!in_array($key, $blockedVars)) {
-                $finalVars[] = $key;
-            }
-        }
-
-        return $finalVars;
-    }*/
 
     public function __wakeup()
     {

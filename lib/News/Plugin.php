@@ -31,9 +31,15 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
             'object.preAdd',
             ['\\News\\Event\\SeoUrl', 'setObjectFrontendUrl']
         );
+
         \Pimcore::getEventManager()->attach(
             'object.preUpdate',
             ['\\News\\Event\\SeoUrl', 'setObjectFrontendUrl']
+        );
+
+        \Pimcore::getEventManager()->attach(
+            'admin.object.get.preSendData',
+            ['\\News\\Event\\CustomLayout', 'setNewsTypeLayout']
         );
     }
 
@@ -43,7 +49,7 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
     public static function install()
     {
         try {
-            $install = new \News\Plugin\Install();
+            $install = new Install();
             $install->createConfig();
             $install->createStaticRoutes();
             $install->installAdminTranslations();
@@ -51,7 +57,6 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
             $install->createClasses();
         } catch (Exception $e) {
             \Pimcore\Logger::crit($e);
-
             return self::getTranslate()->_('news_install_failed');
         }
 
@@ -64,14 +69,13 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
     public static function uninstall()
     {
         try {
-            $install = new \News\Plugin\Install();
+            $install = new Install();
             $install->removeConfig();
             $install->removeStaticRoutes();
 
             return self::getTranslate()->_('news_uninstalled_successfully');
         } catch (Exception $e) {
             \Pimcore\Logger::crit($e);
-
             return self::getTranslate()->_('news_uninstall_failed');
         }
     }
@@ -82,8 +86,21 @@ class Plugin extends PluginLib\AbstractPlugin implements PluginLib\PluginInterfa
     public static function isInstalled()
     {
         $install = new Install();
-
         return $install->isInstalled();
+    }
+
+    /**
+     *
+     * @param string $language
+     * @return string $languageFile for the specified language relative to plugin directory
+     */
+    public static function getTranslationFile($language)
+    {
+        if (is_file(PIMCORE_PLUGINS_PATH . '/News/static/texts/' . $language . '.csv')) {
+            return '/News/static/texts/' . $language . '.csv';
+        } else {
+            return '/News/static/texts/en.csv';
+        }
     }
 
     /**
