@@ -40,7 +40,8 @@ class Entry extends Concrete
             'entryType'            => 'all',
             'category'             => NULL,
             'includeSubCategories' => FALSE,
-            'where'                => []
+            'where'                => [],
+            'request'              => []
 
         ], $params);
 
@@ -60,7 +61,7 @@ class Entry extends Concrete
         }
 
         //add optional category selector
-        static::addCategorySelectorToQuery($newsListing, $categories);
+        static::addCategorySelectorToQuery($newsListing, $categories, $settings);
 
         //add additional where clauses.
         if (count($settings['where'])) {
@@ -71,7 +72,7 @@ class Entry extends Concrete
         }
 
         //allow listing modification.
-        static::modifyListing($newsListing);
+        static::modifyListing($newsListing, $settings);
 
         $paginator = \Zend_Paginator::factory($newsListing);
         $paginator->setCurrentPageNumber($settings['page']);
@@ -85,16 +86,21 @@ class Entry extends Concrete
      *
      * @param Object\NewsEntry\Listing $newsListing
      * @param null                     $categories
+     * @param array                    $settings
      */
-    private static function addCategorySelectorToQuery($newsListing, $categories = NULL)
+    private static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
     {
-        $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories) {
+        $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories, $settings) {
             if (!empty($categories)) {
-                $query->join(['relations' => 'object_relations_' . $newsListing->getClassId()], "relations.src_id = o_id AND relations.fieldname = 'categories'", '');
+                $query->join(
+                    ['relations' => 'object_relations_' . $newsListing->getClassId()],
+                    "relations.src_id = o_id AND relations.fieldname = 'categories'",
+                    ''
+                );
             }
 
             //allow query modification.
-            static::modifyQuery($query, $newsListing);
+            static::modifyQuery($query, $newsListing, $settings);
         });
 
         if (!empty($categories)) {
@@ -105,15 +111,17 @@ class Entry extends Concrete
     /**
      * @param \Zend_Db_Select                         $query
      * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     * @param array                                   $settings
      */
-    protected static function modifyQuery($query, $listing)
+    protected static function modifyQuery($query, $listing, $settings = [])
     {
     }
 
     /**
      * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     * @param array                                   $settings
      */
-    protected static function modifyListing($listing)
+    protected static function modifyListing($listing, $settings = [])
     {
     }
 

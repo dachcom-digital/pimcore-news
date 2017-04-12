@@ -3,7 +3,9 @@
 namespace Pimcore\Model\Document\Tag\Area;
 
 use News\Model\Configuration;
+use News\Controller\WidgetHandler;
 use News\Tool\NewsTypes;
+
 use Pimcore\Model\Document;
 use Pimcore\Model\Object;
 
@@ -16,7 +18,7 @@ class News extends Document\Tag\Area\AbstractArea
     {
         $view = $this->getView();
         $querySettings = [];
-
+        
         //set category
         $category = NULL;
         if ($view->href('category')->getElement()) {
@@ -64,6 +66,12 @@ class News extends Document\Tag\Area\AbstractArea
         $querySettings['sort']['field'] = $view->select('sortby')->getData() ?: 'date';
         $querySettings['sort']['dir'] = $view->select('orderby')->getData() ?: 'desc';
 
+        //get request data
+        $querySettings['request'] = [
+            'POST' => $view->getRequest()->getPost(),
+            'GET'  => $view->getRequest()->getQuery()
+        ];
+
         //load Query
         $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 
@@ -89,17 +97,34 @@ class News extends Document\Tag\Area\AbstractArea
         $mainClasses[] = 'area';
         $mainClasses[] = 'news-' . $view->select('layout')->getData();
 
-        if($entryType !== 'all') {
-            $mainClasses[] = 'entry-type-' . str_replace(['_',' '],['-'], strtolower($entryType));
+        if ($entryType !== 'all') {
+            $mainClasses[] = 'entry-type-' . str_replace(['_', ' '], ['-'], strtolower($entryType));
         }
 
+        //prepare WidgetSettings
+        $widgetSettings = $querySettings;
+        $widgetSettings['showPagination'] = $showPagination;
+        $widgetSettings['entryType'] = $entryType;
+        $widgetSettings['paginator'] = $newsObjects;
+        
+        //initialize widget handler
+        $widgetHandler = new WidgetHandler($widgetSettings);
+        $widgetHandler->passHelperPaths($view->getHelperPaths());
+        $widgetHandler->setEditMode($view->editmode);
+
         $view->assign([
+
             'mainClasses'    => implode(' ', $mainClasses),
             'category'       => $category,
             'showPagination' => $showPagination,
             'paginator'      => $newsObjects,
             'entryType'      => $entryType,
-            'editSettings'   => $adminSettings
+            'widgetHandler'  => $widgetHandler,
+
+            //system/editmode related
+            'editSettings'   => $adminSettings,
+            'querySettings'  => $querySettings
+
         ]);
     }
 
