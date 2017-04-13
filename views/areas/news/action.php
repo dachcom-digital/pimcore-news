@@ -21,13 +21,14 @@ class News extends Document\Tag\Area\AbstractArea
         
         //set category
         $category = NULL;
+        $includeSubCategories = FALSE;
         if ($view->href('category')->getElement()) {
-
             $category = $view->href('category')->getElement();
-            $querySettings['category'] = $category;
-            $querySettings['includeSubCategories'] = $view->checkbox('includeSubCategories')->getData() === '1';
-
+            $includeSubCategories = $view->checkbox('includeSubCategories')->getData() === '1';
         }
+
+        $querySettings['category'] = $category;
+        $querySettings['includeSubCategories'] = $includeSubCategories;
 
         //set entry type
         $entryType = $view->select('entryType')->getData() ?: 'all';
@@ -38,19 +39,22 @@ class News extends Document\Tag\Area\AbstractArea
 
         //set pagination
         $showPagination = FALSE;
+        $itemPerPage = 10;
         if ($view->checkbox('showPagination')->getData() === '1') {
 
             $showPagination = TRUE;
             $itemsPerPage = (int)$view->numeric('itemsPerPage')->getData();
 
             if (empty($limit) || $itemsPerPage > $limit) {
-                $querySettings['itemsPerPage'] = $itemsPerPage;
+                $itemPerPage = $itemsPerPage;
             } else if (!empty($limit)) {
-                $querySettings['itemsPerPage'] = $limit;
+                $itemPerPage = $limit;
             }
         } else if (!empty($limit)) {
-            $querySettings['itemsPerPage'] = $limit;
+            $itemPerPage = $limit;
         }
+
+        $querySettings['itemsPerPage'] = $itemPerPage;
 
         //set paged
         $querySettings['page'] = (int)$this->getParam('page');
