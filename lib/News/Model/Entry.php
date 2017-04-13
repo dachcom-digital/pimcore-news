@@ -137,15 +137,14 @@ class Entry extends Concrete
             return NULL;
         }
 
-        $categories = [];
+        $categories = [ $category->getId() ];
 
-        if (!$includeSubCategories) {
-            $categories[] = $category->getId();
-        } else {
+        if ($includeSubCategories === TRUE) {
+
             $entries = NewsCategory::getList();
-            $entries->setCondition('o_path LIKE "' . $category->getPath() . '%"');
+            $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
 
-            foreach ($entries as $entry) {
+            foreach ($entries->load() as $entry) {
                 $categories[] = $entry->getId();
             }
         }
