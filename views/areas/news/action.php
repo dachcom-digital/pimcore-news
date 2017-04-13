@@ -23,12 +23,10 @@ class News extends Document\Tag\Area\AbstractArea
         $category = NULL;
         if ($view->href('category')->getElement()) {
 
-            $querySettings['category'] = $view->href('category')->getElement();
             $category = $view->href('category')->getElement();
+            $querySettings['category'] = $category;
+            $querySettings['includeSubCategories'] = $view->checkbox('includeSubCategories')->getData() === '1';
 
-            if ($view->checkbox('includeSubCategories')->getData() === '1') {
-                $querySettings['includeSubCategories'] = TRUE;
-            }
         }
 
         //set entry type
