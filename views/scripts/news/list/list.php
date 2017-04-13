@@ -1,6 +1,6 @@
 <div class="<?= $this->mainClasses; ?>">
 
-    <?php if ($this->paginator) { ?>
+    <?php if ($this->paginator->getTotalItemCount() > 0) { ?>
 
         <div class="news-list-content">
             <?= $this->template('news/partial/entries.php'); ?>
