@@ -4,8 +4,8 @@
     <div class="t-row">
 
         <div class="t-col-half">
-            <label class="clearfix"><?= $this->translateAdmin('top news') ?></label><br>
-            <?= $this->checkbox('latest'); ?> <?= $this->translateAdmin('show only top news') ?>
+            <label class="clearfix"><?= $this->translateAdmin('top entries') ?></label><br>
+            <?= $this->checkbox('latest'); ?> <?= $this->translateAdmin('show only top entries') ?>
         </div>
 
         <div class="t-col-half">
@@ -26,7 +26,7 @@
             <?= $this->checkbox('showPagination'); ?> <?= $this->translateAdmin('show pagination') ?>
         </div>
         <div class="t-col-half">
-            <label><?= $this->translateAdmin('items per page') ?></label>
+            <label><?= $this->translateAdmin('entries per page') ?></label>
             <?php if ($this->editmode && $this->numeric('itemsPerPage')->isEmpty()) {
                 $this->numeric('itemsPerPage')->setDataFromResource($this->editSettings['listSettings']['paginate']['itemsPerPage']);
             } ?>
@@ -41,7 +41,7 @@
 
     <div class="t-row">
 
-        <label><?= $this->translateAdmin('max records displayed') ?></label>
+        <label><?= $this->translateAdmin('maximum number of entries') ?></label>
         <?php if ($this->editmode && $this->numeric('limit')->getData() == NULL || $this->numeric('limit')->getData() < 0) {
             $this->numeric('limit')->setDataFromResource($this->editSettings['listSettings']['maxItems']);
         } ?>

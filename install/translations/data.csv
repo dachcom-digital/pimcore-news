@@ -1,13 +1,13 @@
 "key";"en";"de";"creationDate";"modificationDate";
 "news";"news";"News";1460395362;1460395362;
-"top news";"top news";"Top News";1460395362;1460395362;
-"show only top news";"Show only top news";"Nur Top News anzeigen";1460395362;1460395362;
+"top entries";"top Entries";"Top Beiträge";1460395362;1460395362;
+"show only top entries";"Show only top Entries";"Nur Top Beiträge anzeigen";1460395362;1460395362;
 "pagination";"Pagination";"Paginierung";1460395362;1460395362;
 "show pagination";"Show Pagination";"Paginierung anzeigen";1460395362;1460395362;
-"max records displayed";"Max Records displayed";"Anzahl der anzuzeigenden News";1460395362;1460395362;
+"maximum number of entries";"Maximum Number of Entries";"Maximale Anzahl der anzuzeigenden Beiträge";1460395362;1460395362;
 "category";"Category";"Kategorie";1460395362;1460395362;
 "categories";"Categories";"Kategorien";1460395362;1460395362;
-"latest news";"is top news";"Ist eine Top News";1460395362;1460395362;
+"latest news";"is top entry";"Ist ein Top Beitrag";1460395362;1460395362;
 "author";"Author";"Autor";1460395362;1460395362;
 "entry type";"Entry Type";"Beitragstyp";1460395362;1460395362;
 "all entry types";"All Entry Types";"Alle Beitragstypen";1460395362;1460395362;
@@ -28,8 +28,7 @@
 "sort direction";"Sort direction";"Sortierung";1476276792;1476276792;
 "descending";"descending";"Absteigend";1476276792;1476276792;
 "ascending";"ascending";"Aufsteigend";1476276792;1476276792;
-"max records displayed";"Max records displayed";"Maximale Anzahl anzuzeigender Datensätze";1476276792;1476276792;
-"items per page";"Items per Page";"Einträge pro Seite";1476276792;1476276792;
+"entries per page";"Entries per Page";"Beiträge pro Seite";1476276792;1476276792;
 "layout";"Layout";"Layout";1476276792;1476276792;
 "list";"list";"Liste";1476276792;1476276792;
 "latest";"latest";"Liste Kompakt";1476276792;1476276792;
