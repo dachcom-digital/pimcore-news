@@ -22,7 +22,7 @@ Add this to your `news_configuration.php`:
 ]
 ```
 - You also need to update or migrate both classes from `install/object/structures/*.json`.
-- Remove the `press_detail static route if you're using just one entry type.
+- Remove the `press_detail` static route if you're using just one entry type.
 - because of the new entry types we adjusted the area edit labels to be more generic. re-import the `install/translations/data.csv` in your admin translation section.
 
 **Misc**  
