@@ -2,12 +2,19 @@
 
 namespace News\Tool;
 
+use Pimcore\Model\Site;
+use Pimcore\Model\Staticroute;
 use Pimcore\Model\Object;
 use Pimcore\Model\Object\ClassDefinition;
 use News\Model\Configuration;
 
 class NewsTypes
 {
+    /**
+     * @var array
+     */
+    protected static $routeData = [];
+
     /**
      * @param null $object
      *
@@ -91,17 +98,37 @@ class NewsTypes
     /**
      * @param $entryType
      *
-     * @return string
+     * @return array
      */
-    public static function getRouteName($entryType)
+    public static function getRouteInfo($entryType)
     {
-        $defaultStaticRoute = 'news_detail';
+        //use cache.
+        if(isset(static::$routeData[$entryType])) {
+            return static::$routeData[$entryType];
+        }
+
+        $routeData = ['name' => 'news_detail', 'urlParams' => []];
         $types = static::getTypesFromConfig();
 
         if(isset($types[$entryType]) && !empty($types[$entryType]['route'])) {
-            return $types[$entryType]['route'];
+            $routeData['name'] = $types[$entryType]['route'];
         }
 
-        return $defaultStaticRoute;
+        $siteId = NULL;
+        if (Site::isSiteRequest()) {
+            $siteId = Site::getCurrentSite()->getId();
+        }
+
+        $route = Staticroute::getByName($routeData['name'], $siteId);
+        $variables = explode(',', $route->getVariables());
+
+        //remove default one
+        $defaults = ['news'];
+        $variables = array_diff($variables, $defaults);
+
+        $routeData['urlParams'] = array_merge($routeData['urlParams'], $variables);
+        static::$routeData[$entryType] = $routeData;
+
+        return $routeData;
     }
 }

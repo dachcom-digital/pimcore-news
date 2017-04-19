@@ -4,6 +4,7 @@ namespace News\Helper\View;
 
 use News\Tool\NewsTypes;
 use Pimcore\Model\Document;
+use Pimcore\Tool;
 
 class NewsHelper extends \Zend_View_Helper_Abstract
 {
@@ -17,7 +18,7 @@ class NewsHelper extends \Zend_View_Helper_Abstract
 
     /**
      * @param \Pimcore\Model\Object\NewsEntry $news
-     * @param array $additionalUrlParams
+     * @param array                           $additionalUrlParams
      *
      * @return string
      */
@@ -31,19 +32,31 @@ class NewsHelper extends \Zend_View_Helper_Abstract
             $isRedirectLink = TRUE;
         }
 
+        $eventParams = [];
+
         if (is_null($href)) {
-            $staticRouteName = NewsTypes::getRouteName($news->getEntryType());
+            $staticRouteInfo = NewsTypes::getRouteInfo($news->getEntryType());
 
             $params = array_merge([
-                'lang' => $this->view->language,
                 'news' => $news->getDetailUrl($this->view->language)
             ], $additionalUrlParams);
 
-            $href = $this->view->url($params, $staticRouteName, TRUE);
+            if (in_array('lang', $staticRouteInfo['urlParams'])) {
+                $params['lang'] = $this->view->language;
+            }
+
+            $href = $this->view->url($params, $staticRouteInfo['name'], TRUE);
+
+            $eventParams['staticRouteName'] = $staticRouteInfo['name'];
+            $eventParams['routeParams'] = $params;
         }
 
-        $absPath = $this->view->serverUrl() . $href;
-        $cmdEv = \Pimcore::getEventManager()->trigger('news.detail.url', NULL, ['url' => $absPath, 'isRedirectLink' => $isRedirectLink]);
+        $absPath = Tool::getHostUrl() . $href;
+
+        $eventParams['url'] = $absPath;
+        $eventParams['isRedirectLink'] = $isRedirectLink;
+
+        $cmdEv = \Pimcore::getEventManager()->trigger('news.detail.url', NULL, $eventParams);
 
         if ($cmdEv->stopped()) {
             $absPath = $cmdEv->last();
@@ -74,7 +87,7 @@ class NewsHelper extends \Zend_View_Helper_Abstract
             if (
                 isset($_SERVER['HTTP_REFERER'])
                 && preg_match('@^[^/]+://[^/]+@', $_SERVER['HTTP_REFERER'])
-                && strpos($_SERVER['HTTP_REFERER'], $this->view->serverUrl()) !== FALSE
+                && strpos($_SERVER['HTTP_REFERER'], Tool::getHostUrl()) !== FALSE
             ) {
                 $backLink = $_SERVER['HTTP_REFERER'];
             }
