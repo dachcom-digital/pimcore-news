@@ -94,7 +94,7 @@ class Entry extends Concrete
             if (!empty($categories)) {
                 $query->join(
                     ['relations' => 'object_relations_' . $newsListing->getClassId()],
-                    "relations.src_id = o_id AND relations.fieldname = 'categories'",
+                    "relations.src_id = o_id",
                     ''
                 );
             }
@@ -104,7 +104,7 @@ class Entry extends Concrete
         });
 
         if (!empty($categories)) {
-            $newsListing->addConditionParam('relations.dest_id IN (?)', implode(',', $categories));
+            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,', count($categories)), ',') .')', $categories);
         }
     }
 

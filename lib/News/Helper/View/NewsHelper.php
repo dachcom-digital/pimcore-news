@@ -131,12 +131,7 @@ class NewsHelper extends \Zend_View_Helper_Abstract
         }
 
         $newsListing->addConditionParam('name <> ""');
-        $newsListing->addConditionParam('o_id != ?', $news->getId());
         $newsListing->setGroupBy('o_id');
-
-        if ($settings['entryType'] !== 'all') {
-            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
-        }
 
         $categories = [];
         if ( count($news->getCategories()) > 0 && !$settings['ignoreCategory']) {
@@ -146,6 +141,11 @@ class NewsHelper extends \Zend_View_Helper_Abstract
 
             Entry::addCategorySelectorToQuery($newsListing, $categories);
         }
+
+        if ($settings['entryType'] !== 'all') {
+            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        }
+        $newsListing->addConditionParam('o_id != ?', $news->getId());
 
         //add additional where clauses.
         if (count($settings['where'])) {
