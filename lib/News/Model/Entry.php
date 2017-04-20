@@ -88,7 +88,7 @@ class Entry extends Concrete
      * @param null                     $categories
      * @param array                    $settings
      */
-    private static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
+    public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
     {
         $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories, $settings) {
             if (!empty($categories)) {
@@ -131,7 +131,7 @@ class Entry extends Concrete
      *
      * @return array|null
      */
-    private static function getCategoriesRecursive($category, $includeSubCategories = FALSE)
+    public static function getCategoriesRecursive($category, $includeSubCategories = FALSE)
     {
         if (!$category) {
             return NULL;

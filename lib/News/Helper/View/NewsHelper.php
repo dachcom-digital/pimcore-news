@@ -2,9 +2,12 @@
 
 namespace News\Helper\View;
 
+use Carbon\Carbon;
+use News\Model\Entry;
 use News\Tool\NewsTypes;
 use Pimcore\Model\Document;
 use Pimcore\Tool;
+use Pimcore\Model\Object;
 
 class NewsHelper extends \Zend_View_Helper_Abstract
 {
@@ -94,6 +97,66 @@ class NewsHelper extends \Zend_View_Helper_Abstract
         }
 
         return $backLink;
+    }
+
+    /**
+     * @param \Pimcore\Model\Object\NewsEntry $news
+     * @param array                           $params
+     *
+     * @return array
+     */
+    public function getRelatedNews($news, $params = []) {
+
+        $settings = array_merge([
+            'sort'                 => [
+                'field' => 'date',
+                'dir'   => 'desc'
+            ],
+            'limit'                 => 4,
+            'where'                 => [],
+            'entryType'             => $news->getEntryType(),
+            'includeSubCategories'  => FALSE,
+            'ignoreCategory'        => FALSE
+
+        ], $params);
+
+        $newsListing = Object\NewsEntry::getList([
+            'limit' => $settings['limit']
+        ]);
+        if ( is_string($settings['sort']) && strtolower($settings['sort']) === 'random' ) {
+            $newsListing->setOrderKey('RAND()', FALSE);
+        } else {
+            $newsListing->setOrderKey($settings['sort']['field']);
+            $newsListing->setOrder($settings['sort']['dir']);
+        }
+
+        $newsListing->addConditionParam('name <> ""');
+        $newsListing->addConditionParam('o_id != ?', $news->getId());
+        $newsListing->setGroupBy('o_id');
+
+        if ($settings['entryType'] !== 'all') {
+            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        }
+
+        $categories = [];
+        if ( count($news->getCategories()) > 0 && !$settings['ignoreCategory']) {
+            foreach ( $news->getCategories() as $category ) {
+                $categories += Entry::getCategoriesRecursive($category, $settings['includeSubCategories']);
+            }
+
+            Entry::addCategorySelectorToQuery($newsListing, $categories);
+        }
+
+        //add additional where clauses.
+        if (count($settings['where'])) {
+
+            foreach ($settings['where'] as $condition => $val) {
+                $newsListing->addConditionParam($condition, $val);
+            }
+
+        }
+
+        return $newsListing->load();
     }
 
 }
