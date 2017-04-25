@@ -48,12 +48,7 @@ class Entry extends Concrete
         $newsListing = Object\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
-        $newsListing->addConditionParam('name <> ""');
         $newsListing->setGroupBy('o_id');
-
-        if ($settings['entryType'] !== 'all') {
-            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
-        }
 
         $categories = NULL;
         if ($settings['category'] && $settings['category'] instanceof Category) {
@@ -63,6 +58,11 @@ class Entry extends Concrete
         //add optional category selector
         static::addCategorySelectorToQuery($newsListing, $categories, $settings);
 
+        //add entry type selector
+        if ($settings['entryType'] !== 'all') {
+            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        }
+
         //add additional where clauses.
         if (count($settings['where'])) {
 
@@ -70,6 +70,9 @@ class Entry extends Concrete
                 $newsListing->addConditionParam($condition, $val);
             }
         }
+
+        //do not allow empty names
+        $newsListing->addConditionParam('name <> ?', '');
 
         //allow listing modification.
         static::modifyListing($newsListing, $settings);
