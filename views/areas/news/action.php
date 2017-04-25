@@ -18,7 +18,7 @@ class News extends Document\Tag\Area\AbstractArea
     {
         $view = $this->getView();
         $querySettings = [];
-        
+
         //set category
         $category = NULL;
         $includeSubCategories = FALSE;
@@ -77,6 +77,9 @@ class News extends Document\Tag\Area\AbstractArea
         //load Query
         $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 
+        //get Layout Name
+        $layoutName = $view->select('layout')->getData();
+
         //load settings for edit.php in edit-mode
         $adminSettings = [];
         if ($view->editmode === TRUE) {
@@ -97,7 +100,7 @@ class News extends Document\Tag\Area\AbstractArea
         $mainClasses = [];
 
         $mainClasses[] = 'area';
-        $mainClasses[] = 'news-' . $view->select('layout')->getData();
+        $mainClasses[] = 'news-' . $layoutName;
 
         if ($entryType !== 'all') {
             $mainClasses[] = 'entry-type-' . str_replace(['_', ' '], ['-'], strtolower($entryType));
@@ -108,7 +111,8 @@ class News extends Document\Tag\Area\AbstractArea
         $widgetSettings['showPagination'] = $showPagination;
         $widgetSettings['entryType'] = $entryType;
         $widgetSettings['paginator'] = $newsObjects;
-        
+        $widgetSettings['layoutName'] = $layoutName;
+
         //initialize widget handler
         $widgetHandler = new WidgetHandler($widgetSettings);
         $widgetHandler->passHelperPaths($view->getHelperPaths());
@@ -121,6 +125,7 @@ class News extends Document\Tag\Area\AbstractArea
             'showPagination' => $showPagination,
             'paginator'      => $newsObjects,
             'entryType'      => $entryType,
+            'layoutName'     => $layoutName,
             'widgetHandler'  => $widgetHandler,
 
             //system/editmode related
