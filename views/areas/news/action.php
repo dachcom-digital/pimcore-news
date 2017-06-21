@@ -24,7 +24,7 @@ class News extends Document\Tag\Area\AbstractArea
         $includeSubCategories = FALSE;
         if ($view->href('category')->getElement()) {
             $category = $view->href('category')->getElement();
-            $includeSubCategories = $view->checkbox('includeSubCategories')->getData() === '1';
+            $includeSubCategories = (bool)$view->checkbox('includeSubCategories')->getData() === TRUE;
         }
 
         $querySettings['category'] = $category;
@@ -40,7 +40,7 @@ class News extends Document\Tag\Area\AbstractArea
         //set pagination
         $showPagination = FALSE;
         $itemPerPage = 10;
-        if ($view->checkbox('showPagination')->getData() === '1') {
+        if ((bool)$view->checkbox('showPagination')->getData() === TRUE) {
 
             $showPagination = TRUE;
             $itemsPerPage = (int)$view->numeric('itemsPerPage')->getData();
@@ -60,7 +60,7 @@ class News extends Document\Tag\Area\AbstractArea
         $querySettings['page'] = (int)$this->getParam('page');
 
         //only latest
-        if ($view->checkbox('latest')->getData() === '1') {
+        if ((bool)$view->checkbox('latest')->getData() === TRUE) {
             $querySettings['where']['latest = ?'] = 1;
         }
 
