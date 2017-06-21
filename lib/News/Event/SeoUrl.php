@@ -2,7 +2,9 @@
 
 namespace News\Event;
 
-use Pimcore\Model\Object;
+use Pimcore\Model;
+use Pimcore\Cache;
+use Pimcore\Db;
 
 class SeoUrl
 {
@@ -19,13 +21,13 @@ class SeoUrl
             return;
         }
 
-        \Pimcore\Model\Version::disable();
+        Model\Version::disable();
 
         self::parseUrl($target, $className);
 
-        \Pimcore\Model\Version::enable();
+        Model\Version::enable();
 
-        \Pimcore\Cache::clearTag('object_' . $target->getId());
+        Cache::clearTag('object_' . $target->getId());
     }
 
     /**
@@ -136,7 +138,7 @@ class SeoUrl
 
         $duplicateUrlObjects = $objectClass::getByLocalizedfields(
             'detailUrl', $url, $language,
-            ['limit' => 1, 'condition' => ' AND name = "' . $name . '" AND ooo_id != ' . (int)$obj->getId()]
+            ['limit' => 1, 'condition' => ' AND name = "' . Db::get()->quote($name) . '" AND ooo_id != ' . (int)$obj->getId()]
         );
 
         return count($duplicateUrlObjects) === 1;
