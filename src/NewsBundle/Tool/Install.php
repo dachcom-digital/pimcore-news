@@ -175,9 +175,12 @@ class Install extends AbstractInstaller
     public function installTranslations()
     {
         $csv = $this->installSourcesPath . '/translations/data.csv';
-        Translation\Website::importTranslationsFromFile($csv, TRUE, Tool\Admin::getLanguages());
+        Translation\Admin::importTranslationsFromFile($csv, TRUE, Tool\Admin::getLanguages());
     }
 
+    /**
+     * @return bool
+     */
     public function createFolders()
     {
         $root = Object\Folder::getByPath('/news');
