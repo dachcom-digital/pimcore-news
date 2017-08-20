@@ -1,0 +1,78 @@
+services:
+
+    # tool: installer
+    news.tool.installer:
+        class: NewsBundle\Tool\Install
+        arguments:
+            - '@logger'
+            - '@pimcore_admin.serializer'
+        tags:
+            - { name: monolog.logger }
+
+    # configuration
+    news.configuration:
+        class: NewsBundle\Configuration\Configuration
+
+    # area brick
+    news.area.brick.form:
+        class: NewsBundle\Document\Areabrick\News\News
+        arguments:
+            - '@news.configuration'
+            - '@news.manager.entry_types'
+            - '@pimcore.translator'
+        tags:
+            - { name: pimcore.area.brick, id: news }
+
+    # manager entry types:
+    news.manager.entry_types:
+        class: NewsBundle\Manager\EntryTypeManager
+        arguments:
+            - '@news.configuration'
+
+
+    # generator entry links:
+    news.generator.link:
+        class: NewsBundle\Generator\LinkGenerator
+        arguments:
+            - '@router'
+            - '@news.manager.entry_types'
+
+    # generator related entries:
+    news.generator.related_entries:
+        class: NewsBundle\Generator\RelatedEntriesGenerator
+
+    # event:
+    news.event_listener.news_seo:
+        class: NewsBundle\EventListener\NewsSeoListener
+        arguments:
+            - '@news.configuration'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # event:
+    news.event_listener.news_type:
+        class: NewsBundle\EventListener\NewsTypeListener
+        arguments:
+            - '@request_stack'
+            - '@news.configuration'
+            - '@news.manager.entry_types'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # twig extension: links
+    news.twig.extension.news:
+        class: NewsBundle\Twig\Extension\NewsExtension
+        public: false
+        arguments:
+            - '@news.generator.link'
+        tags:
+            - { name: twig.extension }
+
+    # twig extension: relations
+    news.twig.extension.related:
+        class: NewsBundle\Twig\Extension\RelatedEntriesExtension
+        public: false
+        arguments:
+            - '@news.generator.related_entries'
+        tags:
+            - { name: twig.extension }

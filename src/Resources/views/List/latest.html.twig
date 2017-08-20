@@ -1,0 +1,15 @@
+<div class="{{ main_classes }}">
+
+    {% if paginator.getTotalItemCount() > 0  %}
+
+        <div class="news-latest-content">
+            {% include '@News/Block/entries.html.twig' %}
+        </div>
+
+    {% else %}
+
+        {{ 'No News found'|trans }}
+
+    {% endif %}
+
+</div>

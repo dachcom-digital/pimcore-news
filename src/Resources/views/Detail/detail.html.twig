@@ -1,0 +1,154 @@
+{% extends '@News/layout.html.twig' %}
+
+{% block news_detail_wrapper %}
+
+    {% block news_detail_content %}
+
+        {% set back_link = news_entry_backlink(entry) %}
+
+        <div class="news-detail">
+
+            <h1>{{ entry.getName() }}</h1>
+
+            {% if entry.getImages() is iterable and entry.getImages()|length > 0 %}
+
+                {% if entry.getImages()|length > 1 %}
+                    <div class="media-gallery light-gallery">
+
+                        {% for image in entry.getImages() %}
+                            {% if image is instanceof('\Pimcore\Model\Asset\Image') %}
+                                <a href="{{ image.getFullPath() }}" class="item{{ loop.index > 1 ? ' hidden'  : '' }}" data-src="{{ image.getThumbnail('contentImage') }}">
+                                    {{ image.getThumbnail('galleryImage').getHtml({'class': 'img-responsive'}) }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="media-gallery">
+                        {% for image in entry.getImages() %}
+                            {% if image is instanceof('\Pimcore\Model\Asset\Image') %}
+                                <a href="{{ image.getFullPath() }}" class="item" data-src="{{ image.getThumbnail('contentImage') }}">
+                                    {{ image.getThumbnail('galleryImage').getHtml({'class': 'img-responsive'}) }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+            <p class="date">
+                {{ entry.getDate().format('d.m.Y') }}
+            </p>
+
+            {% if entry.getLead() is not empty %}
+                <div class="lead">
+                    {{ entry.getLead() }}
+                </div>
+            {% endif %}
+
+            {% if entry.getDescription() is not empty %}
+                <div class="description">
+                    {{ entry.getDescription() }}
+                </div>
+            {% endif %}
+
+            {% if entry.getVideo() is not empty %}
+
+                <div class="video row">
+                    <div class="col-xs-12 col-sm-6">
+
+                        <div class="video-item responsive">
+
+                            {#
+
+                            $video = new \Pimcore\Model\Document\Tag\Video();
+                            $video->setOptions([
+                                'thumbnail'  => 'content',
+                                'width'      => '100%',
+                                'height'     => 'auto',
+                                'attributes' => [
+                                    'class'    => 'video-js',
+                                    'preload'  => 'auto',
+                                    'controls' => ''
+                                ]
+                            ]);
+
+                            $video->type = $this->news->getVideo()->getType();
+                            $video->id = $this->news->getVideo()->getData();
+                            $video->title = $this->news->getVideo()->getTitle();
+
+                            if ($this->news->getVideo()->getPoster() instanceof \Pimcore\Model\Asset\Image) {
+                                $video->poster = $this->news->getVideo()->getPoster()->getId();
+                            }
+
+                            {{ video.frontend() }}
+
+                            #}
+
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <h2>{{ entry.getVideo().getTitle() }}</h2>
+
+                        <p class="description">
+                            {{ entry.getVideo().getDescription() }}
+                        </p>
+                    </div>
+                </div>
+
+            {% endif %}
+
+            {% if entry.getDownloads() is iterable and entry.getDownloads()|length > 0 %}
+
+                <div class="download-list">
+                    <h2>{{ 'Downloads'|trans }}</h2>
+                    <ul class="list-unstyled">
+                    {% for download in entry.getDownloads() %}
+                        {% if download is instanceof('\Pimcore\Model\Asset') %}
+
+                            {% set dPath = download.getFullPath() %}
+                            {% set dSize = download.getFileSize('kb', 2) %}
+                            {% set dType = pimcore.file.getFileExtension(download.getFilename()) %}
+                            {% set dName = (download.getMetadata('name')) ? download.getMetadata('name') : 'Download' %}
+
+                            <li class="item">
+                                <a href="{{ dPath }}" target="_blank" class="icon-download-{{ dType }}">
+                                    {{ dName }}<span class="size">{{ dType }} ({{ dSize }})</span>
+                                </a>
+                            </li>
+
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+
+            {% endif %}
+
+            {% if entry.getLinks() is not empty %}
+
+                <h4>{{ 'Links'|trans }}</h4>
+
+                <div class="link-list">
+
+                    <ul class="list-unstyled">
+
+                        {% for link in news.getLinks() %}
+                            <li class="item">{{ link.url.getData() }}</li>
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+            {% if back_link is not empty %}
+                <a href="{{ back_link }}" class="back">{{ 'Back to List'|trans }}</a>
+            {% endif %}
+
+        </div>
+
+    {% endblock news_detail_content %}
+
+{% endblock news_detail_wrapper %}

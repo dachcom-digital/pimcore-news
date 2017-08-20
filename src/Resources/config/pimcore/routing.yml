@@ -1,0 +1,6 @@
+news.controller.admin.get_entry_types:
+    path: /admin/news/settings/get-entry-types
+    defaults: { _controller: NewsBundle:Admin/Settings:getEntryTypes }
+news.controller.admin.change_entry_type:
+    path: /admin/news/settings/change-entry-type
+    defaults: { _controller: NewsBundle:Admin/Settings:changeEntryType }

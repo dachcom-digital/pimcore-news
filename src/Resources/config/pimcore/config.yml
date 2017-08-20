@@ -1,0 +1,29 @@
+pimcore:
+    objects:
+        class_definitions:
+            data:
+                map:
+                    newsTypeSelect: NewsBundle\CoreExtension\NewsTypeSelect
+
+news:
+    list:
+        sort_by: 'date'
+        order_by: 'desc'
+        max_items: 0
+        paginate:
+            items_per_page: 10
+        layouts:
+            default: 'list'
+            items:
+                list:
+                    name: 'news.list'
+                latest:
+                    name: 'news.latest'
+    detail: ~
+    entry_types:
+        default: 'news'
+        items:
+            news:
+                name: 'news.entry_type.news'
+                route: 'news_detail'
+                custom_layout_id: 0

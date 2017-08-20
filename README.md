@@ -1,15 +1,10 @@
 # Pimcore News
-Pimcore News Plugin
+Pimcore News Plugin. It's also possible to generate custom types like Press, Blog...
 
 ## Requirements
-* Pimcore 4.3
+* Pimcore 5
 
 ## Installation
-**Handcrafted Installation**   
-1. Download Plugin  
-2. Rename it to `News`  
-3. Place it in your plugin directory  
-4. Activate & install it through backend 
 
 **Composer Installation**  
 1. Add code below to your `composer.json`    
@@ -17,7 +12,7 @@ Pimcore News Plugin
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~1.2.0",
+    "dachcom-digital/news" : "~2.0.0",
 }
 ```
 
@@ -34,28 +29,15 @@ Pimcore News Plugin
 * *Meta Information* Tab: Extend News with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.  
 * *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
 
-**Override Templates**  
-To override the news scripts, just create a news folder in your scripts folder to override templates:
- 
- `/website/views/scripts/news/detail.php`
- 
 ## Events
 **news.head.meta**  
-Use this event to override news detail meta tags.
-
-```
-$params = [
-    'title'             => $title,
-    'description'       => $description,
-    'og:title'          => $ogTitle,
-    'og:description'    => $ogDescription,
-    'og:url'            => $ogDescription,
-    'og:image'          => $ogImage
-];
+TBD
         
-```
 **news.detail.url**  
-Use this event to manipulate the news detail url.
+TBD
+
+## Widgets
+TBD
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  

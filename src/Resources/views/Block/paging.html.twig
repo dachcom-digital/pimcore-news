@@ -1,0 +1,17 @@
+{% if pageCount|length > 1 %}
+    <div class="row">
+        <div class="col-xs-12 pagination-block">
+            <ul class="pagination">
+                {% if previous is defined %}
+                    <li><a href="{{ url({'page':  previous}) }}">«</a></li>
+                {% endif %}
+                {% for page in pagesInRange %}
+                    <li class="{{ page == >current ? 'active' : '' }}"><a href="{{ url({'page': page}) }}">{{ page }}</a></li>
+                {% endfor %}
+                {% if next is defined %}
+                    <li><a href="{{ url({'page':  next}) }}">»</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

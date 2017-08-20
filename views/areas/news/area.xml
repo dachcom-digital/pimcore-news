@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<zend-config>
-    <id>news</id>
-    <name>News</name>
-    <version>1.0.0</version>
-    <description>News Plugin</description>
-</zend-config>

@@ -1,7 +1,0 @@
-"news", "News"
-"news_name","News Plugin"
-"news_type_select","News Type Selector"
-"news_installed_successfully","News plugin installed successfully. Please don't forget to reload pimcore!"
-"news_install_failed","Could not install News plugin. See log for more details."
-"news_uninstalled_successfully","Successfully uninstalled News plugin. Please don't forget to reload pimcore!"
-"news_uninstall_failed","Could not uninstall News plugin. See log for more details."

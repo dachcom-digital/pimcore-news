@@ -1,0 +1,14 @@
+{
+    "routes":[
+        {
+            "name": "news_detail",
+            "pattern": "/(\\w+)\\/news\\/(.*?)$/",
+            "reverse": "/%_locale/news/%entry",
+            "module": "News",
+            "controller": "entry",
+            "action": "detail",
+            "variables": "_locale,entry",
+            "priority": "0"
+        }
+    ]
+}

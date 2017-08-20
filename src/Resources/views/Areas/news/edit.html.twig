@@ -1,0 +1,84 @@
+<div class="toolbox-edit-overlay">
+
+    <div class="t-row">
+
+        <div class="t-col-half">
+            <label class="clearfix">{{ 'news.top_entries'|trans({}, 'admin') }}</label><br>
+            {{ pimcore_checkbox('latest')}} {{ 'news.show_only_top_entries' }}
+        </div>
+
+        <div class="t-col-half">
+            <label>{{ 'news.layout'|trans({}, 'admin') }}</label>
+            {{ pimcore_select('layout', {'store': config.layouts.store}) }}
+        </div>
+
+    </div>
+
+    <div class="t-row">
+
+        <div class="t-col-half">
+            <label class="clearfix">{{ 'news.pagination'|trans({}, 'admin') }}</label><br>
+            {{ pimcore_checkbox('showPagination') }} {{ 'news.show_pagination'|trans({}, 'admin') }}
+        </div>
+        <div class="t-col-half">
+            <label>{{ 'news.entries_per_page'|trans({}, 'admin') }}</label>
+            {{ pimcore_numeric('itemsPerPage', { 'decimalPrecision': 0, 'minValue': 0 }) }}
+        </div>
+
+    </div>
+
+    <div class="t-row">
+
+        <label>{{ 'news.maximum_number_of_entries'|trans({}, 'admin') }}</label>
+        {{ pimcore_numeric('limit', {'decimalPrecision': 0, 'minValue': 0 }) }}
+
+    </div>
+
+    <div class="t-row">
+
+        <div class="t-col-half">
+            <label>{{ 'news.sort_by'|trans({}, 'admin') }}</label>
+            {{ pimcore_select('sortby', { 'store': config.sort_by.store
+            }) }}
+        </div>
+
+        <div class="t-col-half">
+            <label>{{ 'news.order_by'|trans({}, 'admin') }}</label>
+            {{ pimcore_select('orderby', { 'store': config.order_by.store
+            }) }}
+        </div>
+
+    </div>
+
+    <div class="t-row">
+
+        <div class="t-col-half">
+            <label>{{ 'news.category'|trans({}, 'admin') }}</label>
+            {{ pimcore_href('category', config.category.href_config) }}
+        </div>
+
+        <div class="t-col-half">
+            <label class="clearfix">{{ 'news.subcategories'|trans({}, 'admin') }}</label><br>
+            {{ pimcore_checkbox('includeSubCategories') }} {{ 'news.include_subcategories'|trans({}, 'admin') }}
+        </div>
+
+    </div>
+
+    <div class="t-row">
+
+        <div class="t-col-half">
+
+            <label>{{ 'news.entry_type'|trans({}, 'admin') }}</label>
+            {{ pimcore_select('entryType', {'store': config.entry_types.store}) }}
+        </div>
+
+        <div class="t-col-half">
+            <span class="description">
+                <strong>{{ 'news.entry_type'|trans({}, 'admin') }}:</strong> {{ 'news.entry_type_output_limit'|trans({}, 'admin') }}
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% spaceless -%}
+
+        {% if entry.getName() is not empty %}
+            {% do pimcore_head_title().set(entry.getName()) %}
+        {% endif %}
+
+        {% if entry.getLead() is not empty %}
+            {% do pimcore_head_meta().setDescription(entry.getLead()) %}
+        {% endif %}
+
+    {%- endspaceless %}
+
+    {% block layout_head_meta deferred %}
+        {{ pimcore_head_title() }}
+        {{ pimcore_head_meta() }}
+    {% endblock %}
+
+
+</head>
+<body class="news-detail">
+
+{% block news_detail_wrapper %}{% endblock %}
+
+</body>
+</html>
