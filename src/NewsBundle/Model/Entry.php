@@ -234,4 +234,20 @@ class Entry extends Concrete implements EntryInterface
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaTitle()
+    {
+        throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaDescription()
+    {
+        throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
+    }
 }

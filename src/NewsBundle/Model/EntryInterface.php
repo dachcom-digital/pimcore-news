@@ -58,4 +58,8 @@ interface EntryInterface
 
     public function getCategories();
 
+    public function getMetaTitle();
+
+    public function getMetaDescription();
+
 }

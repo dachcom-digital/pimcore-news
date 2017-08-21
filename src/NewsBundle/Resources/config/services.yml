@@ -23,25 +23,30 @@ services:
         tags:
             - { name: pimcore.area.brick, id: news }
 
-    # manager entry types:
+    # manager entry types
     news.manager.entry_types:
         class: NewsBundle\Manager\EntryTypeManager
         arguments:
             - '@news.configuration'
 
-
-    # generator entry links:
+    # generator entry links
     news.generator.link:
         class: NewsBundle\Generator\LinkGenerator
         arguments:
             - '@router'
             - '@news.manager.entry_types'
 
-    # generator related entries:
+    # generator related entries
     news.generator.related_entries:
         class: NewsBundle\Generator\RelatedEntriesGenerator
 
-    # event:
+    # generator head meta
+    news.generator.head_meta:
+        class: NewsBundle\Generator\HeadMetaGenerator
+        arguments:
+            - '@news.generator.link'
+
+    # event: seo optimizer
     news.event_listener.news_seo:
         class: NewsBundle\EventListener\NewsSeoListener
         arguments:
@@ -49,13 +54,23 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    # event:
+    # event: entry types definition
     news.event_listener.news_type:
         class: NewsBundle\EventListener\NewsTypeListener
         arguments:
             - '@request_stack'
             - '@news.configuration'
             - '@news.manager.entry_types'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # event: metadata
+    news.event_listener.meta_data:
+        class: NewsBundle\EventListener\MetaDataListener
+        arguments:
+            - '@pimcore.templating.view_helper.head_meta'
+            - '@pimcore.templating.view_helper.head_title'
+            - '@news.generator.head_meta'
         tags:
             - { name: kernel.event_subscriber }
 
