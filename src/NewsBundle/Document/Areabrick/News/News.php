@@ -272,7 +272,7 @@ class News extends AbstractTemplateAreabrick
         ];
 
         foreach ($this->entryTypeManager->getTypesFromConfig() as $typeKey => $typeData) {
-            $store[] = [$typeKey, $this->translator->trans($typeData['name'])];
+            $store[] = [$typeKey, $this->translator->trans($typeData['name'], [], 'admin')];
         }
 
         return $store;
