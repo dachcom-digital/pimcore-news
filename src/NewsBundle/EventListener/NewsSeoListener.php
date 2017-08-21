@@ -7,7 +7,6 @@ use Pimcore\Cache;
 use Pimcore\Db;
 use Pimcore\Event\Model\ObjectEvent;
 use Pimcore\Event\ObjectEvents;
-use Pimcore\Model\Object\News;
 use Pimcore\Model\Version;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -59,8 +58,8 @@ class NewsSeoListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Pimcore\Model\Object           $object
-     * @param string (NewsEntry|NewsCategory) $className
+     * @param \Pimcore\Model\Object\AbstractObject $object
+     * @param string (NewsEntry|NewsCategory)      $className
      *
      * @return bool
      * @throws \Exception
