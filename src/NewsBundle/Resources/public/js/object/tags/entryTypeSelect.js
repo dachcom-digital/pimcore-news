@@ -1,8 +1,8 @@
 
-pimcore.registerNS('pimcore.object.tags.newsTypeSelect');
-pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
+pimcore.registerNS('pimcore.object.tags.entryTypeSelect');
+pimcore.object.tags.entryTypeSelect = Class.create(pimcore.object.tags.select, {
 
-    type: 'newsTypeSelect',
+    type: 'entryTypeSelect',
 
     getGridColumnEditor: function (field) {
         //grid column configuration for news type is currently not supported

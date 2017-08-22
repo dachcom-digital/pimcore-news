@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class NewsTypeListener implements EventSubscriberInterface
+class EntryTypeListener implements EventSubscriberInterface
 {
     /**
      * @var RequestStack
@@ -49,14 +49,14 @@ class NewsTypeListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            AdminEvents::OBJECT_GET_PRE_SEND_DATA => 'setNewsTypeLayout'
+            AdminEvents::OBJECT_GET_PRE_SEND_DATA => 'setEntryTypeLayout'
         ];
     }
 
     /**
      * @param GenericEvent $e
      */
-    public function setNewsTypeLayout(GenericEvent $e)
+    public function setEntryTypeLayout(GenericEvent $e)
     {
         /** @var \Pimcore\Model\Object\NewsEntry $object */
         $object = $e->getArgument('object');

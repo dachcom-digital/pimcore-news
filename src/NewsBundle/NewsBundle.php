@@ -30,8 +30,8 @@ class NewsBundle extends AbstractPimcoreBundle
     {
         return [
             '/bundles/news/js/startup.js',
-            '/bundles/news/js/object/data/newsTypeSelect.js',
-            '/bundles/news/js/object/tags/newsTypeSelect.js'
+            '/bundles/news/js/object/data/entryTypeSelect.js',
+            '/bundles/news/js/object/tags/entryTypeSelect.js'
         ];
     }
 

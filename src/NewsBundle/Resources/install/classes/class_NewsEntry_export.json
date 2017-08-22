@@ -118,7 +118,7 @@
 								"visibleSearch":false
 							},
 							{
-								"fieldtype":"newsTypeSelect",
+								"fieldtype":"entryTypeSelect",
 								"options":null,
 								"width":300,
 								"defaultValue":null,

@@ -3,7 +3,7 @@ pimcore:
         class_definitions:
             data:
                 map:
-                    newsTypeSelect: NewsBundle\CoreExtension\NewsTypeSelect
+                    entryTypeSelect: NewsBundle\CoreExtension\EntryTypeSelect
 
 news:
     list:

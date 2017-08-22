@@ -1,7 +1,7 @@
-pimcore.registerNS('pimcore.object.classes.data.newsTypeSelect');
-pimcore.object.classes.data.newsTypeSelect = Class.create(pimcore.object.classes.data.data, {
+pimcore.registerNS('pimcore.object.classes.data.entryTypeSelect');
+pimcore.object.classes.data.entryTypeSelect = Class.create(pimcore.object.classes.data.data, {
 
-    type: 'newsTypeSelect',
+    type: 'entryTypeSelect',
 
     allowIn: {
         object: true,
@@ -11,13 +11,13 @@ pimcore.object.classes.data.newsTypeSelect = Class.create(pimcore.object.classes
     },
 
     initialize: function (treeNode, initData) {
-        this.type = 'newsTypeSelect';
+        this.type = 'entryTypeSelect';
         this.initData(initData);
         this.treeNode = treeNode;
     },
 
     getTypeName: function () {
-        return t('news_type_select');
+        return t('news.type_select');
     },
 
     getIconClass: function () {

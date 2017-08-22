@@ -55,8 +55,8 @@ services:
             - { name: kernel.event_subscriber }
 
     # event: entry types definition
-    news.event_listener.news_type:
-        class: NewsBundle\EventListener\NewsTypeListener
+    news.event_listener.entry_type:
+        class: NewsBundle\EventListener\EntryTypeListener
         arguments:
             - '@request_stack'
             - '@news.configuration'
