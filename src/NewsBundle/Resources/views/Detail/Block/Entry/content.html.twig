@@ -1,0 +1,25 @@
+{# single content for detail view #}
+
+{% block news_detail_entry_content %}
+
+    <div class="detail-entry-content entry-content">
+
+        <p class="date">
+            {{ entry.getDate().format('d.m.Y') }}
+        </p>
+
+        {% if entry.getLead() is not empty %}
+            <div class="lead">
+                {{ entry.getLead() }}
+            </div>
+        {% endif %}
+
+        {% if entry.getDescription() is not empty %}
+            <div class="description">
+                {{ entry.getDescription()|raw }}
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock news_detail_entry_content %}

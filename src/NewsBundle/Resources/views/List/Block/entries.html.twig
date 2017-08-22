@@ -1,0 +1,18 @@
+{% block news_entries %}
+
+    <div class="news-list-entries">
+
+        {% for news in paginator %}
+
+            <div class="news-entry">
+
+                {% include '@News/List/Block/Entry/image.html.twig' %}
+                {% include '@News/List/Block/Entry/content.html.twig' %}
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{# single image for list view #}
+
+{% block news_list_entry_image %}
+
+    {% if news.getImage() is not null %}
+
+        <div class="list-entry-image entry-image">
+            <a href="{{ news_entry_permalink(news) }}">
+                {{ news.getImage().getThumbnail('contentImage').getHtml({'class': 'img-responsive'})|raw }}
+            </a>
+        </div>
+
+    {% endif %}
+
+{% endblock news_list_entry_image %}

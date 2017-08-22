@@ -1,0 +1,16 @@
+{# single content for list view #}
+
+{% block news_list_entry_content %}
+
+    <div class="list-entry-content entry-content">
+        <p class="date">{{ news.getDate().format('d.m.Y') }}</p>
+
+        <h2 class="list-entry-headline entry-headline">{{ news.getName() }}</h2>
+        <p>{{ news.getLead() }}</p>
+
+        <a href="{{ news_entry_permalink(news) }}" class="col-xs-12">
+            <span class="more">{{ 'news.read_more'|trans }}</span>
+        </a>
+    </div>
+
+{% endblock news_list_entry_content %}

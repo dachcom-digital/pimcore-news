@@ -1,0 +1,24 @@
+{# single video for detail view #}
+
+{% block news_detail_entry_video %}
+
+    {% if entry.getVideo() is not empty %}
+
+        <div class="detail-entry-video entry-video">
+
+            <div class="video-item responsive">
+                {{ news_video_tag(entry.getVideo()) }}
+            </div>
+
+            {% if entry.getVideo().getTitle() is not empty %}
+                <h2 class="video-title">{{ entry.getVideo().getTitle() }}</h2>
+            {% endif %}
+
+            {% if entry.getVideo().getDescription() is not empty %}
+                <p class="video-description">{{ entry.getVideo().getDescription() }}</p>
+            {% endif %}
+        </div>
+
+    {% endif %}
+
+{% endblock news_detail_entry_video %}

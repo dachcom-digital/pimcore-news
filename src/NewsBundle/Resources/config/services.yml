@@ -91,3 +91,10 @@ services:
             - '@news.generator.related_entries'
         tags:
             - { name: twig.extension }
+
+    # twig extension: video tag
+    news.twig.extension.video_tag:
+        class: NewsBundle\Twig\Extension\VideoTagExtension
+        public: false
+        tags:
+            - { name: twig.extension }

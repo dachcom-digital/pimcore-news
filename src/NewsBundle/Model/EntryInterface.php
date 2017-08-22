@@ -40,7 +40,7 @@ interface EntryInterface
     public static function getCategoriesRecursive($category, $includeSubCategories = FALSE);
 
     /**
-     * Get Image for Product
+     * Get single image for entry
      * @return bool|\Pimcore\Model\Asset
      */
     public function getImage();

@@ -1,0 +1,24 @@
+{# single links for detail view #}
+
+{% block news_detail_entry_links %}
+
+    {% if entry.getLinks() is not empty %}
+
+        <div class="detail-entry-links entry-links">
+
+            <h4>{{ 'Links'|trans }}</h4>
+            <div class="link-list">
+                <ul class="list-unstyled">
+
+                    {% for link in entry.getLinks() %}
+                        <li class="item">{{ link.url.getData()|raw }}</li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+
+        </div>
+
+    {% endif %}
+
+{% endblock news_detail_entry_links %}

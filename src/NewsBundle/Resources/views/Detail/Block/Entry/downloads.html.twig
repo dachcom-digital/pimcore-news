@@ -1,0 +1,33 @@
+{# single download for detail view #}
+
+{% block news_detail_entry_download %}
+
+    {% if entry.getDownloads() is iterable and entry.getDownloads()|length > 0 %}
+
+        <div class="detail-entry-downloads entry-downloads">
+
+            <h2>{{ 'Downloads'|trans }}</h2>
+            <ul class="list-unstyled">
+                {% for download in entry.getDownloads() %}
+                    {% if download is instanceof('\Pimcore\Model\Asset') %}
+
+                        {% set dPath = download.getFullPath() %}
+                        {% set dSize = download.getFileSize('kb', 2) %}
+                        {% set dType = pimcore.file.getFileExtension(download.getFilename()) %}
+                        {% set dName = (download.getMetadata('name')) ? download.getMetadata('name') : 'Download' %}
+
+                        <li class="item">
+                            <a href="{{ dPath }}" target="_blank" class="icon-download-{{ dType }}">
+                                {{ dName }}<span class="size">{{ dType }} ({{ dSize }})</span>
+                            </a>
+                        </li>
+
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+        </div>
+
+    {% endif %}
+
+{% endblock news_detail_entry_download %}

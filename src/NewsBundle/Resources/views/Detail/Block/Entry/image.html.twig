@@ -1,0 +1,15 @@
+{# single image for detail view #}
+
+{% block news_detail_entry_image %}
+
+    {% if entry.getImage() is not null %}
+
+        <div class="detail-entry-image entry-image">
+            <a href="{{ entry.getFullPath() }}" class="item" data-src="{{ entry.getImage().getThumbnail('contentImage') }}">
+                {{ entry.getImage().getThumbnail('galleryImage').getHtml({'class': 'img-responsive'})|raw }}
+            </a>
+        </div>
+
+    {% endif %}
+
+{% endblock news_detail_entry_image %}

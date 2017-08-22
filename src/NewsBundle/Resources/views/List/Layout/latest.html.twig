@@ -1,0 +1,17 @@
+<div class="{{ main_classes }} layout-latest">
+
+    {% if paginator.getTotalItemCount() > 0 %}
+
+        {% include '@News/List/Block/entries.html.twig' %}
+
+        {% if show_pagination %}
+            {% include '@News/List/Block/paginator.html.twig' %}
+        {% endif %}
+
+    {% else %}
+
+        {{ 'No News found'|trans }}
+
+    {% endif %}
+
+</div>

@@ -1,0 +1,39 @@
+{% block news_entries_paginator %}
+
+    {% set pages = paginator.getPages('Sliding') %}
+
+    {% if pages.pageCount > 0 %}
+
+        <ul class="pagination">
+
+            {% if pages.previous is defined %}
+                <li class="first">
+                    <a href="{{ pimcore_url({ page: pages.first }) }}">&laquo;</a>
+                </li>
+            {% endif %}
+
+            {% for page in pages.pagesInRange %}
+
+                {% if (pages.first < page) and (page < pages.last) or page == pages.current %}
+                    {% set class = page == pages.current ? 'active' %}
+
+                    <li{% if class is not empty %} class="{{ class }}"{% endif %}>
+                        <a href="{{ pimcore_url({ page: page }) }}">{{ page }}</a>
+                    </li>
+                {% endif %}
+
+            {% endfor %}
+
+            {% if pages.next is defined %}
+
+                <li class="last">
+                    <a href="{{ pimcore_url({ page: pages.last }) }}">&raquo;</a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+    {% endif %}
+
+{% endblock news_entries_paginator %}
