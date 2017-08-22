@@ -1,0 +1,18 @@
+{% macro news_download(download) %}
+
+    {% if download is not null %}
+
+        {% set download_path = download.getFullPath() %}
+        {% set download_size = download.getFileSize('kb', 2) %}
+        {% set download_type = download.getFilename()|split('.')|last %}
+        {% set download_name = (download.getMetadata('name')) ? download.getMetadata('name') : 'Download'|trans %}
+
+        <li class="item">
+            <a href="{{ download_path }}" target="_blank" class="icon-download-{{ download_type }}">
+                <span class="title">{{ download_name }}</span> <span class="extension">{{ download_type }}</span> <span class="size">({{ download_size }})</span>
+            </a>
+        </li>
+
+    {% endif %}
+
+{% endmacro news_download %}

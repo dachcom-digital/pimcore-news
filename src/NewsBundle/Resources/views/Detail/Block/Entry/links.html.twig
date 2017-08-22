@@ -8,7 +8,7 @@
 
             <h4>{{ 'Links'|trans }}</h4>
             <div class="link-list">
-                <ul class="list-unstyled">
+                <ul class="news-ul">
 
                     {% for link in entry.getLinks() %}
                         <li class="item">{{ link.url.getData()|raw }}</li>

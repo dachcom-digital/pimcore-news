@@ -2,27 +2,16 @@
 
 {% block news_detail_entry_download %}
 
+    {% import '@News/Macro/download.html.twig' as download_macro %}
+
     {% if entry.getDownloads() is iterable and entry.getDownloads()|length > 0 %}
 
         <div class="detail-entry-downloads entry-downloads">
 
-            <h2>{{ 'Downloads'|trans }}</h2>
-            <ul class="list-unstyled">
+            <h4>{{ 'Downloads'|trans }}</h4>
+            <ul class="news-ul">
                 {% for download in entry.getDownloads() %}
-                    {% if download is instanceof('\Pimcore\Model\Asset') %}
-
-                        {% set dPath = download.getFullPath() %}
-                        {% set dSize = download.getFileSize('kb', 2) %}
-                        {% set dType = pimcore.file.getFileExtension(download.getFilename()) %}
-                        {% set dName = (download.getMetadata('name')) ? download.getMetadata('name') : 'Download' %}
-
-                        <li class="item">
-                            <a href="{{ dPath }}" target="_blank" class="icon-download-{{ dType }}">
-                                {{ dName }}<span class="size">{{ dType }} ({{ dSize }})</span>
-                            </a>
-                        </li>
-
-                    {% endif %}
+                    {{ download_macro.news_download(download) }}
                 {% endfor %}
             </ul>
 
