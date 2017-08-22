@@ -37,7 +37,7 @@ class EntryTypeManager
      */
     public function getTypes($object = NULL)
     {
-        $newsTypes = $this->getTypesFromConfig();
+        $entryTypes = $this->getTypesFromConfig();
 
         $validLayouts = NULL;
 
@@ -45,7 +45,7 @@ class EntryTypeManager
             $validLayouts = Object\Service::getValidLayouts($object);
         }
 
-        foreach ($newsTypes as $typeId => &$type) {
+        foreach ($entryTypes as $typeId => &$type) {
 
             if($type['custom_layout_id'] === 0) {
                 $type['custom_layout_id'] = NULL;
@@ -70,13 +70,13 @@ class EntryTypeManager
             $allowMasterLayout = isset($validLayouts[0]);
 
             if ((!$allowMasterLayout || !is_null($customLayoutId)) && !is_null($validLayouts) && !isset($validLayouts[$customLayoutId])) {
-                unset($newsTypes[$typeId]);
+                unset($entryTypes[$typeId]);
             } else {
                 $type['custom_layout_id'] = $customLayoutId;
             }
         }
 
-        return $newsTypes;
+        return $entryTypes;
     }
 
     /**

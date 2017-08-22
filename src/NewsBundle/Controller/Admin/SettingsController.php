@@ -26,10 +26,9 @@ class SettingsController extends AdminController
         $translator = $this->container->get('pimcore.translator');
 
         $newsObject = Object::getById(intval($request->get('objectId')));
-        $newsTypes = $entryTypeManager->getTypes($newsObject);
 
         $valueArray = [];
-        foreach ($newsTypes as $typeName => $type) {
+        foreach ($entryTypeManager->getTypes($newsObject) as $typeName => $type) {
             $valueArray[] = [
                 'custom_layout_id' => $type['custom_layout_id'],
                 'value'            => $typeName,
