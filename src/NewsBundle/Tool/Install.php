@@ -7,7 +7,6 @@ use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
 
 use Pimcore\Model\Staticroute;
 use Pimcore\Tool;
-use Psr\Log\LoggerInterface;
 use Pimcore\Model\Object;
 use Pimcore\Model\Translation;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,11 +16,6 @@ use Pimcore\Model\Object\ClassDefinition;
 
 class Install extends AbstractInstaller
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @var Serializer
      */
@@ -53,14 +47,13 @@ class Install extends AbstractInstaller
     /**
      * Install constructor.
      *
-     * @param LoggerInterface $logger
      * @param Serializer $serializer
      */
-    public function __construct(LoggerInterface $logger, Serializer $serializer)
+    public function __construct(Serializer $serializer)
     {
-        $this->logger = $logger;
-        $this->serializer = $serializer;
+        parent::__construct();
 
+        $this->serializer = $serializer;
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
     }

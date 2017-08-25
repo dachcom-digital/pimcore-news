@@ -4,10 +4,7 @@ services:
     news.tool.installer:
         class: NewsBundle\Tool\Install
         arguments:
-            - '@logger'
             - '@pimcore_admin.serializer'
-        tags:
-            - { name: monolog.logger }
 
     # configuration
     news.configuration:

@@ -2,7 +2,7 @@
 Pimcore News Plugin. It's also possible to generate custom types like Press, Blog...
 
 ## Requirements
-* Pimcore 5
+* Pimcore 5. Only with Build 96 or greater.
 
 ## Installation
 
