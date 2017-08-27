@@ -26,22 +26,37 @@ services:
         arguments:
             - '@news.configuration'
 
-    # generator entry links
-    news.generator.link:
-        class: NewsBundle\Generator\LinkGenerator
+    # abstract generator entry links
+    news.generator.abstract.link:
+        class: NewsBundle\Generator\AbstractLinkGenerator
+        abstract: true
         arguments:
             - '@router'
             - '@news.manager.entry_types'
+    # generator entry links
+    news.generator.link:
+        parent: news.generator.abstract.link
+        class: NewsBundle\Generator\LinkGenerator
 
+    # abstract generator related entries
+    news.generator.abstract.related_entries:
+        class: NewsBundle\Generator\AbstractRelatedEntriesGenerator
+        abstract: true
     # generator related entries
     news.generator.related_entries:
+        parent: news.generator.abstract.related_entries
         class: NewsBundle\Generator\RelatedEntriesGenerator
 
-    # generator head meta
-    news.generator.head_meta:
-        class: NewsBundle\Generator\HeadMetaGenerator
+    # abstract generator head meta
+    news.generator.abstract.head_meta:
+        class: NewsBundle\Generator\AbstractHeadMetaGenerator
+        abstract: true
         arguments:
             - '@news.generator.link'
+    # generator head meta
+    news.generator.head_meta:
+        parent: news.generator.abstract.head_meta
+        class: NewsBundle\Generator\HeadMetaGenerator
 
     # event: seo optimizer
     news.event_listener.news_seo:

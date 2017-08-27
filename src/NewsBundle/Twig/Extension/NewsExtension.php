@@ -2,22 +2,22 @@
 
 namespace NewsBundle\Twig\Extension;
 
-use NewsBundle\Generator\LinkGenerator;
+use NewsBundle\Generator\LinkGeneratorInterface;
 use NewsBundle\Model\EntryInterface;
 
 class NewsExtension extends \Twig_Extension
 {
     /**
-     * @var LinkGenerator
+     * @var LinkGeneratorInterface
      */
     private $linkGenerator;
 
     /**
      * NewsExtension constructor.
      *
-     * @param LinkGenerator $linkGenerator
+     * @param LinkGeneratorInterface $linkGenerator
      */
-    public function __construct(LinkGenerator $linkGenerator)
+    public function __construct(LinkGeneratorInterface $linkGenerator)
     {
         $this->linkGenerator = $linkGenerator;
     }
@@ -29,11 +29,11 @@ class NewsExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction(
+            new \Twig_Function(
                 'news_entry_permalink',
                 [$this, 'generatePermalink']
             ),
-            new \Twig_SimpleFunction(
+            new \Twig_Function(
                 'news_entry_backlink',
                 [$this, 'generateBackLink']
             ),

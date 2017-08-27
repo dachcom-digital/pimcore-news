@@ -12,30 +12,27 @@ Pimcore News Plugin. It's also possible to generate custom types like Press, Blo
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~2.0.0",
+    "dachcom-digital/news" : "dev-master",
 }
 ```
 
 ## Important to know
-* The detail url is based on the title for each language. If the detail url field is empty, the title will be transformed to a valid url slug.
+- The detail url is based on the title for each language. If the detail url field is empty, the title will be transformed to a valid url slug.
+- The News Bundle will install two classes (`NewsEntry` and `NewsCategory`). If you're going to modify them, please be sure that you're follow our [upgrade notes](UPGRADE.md) in case we're changing the class structure.
 
 ## Good to know
-* News can be placed at any place on your website through the news area element. Use it as list, latest or even as a custom layout.
-* The detail page always stays the same (see static route), no matter where you placed the area element.
-* It's possible to override the detail url in the news object.
+- News can be placed at any place on your website through the news area element. Use it as list, latest or even as a custom layout.
+- The detail page always stays the same (see static route), no matter where you placed the area element.
+- It's possible to override the detail url in the news object.
 
-## Extend News  
-**Data**  
-* *Meta Information* Tab: Extend News with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.  
-* *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
+## Extending News Object
+- *Meta Information* Tab: Extend News with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.  
+- *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
 
-## Events
-**news.head.meta**  
-TBD
+### Further Information
+- [Head Meta Generator](docs/10_HeadMetaGenerator.md)
+- [Link Generator](docs/11_LinkGenerator.md)
         
-**news.detail.url**  
-TBD
-
 ## Widgets
 TBD
 

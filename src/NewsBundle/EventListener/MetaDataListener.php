@@ -2,8 +2,7 @@
 
 namespace NewsBundle\EventListener;
 
-use NewsBundle\Generator\HeadMetaGenerator;
-use NewsBundle\Generator\HeadTitleGenerator;
+use NewsBundle\Generator\HeadMetaGeneratorInterface;
 use NewsBundle\Model\EntryInterface;
 use Pimcore\Model\Object\NewsEntry;
 use Pimcore\Templating\Helper\HeadMeta;
@@ -26,19 +25,19 @@ class MetaDataListener implements EventSubscriberInterface
     protected $headTitle;
 
     /**
-     * @var HeadMetaGenerator
+     * @var HeadMetaGeneratorInterface
      */
     protected $headMetaGenerator;
 
     /**
-     * @param HeadMeta           $headMeta
-     * @param HeadTitle          $headTitle
-     * @param HeadMetaGenerator  $headMetaGenerator
+     * @param HeadMeta                   $headMeta
+     * @param HeadTitle                  $headTitle
+     * @param HeadMetaGeneratorInterface $headMetaGenerator
      */
     public function __construct(
         HeadMeta $headMeta,
         HeadTitle $headTitle,
-        HeadMetaGenerator $headMetaGenerator
+        HeadMetaGeneratorInterface $headMetaGenerator
     ) {
         $this->headMeta = $headMeta;
         $this->headTitle = $headTitle;
@@ -66,13 +65,13 @@ class MetaDataListener implements EventSubscriberInterface
             return;
         }
 
-        if($request->attributes->get('pimcore_request_source') !== 'staticroute') {
+        if ($request->attributes->get('pimcore_request_source') !== 'staticroute') {
             return;
         }
 
         $entryId = $request->get('entry');
 
-        if(empty($entryId)) {
+        if (empty($entryId)) {
             return;
         }
 
@@ -84,7 +83,7 @@ class MetaDataListener implements EventSubscriberInterface
         }
 
         foreach ($this->headMetaGenerator->generateMeta($entry) as $property => $content) {
-            if(!empty($content)) {
+            if (!empty($content)) {
                 $this->headMeta->appendProperty($property, $content);
             }
         }
@@ -93,7 +92,7 @@ class MetaDataListener implements EventSubscriberInterface
 
         $title = $this->headMetaGenerator->generateTitle($entry);
 
-        switch (HeadMetaGenerator::TITLE_POSITION) {
+        switch ($this->headMetaGenerator->getTitlePosition()) {
             case Container::SET:
                 $this->headTitle->set($title);
                 break;

@@ -45,9 +45,12 @@ interface EntryInterface
      */
     public function getImage();
 
-    /**
-     * @return mixed
-     */
+    public function getName($language = NULL);
+
+    public function getLead($language = NULL);
+
+    public function getDescription($language = NULL);
+
     public function getJsonLDData();
 
     public function getEntryType();

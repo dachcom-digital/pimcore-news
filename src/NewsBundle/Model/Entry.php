@@ -171,6 +171,9 @@ class Entry extends Concrete implements EntryInterface
         return NULL;
     }
 
+    /**
+     * @return array
+     */
     public function getJsonLDData()
     {
         $data = [
@@ -201,6 +204,30 @@ class Entry extends Concrete implements EntryInterface
         }
 
         return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName($language = NULL)
+    {
+        throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLead($language = NULL)
+    {
+        throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription($language = NULL)
+    {
+        throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
     /**
