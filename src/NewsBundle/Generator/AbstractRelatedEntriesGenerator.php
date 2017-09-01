@@ -29,6 +29,7 @@ abstract class AbstractRelatedEntriesGenerator implements RelatedEntriesGenerato
 
         ], $params);
 
+        /** @var Object\NewsEntry\Listing $newsListing */
         $newsListing = Object\NewsEntry::getList([
             'limit' => $settings['limit']
         ]);
@@ -54,6 +55,7 @@ abstract class AbstractRelatedEntriesGenerator implements RelatedEntriesGenerato
         if ($settings['entryType'] !== 'all') {
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
         }
+
         $newsListing->addConditionParam('o_id != ?', $news->getId());
 
         //add additional where clauses.
