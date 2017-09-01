@@ -1,18 +1,16 @@
-{% set entries = news_related_entries(entry) %}
+{% set related_entries = news_related_entries(entry) %}
 
-{% if entries is iterable and entries|length > 0 %}
+{% if related_entries is iterable and entries|length > 0 %}
 
     <div class="news-related-list">
 
         <h3>{{ 'news.related_articles'|trans }}</h3>
 
-        {% for related_entry in news_related_entries(entry) %}
+        {% for related_entry in related_entries %}
 
             <div class="news-related-entry">
 
-                {% if related_entry.getImage() is not null %}
-                    {% include '@News/Detail/Block/Entry/image.html.twig' with { 'entry' : related_entry } %}
-                {% endif %}
+                {% include '@News/Detail/Block/Entry/image.html.twig' with { 'entry' : related_entry } %}
 
                 <p class="date">
                     {{ related_entry.getDate().format('d.m.Y') }}
