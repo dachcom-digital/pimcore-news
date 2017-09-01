@@ -4,7 +4,7 @@
 
     {% if entry.getImages() is iterable and entry.getImages()|length > 0 %}
 
-        <div class="detail-entry-gallery light-gallery entry-gallery">
+        <div class="detail-entry-gallery light-box entry-gallery">
             {% for image in entry.getImages() %}
                 <a href="{{ image.getFullPath() }}" class="item{{ loop.index > 1 ? ' hidden'  : '' }}" data-src="{{ image.getThumbnail('contentImage') }}">
                     {{ image.getThumbnail('galleryImage').getHtml({'class': 'img-responsive'})|raw }}
