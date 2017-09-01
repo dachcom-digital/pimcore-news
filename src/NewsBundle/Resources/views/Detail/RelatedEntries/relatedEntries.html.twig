@@ -1,0 +1,37 @@
+{% set entries = news_related_entries(entry) %}
+
+{% if entries is iterable and entries|length > 0 %}
+
+    <div class="news-related-list">
+
+        <h3>{{ 'news.related_articles'|trans }}</h3>
+
+        {% for related_entry in news_related_entries(entry) %}
+
+            <div class="news-related-entry">
+
+                {% if related_entry.getImage() is not null %}
+                    {% include '@News/Detail/Block/Entry/image.html.twig' with { 'entry' : related_entry } %}
+                {% endif %}
+
+                <p class="date">
+                    {{ related_entry.getDate().format('d.m.Y') }}
+                </p>
+
+                {% if entry.getLead() is not empty %}
+                    <div class="lead">
+                        {{ entry.getLead() }}
+                    </div>
+                {% endif %}
+
+                <a href="{{ news_entry_permalink(related_entry) }}" class="col-xs-12">
+                    <span class="more">{{ 'news.read_more'|trans }}</span>
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
