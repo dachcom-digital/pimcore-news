@@ -1,6 +1,6 @@
 {% set related_entries = news_related_entries(entry) %}
 
-{% if related_entries is iterable and entries|length > 0 %}
+{% if related_entries is iterable and related_entries|length > 0 %}
 
     <div class="news-related-list">
 
@@ -16,9 +16,9 @@
                     {{ related_entry.getDate().format('d.m.Y') }}
                 </p>
 
-                {% if entry.getLead() is not empty %}
+                {% if related_entry.getLead() is not empty %}
                     <div class="lead">
-                        {{ entry.getLead() }}
+                        {{ related_entry.getLead() }}
                     </div>
                 {% endif %}
 
