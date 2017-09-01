@@ -13,7 +13,7 @@ class RelatedEntriesExtension extends \Twig_Extension
     private $relatedEntriesGenerator;
 
     /**
-     * @param RelatedEntriesGeneratorInterface  $relatedEntriesGenerator
+     * @param RelatedEntriesGeneratorInterface $relatedEntriesGenerator
      */
     public function __construct(RelatedEntriesGeneratorInterface $relatedEntriesGenerator)
     {
@@ -22,26 +22,26 @@ class RelatedEntriesExtension extends \Twig_Extension
 
     /**
      * Returns a list of functions to add to the existing list.
-     *
      * @return array An array of functions
      */
     public function getFunctions()
     {
-        return array(
+        return [
             new \Twig_Function(
                 'news_related_entries',
-                array($this, 'generateRelatedEntries')
+                [$this, 'generateRelatedEntries']
             ),
-        );
+        ];
     }
 
     /**
      * @param EntryInterface $entry
+     * @param array          $params
      *
      * @return string
      */
-    public function generateRelatedEntries(EntryInterface $entry)
+    public function generateRelatedEntries(EntryInterface $entry, $params = [])
     {
-        return $this->relatedEntriesGenerator->generateRelatedEntries($entry);
+        return $this->relatedEntriesGenerator->generateRelatedEntries($entry, $params);
     }
 }
