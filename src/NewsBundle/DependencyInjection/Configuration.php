@@ -56,7 +56,7 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('name')->end()
                                     ->scalarNode('route')->end()
-                                    ->integerNode('custom_layout_id')->end()
+                                    ->scalarNode('custom_layout_id')->end()
                                 ->end()
                             ->end()
                         ->end()
