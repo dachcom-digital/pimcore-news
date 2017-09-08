@@ -5,8 +5,8 @@ namespace NewsBundle\Manager;
 use NewsBundle\Configuration\Configuration;
 use Pimcore\Model\Site;
 use Pimcore\Model\Staticroute;
-use Pimcore\Model\Object;
-use Pimcore\Model\Object\ClassDefinition;
+use Pimcore\Model\DataObject;
+use Pimcore\Model\DataObject\ClassDefinition;
 
 class EntryTypeManager
 {
@@ -42,7 +42,7 @@ class EntryTypeManager
         $validLayouts = NULL;
 
         if (!is_null($object)) {
-            $validLayouts = Object\Service::getValidLayouts($object);
+            $validLayouts = DataObject\Service::getValidLayouts($object);
         }
 
         foreach ($entryTypes as $typeId => &$type) {
@@ -59,7 +59,7 @@ class EntryTypeManager
                 $list->setLimit(1);
                 $list->setCondition('name = ?', $type['custom_layout_id']);
                 $list = $list->load();
-                if (isset($list[0]) && $list[0] instanceof Object\ClassDefinition\CustomLayout) {
+                if (isset($list[0]) && $list[0] instanceof DataObject\ClassDefinition\CustomLayout) {
                     $customLayoutId = (int)$list[0]->getId();
                 } else {
                     $customLayoutId = NULL; //reset field -> custom layout is not available!

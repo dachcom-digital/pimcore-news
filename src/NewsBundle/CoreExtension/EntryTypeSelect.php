@@ -2,7 +2,7 @@
 
 namespace NewsBundle\CoreExtension;
 
-use Pimcore\Model\Object\ClassDefinition\Data\Select;
+use Pimcore\Model\DataObject\ClassDefinition\Data\Select;
 
 class EntryTypeSelect extends Select
 {

@@ -142,7 +142,7 @@
 							},
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Localizedfield",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"input",
@@ -221,7 +221,7 @@
 											"id":"int(11)",
 											"type":"enum('document','asset','object')"
 										},
-										"phpdocType":"\\Pimcore\\Model\\Document\\Page | \\Pimcore\\Model\\Document\\Snippet | \\Pimcore\\Model\\Document | \\Pimcore\\Model\\Asset | \\Pimcore\\Model\\Object\\AbstractObject",
+										"phpdocType":"\\Pimcore\\Model\\Document\\Page | \\Pimcore\\Model\\Document\\Snippet | \\Pimcore\\Model\\Document | \\Pimcore\\Model\\Asset | \\Pimcore\\Model\\DataObject\\AbstractObject",
 										"objectsAllowed":false,
 										"assetsAllowed":false,
 										"assetTypes":[
@@ -305,7 +305,7 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Localizedfield",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"input",
@@ -489,7 +489,7 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Localizedfield",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"multihref",
@@ -586,7 +586,7 @@
 										"height":"",
 										"queryColumnType":"text",
 										"columnType":"text",
-										"phpdocType":"\\Pimcore\\Model\\Object\\Data\\Video",
+										"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Video",
 										"name":"video",
 										"title":"Video",
 										"tooltip":"",
@@ -648,7 +648,7 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Localizedfield",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"block",
@@ -658,13 +658,13 @@
 										"collapsed":false,
 										"queryColumnType":"longtext",
 										"columnType":"longtext",
-										"phpdocType":"\\Pimcore\\Model\\Object\\Data\\Block",
+										"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Block",
 										"childs":[
 											{
 												"fieldtype":"link",
 												"queryColumnType":"text",
 												"columnType":"text",
-												"phpdocType":"\\Pimcore\\Model\\Object\\Data\\Link",
+												"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Link",
 												"name":"url",
 												"title":"Url",
 												"tooltip":"",
@@ -744,7 +744,7 @@
 						"childs":[
 							{
 								"fieldtype":"classificationstore",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Classificationstore",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Classificationstore",
 								"childs":[
 
 								],
@@ -796,7 +796,7 @@
 						"childs":[
 							{
 								"fieldtype":"objectbricks",
-								"phpdocType":"\\Pimcore\\Model\\Object\\Objectbrick",
+								"phpdocType":"\\Pimcore\\Model\\DataObject\\Objectbrick",
 								"allowedTypes":[
 
 								],

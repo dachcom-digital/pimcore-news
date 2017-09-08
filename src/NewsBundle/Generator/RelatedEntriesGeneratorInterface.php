@@ -3,7 +3,7 @@
 namespace NewsBundle\Generator;
 
 use NewsBundle\Model\EntryInterface;
-use Pimcore\Model\Object\NewsEntry;
+use Pimcore\Model\DataObject\NewsEntry;
 
 interface RelatedEntriesGeneratorInterface
 {

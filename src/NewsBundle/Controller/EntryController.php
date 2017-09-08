@@ -3,7 +3,7 @@
 namespace NewsBundle\Controller;
 
 use Pimcore\Controller\FrontendController;
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\Request;
 
 class EntryController extends FrontendController
@@ -13,10 +13,10 @@ class EntryController extends FrontendController
         $newsFragment = $request->attributes->get('entry');
         $locale = $request->attributes->get('_locale');
 
-        /** @var Object\NewsEntry $entry */
-        $entry = Object\NewsEntry::getByLocalizedfields('detailUrl', $newsFragment, $locale, ['limit' => 1]);
+        /** @var DataObject\NewsEntry $entry */
+        $entry = DataObject\NewsEntry::getByLocalizedfields('detailUrl', $newsFragment, $locale, ['limit' => 1]);
 
-        if (!($entry instanceof Object\NewsEntry)) {
+        if (!($entry instanceof DataObject\NewsEntry)) {
             throw new \Exception('Entry (' . $newsFragment . ') couldn\'t be found');
         } else {
             $params = [

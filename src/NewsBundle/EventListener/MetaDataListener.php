@@ -4,7 +4,7 @@ namespace NewsBundle\EventListener;
 
 use NewsBundle\Generator\HeadMetaGeneratorInterface;
 use NewsBundle\Model\EntryInterface;
-use Pimcore\Model\Object\NewsEntry;
+use Pimcore\Model\DataObject\NewsEntry;
 use Pimcore\Templating\Helper\HeadMeta;
 use Pimcore\Templating\Helper\HeadTitle;
 use Pimcore\Templating\Helper\Placeholder\Container;

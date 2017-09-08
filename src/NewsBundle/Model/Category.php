@@ -2,11 +2,10 @@
 
 namespace NewsBundle\Model;
 
-use Pimcore\Model\Object;
-use Pimcore\Model\Object\Concrete;
+use Pimcore\Model\DataObject;
 use Zend\Paginator\Paginator;
 
-class Category extends Concrete implements CategoryInterface
+class Category extends DataObject\Concrete implements CategoryInterface
 {
     /**
      * Get all Categories
@@ -14,7 +13,7 @@ class Category extends Concrete implements CategoryInterface
      */
     public static function getAll()
     {
-        $list = Object\NewsCategory::getList();
+        $list = DataObject\NewsCategory::getList();
         return $list->getObjects();
     }
 
@@ -78,7 +77,7 @@ class Category extends Concrete implements CategoryInterface
      */
     public function getEntries($includeChildCategories = FALSE)
     {
-        $list = Object\NewsCategory::getList();
+        $list = DataObject\NewsCategory::getList();
 
         if (!$includeChildCategories) {
             $list->setCondition('enabled = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
@@ -115,7 +114,7 @@ class Category extends Concrete implements CategoryInterface
         ],
         $includeChildCategories = FALSE
     ) {
-        $list = Object\NewsCategory::getList();
+        $list = DataObject\NewsCategory::getList();
 
         if (!$includeChildCategories) {
             $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
@@ -199,7 +198,7 @@ class Category extends Concrete implements CategoryInterface
      */
     public function getChildCategories()
     {
-        $list = Object\NewsCategory::getList();
+        $list = DataObject\NewsCategory::getList();
         $list->setCondition('o_parentId = ?', [$this->getId()]);
 
         return $list->getObjects();

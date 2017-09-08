@@ -4,7 +4,7 @@ namespace NewsBundle\Generator;
 
 use NewsBundle\Model\Entry;
 use NewsBundle\Model\EntryInterface;
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 
 abstract class AbstractRelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
 {
@@ -29,8 +29,8 @@ abstract class AbstractRelatedEntriesGenerator implements RelatedEntriesGenerato
 
         ], $params);
 
-        /** @var Object\NewsEntry\Listing $newsListing */
-        $newsListing = Object\NewsEntry::getList([
+        /** @var DataObject\NewsEntry\Listing $newsListing */
+        $newsListing = DataObject\NewsEntry::getList([
             'limit' => $settings['limit']
         ]);
         if (is_string($settings['sort']) && strtolower($settings['sort']) === 'random') {

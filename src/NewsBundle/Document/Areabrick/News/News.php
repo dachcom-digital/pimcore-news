@@ -6,7 +6,7 @@ use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
 use Pimcore\Extension\Document\Areabrick\AbstractTemplateAreabrick;
 use Pimcore\Model\Document\Tag\Area\Info;
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 use Pimcore\Translation\Translator;
 use Pimcore\Model\Document;
 
@@ -103,7 +103,7 @@ class News extends AbstractTemplateAreabrick
         ];
 
         //load Query
-        $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
+        $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
 
         //get Layout Name
         $layoutElement = $fieldConfiguration['entry_types']['value'];

@@ -5,9 +5,9 @@ namespace NewsBundle\EventListener;
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
 use Pimcore\Event\AdminEvents;
-use Pimcore\Model\Object\ClassDefinition\CustomLayout;
-use Pimcore\Model\Object\NewsEntry;
-use Pimcore\Model\Object\Service;
+use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
+use Pimcore\Model\DataObject\NewsEntry;
+use Pimcore\Model\DataObject\Service;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -58,7 +58,7 @@ class EntryTypeListener implements EventSubscriberInterface
      */
     public function setEntryTypeLayout(GenericEvent $e)
     {
-        /** @var \Pimcore\Model\Object\NewsEntry $object */
+        /** @var \Pimcore\Model\DataObject\NewsEntry $object */
         $object = $e->getArgument('object');
         $data = $e->getArgument('data');
 

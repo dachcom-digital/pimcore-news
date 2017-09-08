@@ -7,12 +7,11 @@ use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
 
 use Pimcore\Model\Staticroute;
 use Pimcore\Tool;
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 use Pimcore\Model\Translation;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Serializer;
 use NewsBundle\Configuration\Configuration;
-use Pimcore\Model\Object\ClassDefinition;
 
 class Install extends AbstractInstaller
 {
@@ -146,7 +145,7 @@ class Install extends AbstractInstaller
     {
         foreach ($this->getClasses() as $className => $path) {
 
-            $class = new Object\ClassDefinition();
+            $class = new DataObject\ClassDefinition();
             $id = $class->getDao()->getIdByName($className);
 
             if ($id !== FALSE) {
@@ -157,7 +156,7 @@ class Install extends AbstractInstaller
             $class->setName($className);
 
             $data = file_get_contents($path);
-            $success = ClassDefinition\Service::importClassDefinitionFromJson($class, $data);
+            $success = DataObject\ClassDefinition\Service::importClassDefinitionFromJson($class, $data);
 
         }
     }
@@ -176,12 +175,12 @@ class Install extends AbstractInstaller
      */
     public function createFolders()
     {
-        $root = Object\Folder::getByPath('/news');
-        $entries = Object\Folder::getByPath('/news/entries');
-        $categories = Object\Folder::getByPath('/news/categories');
+        $root = DataObject\Folder::getByPath('/news');
+        $entries = DataObject\Folder::getByPath('/news/entries');
+        $categories = DataObject\Folder::getByPath('/news/categories');
 
-        if (!$root instanceof Object\Folder) {
-            $root = Object\Folder::create([
+        if (!$root instanceof DataObject\Folder) {
+            $root = DataObject\Folder::create([
                 'o_parentId'         => 1,
                 'o_creationDate'     => time(),
                 'o_userOwner'        => $this->_getUser(),
@@ -191,8 +190,8 @@ class Install extends AbstractInstaller
             ]);
         }
 
-        if (!$entries instanceof Object\Folder) {
-            Object\Folder::create([
+        if (!$entries instanceof DataObject\Folder) {
+            DataObject\Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
                 'o_userOwner'        => $this->_getUser(),
@@ -202,8 +201,8 @@ class Install extends AbstractInstaller
             ]);
         }
 
-        if (!$categories instanceof Object\Folder) {
-            Object\Folder::create([
+        if (!$categories instanceof DataObject\Folder) {
+            DataObject\Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
                 'o_userOwner'        => $this->_getUser(),

@@ -5,8 +5,8 @@ namespace NewsBundle\EventListener;
 use NewsBundle\Configuration\Configuration;
 use Pimcore\Cache;
 use Pimcore\Db;
-use Pimcore\Event\Model\ObjectEvent;
-use Pimcore\Event\ObjectEvents;
+use Pimcore\Event\Model\DataObjectEvent;
+use Pimcore\Event\DataObjectEvents;
 use Pimcore\Model\Version;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -33,15 +33,15 @@ class NewsSeoListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ObjectEvents::PRE_ADD    => 'handleObjectSeo',
-            ObjectEvents::PRE_UPDATE => 'handleObjectSeo'
+            DataObjectEvents::PRE_ADD    => 'handleObjectSeo',
+            DataObjectEvents::PRE_UPDATE => 'handleObjectSeo'
         ];
     }
 
     /**
-     * @param ObjectEvent $e
+     * @param DataObjectEvent $e
      */
-    public function handleObjectSeo(ObjectEvent $e)
+    public function handleObjectSeo(DataObjectEvent $e)
     {
         $newsObject = $e->getObject();
         $className = (new \ReflectionClass($newsObject))->getShortName();
@@ -58,7 +58,7 @@ class NewsSeoListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Pimcore\Model\Object\AbstractObject $object
+     * @param \Pimcore\Model\DataObject\AbstractObject $object
      * @param string (NewsEntry|NewsCategory)      $className
      *
      * @return bool
@@ -71,7 +71,7 @@ class NewsSeoListener implements EventSubscriberInterface
 
         $fromCopy = FALSE;
 
-        $objectClass = 'Pimcore\\Model\\Object\\' . $className;
+        $objectClass = 'Pimcore\\Model\\DataObject\\' . $className;
         foreach ($languages as $language) {
             if ($this->isFromCopy($object, $objectClass, $language) === TRUE) {
                 $fromCopy = TRUE;

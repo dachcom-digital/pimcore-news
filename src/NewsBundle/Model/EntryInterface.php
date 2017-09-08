@@ -2,7 +2,7 @@
 
 namespace NewsBundle\Model;
 
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 use Zend\Paginator\Paginator;
 
 interface EntryInterface
@@ -25,15 +25,15 @@ interface EntryInterface
     /**
      * add query join if categories available.
      *
-     * @param Object\NewsEntry\Listing $newsListing
-     * @param null                     $categories
-     * @param array                    $settings
+     * @param DataObject\NewsEntry\Listing $newsListing
+     * @param null                         $categories
+     * @param array                        $settings
      */
     public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = []);
 
     /**
-     * @param \Pimcore\Model\Object\NewsCategory $category
-     * @param bool                               $includeSubCategories
+     * @param DataObject\NewsCategory $category
+     * @param bool                    $includeSubCategories
      *
      * @return array|null
      */

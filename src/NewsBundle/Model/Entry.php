@@ -4,13 +4,11 @@ namespace NewsBundle\Model;
 
 use CoreShop\Component\Resource\ImplementedByPimcoreException;
 use Pimcore\Db\ZendCompatibility\QueryBuilder;
-use Pimcore\Model\Object;
+use Pimcore\Model\DataObject;
 use Pimcore\Model\Asset\Image;
-use Pimcore\Model\Object\Concrete;
-use Pimcore\Model\Object\NewsCategory;
 use Zend\Paginator\Paginator;
 
-class Entry extends Concrete implements EntryInterface
+class Entry extends DataObject\Concrete implements EntryInterface
 {
     /**
      * Get all News
@@ -18,7 +16,7 @@ class Entry extends Concrete implements EntryInterface
      */
     public static function getAll()
     {
-        $newsListing = Object\NewsEntry::getList();
+        $newsListing = DataObject\NewsEntry::getList();
         static::modifyListing($newsListing);
 
         return $newsListing->getObjects();
@@ -48,7 +46,7 @@ class Entry extends Concrete implements EntryInterface
 
         ], $params);
 
-        $newsListing = Object\NewsEntry::getList();
+        $newsListing = DataObject\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
         $newsListing->setGroupBy('o_id');
@@ -90,7 +88,7 @@ class Entry extends Concrete implements EntryInterface
     /**
      * add query join if categories available.
      *
-     * @param Object\NewsEntry\Listing $newsListing
+     * @param DataObject\NewsEntry\Listing $newsListing
      * @param null                     $categories
      * @param array                    $settings
      */
@@ -116,7 +114,7 @@ class Entry extends Concrete implements EntryInterface
 
     /**
      * @param QueryBuilder                            $query
-     * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
      * @param array                                   $settings
      */
     protected static function modifyQuery($query, $listing, $settings = [])
@@ -124,7 +122,7 @@ class Entry extends Concrete implements EntryInterface
     }
 
     /**
-     * @param \Pimcore\Model\Object\NewsEntry\Listing $listing
+     * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
      * @param array                                   $settings
      */
     protected static function modifyListing($listing, $settings = [])
@@ -132,7 +130,7 @@ class Entry extends Concrete implements EntryInterface
     }
 
     /**
-     * @param \Pimcore\Model\Object\NewsCategory $category
+     * @param \Pimcore\Model\DataObject\NewsCategory $category
      * @param bool                               $includeSubCategories
      *
      * @return array|null
@@ -147,7 +145,7 @@ class Entry extends Concrete implements EntryInterface
 
         if ($includeSubCategories === TRUE) {
 
-            $entries = NewsCategory::getList();
+            $entries = DataObject\NewsCategory::getList();
             $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
 
             foreach ($entries->load() as $entry) {
