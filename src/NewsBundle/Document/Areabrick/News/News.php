@@ -62,27 +62,19 @@ class News extends AbstractTemplateAreabrick
 
         $querySettings['category'] = $fieldConfiguration['category']['value'];
         $querySettings['includeSubCategories'] = $fieldConfiguration['include_subcategories']['value'];
-
         $querySettings['entryType'] = $fieldConfiguration['entry_types']['value'];
 
         //set limit
         $limit = $fieldConfiguration['max_items']['value'];
 
         //set pagination
-        $itemPerPage = 10;
+        $calculatedItemsPerPage = $fieldConfiguration['paginate']['items_per_page']['value'];
 
-        if ($fieldConfiguration['show_pagination']['value'] === TRUE) {
-            $itemsPerPage = $fieldConfiguration['paginate']['items_per_page']['value'];
-            if (empty($limit) || $itemsPerPage > $limit) {
-                $itemPerPage = $itemsPerPage;
-            } else if (!empty($limit)) {
-                $itemPerPage = $limit;
-            }
-        } else if (!empty($limit)) {
-            $itemPerPage = $limit;
+        if ($calculatedItemsPerPage > $limit) {
+            $calculatedItemsPerPage = $limit;
         }
 
-        $querySettings['itemsPerPage'] = $itemPerPage;
+        $querySettings['itemsPerPage'] = $calculatedItemsPerPage;
 
         //set paged
         $querySettings['page'] = (int)$info->getRequest()->query->get('page');
@@ -105,11 +97,7 @@ class News extends AbstractTemplateAreabrick
         //load Query
         $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
 
-        //get Layout Name
-        $layoutElement = $fieldConfiguration['entry_types']['value'];
-
         $mainClasses = [];
-
         $mainClasses[] = 'area';
         $mainClasses[] = 'news-' . $fieldConfiguration['layouts']['value'];
 
@@ -163,9 +151,6 @@ class News extends AbstractTemplateAreabrick
         //set latest
         $adminSettings['latest'] = ['value' => (bool)$this->getDocumentField('checkbox', 'latest')->getData()];
 
-        //show pagination
-        $adminSettings['show_pagination'] = ['value' => (bool)$this->getDocumentField('checkbox', 'showPagination')->getData()];
-
         //category
         $hrefConfig = ['types' => ['object'], 'subtypes' => ['object' => ['object']], 'classes' => ['NewsCategory'], 'width' => '95%'];
         $adminSettings['category'] = ['value' => NULL, 'href_config' => $hrefConfig];
@@ -213,7 +198,7 @@ class News extends AbstractTemplateAreabrick
         if ($sortByElement->isEmpty()) {
             $sortByElement->setDataFromResource($adminSettings['sort_by']['value']);
         } else {
-            $adminSettings['sort_by']['value'] = $limitElement->getData();
+            $adminSettings['sort_by']['value'] = $sortByElement->getData();
         }
 
         //set order by
@@ -222,7 +207,7 @@ class News extends AbstractTemplateAreabrick
         if ($orderByElement->isEmpty()) {
             $orderByElement->setDataFromResource($adminSettings['order_by']['value']);
         } else {
-            $adminSettings['order_by']['value'] = $limitElement->getData();
+            $adminSettings['order_by']['value'] = $orderByElement->getData();
         }
 
         //set entry type
