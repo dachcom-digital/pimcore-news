@@ -3,6 +3,7 @@
 #### Update from Version 1.4.x to Version 1.5.0
 - New object element (in `NewsEntry` class): `dateTo` (date field, after `date`)
 - New object element (in `NewsEntry` class): `showEntryUntil` (date field, after `dateTo`)
+- Or: Re-import class from `install/object/structures/NewsEntry.json`!
 - Re-import `translations/data.csv`
 - Add this to your `news_configuration.php` (in `news_list_settings` array): `'timeRange' => 'all'`
 
