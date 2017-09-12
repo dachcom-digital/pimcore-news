@@ -38,6 +38,7 @@ class Entry extends Concrete
             'page'                 => 0,
             'itemsPerPage'         => 10,
             'entryType'            => 'all',
+            'timeRange'            => 'all',
             'category'             => NULL,
             'includeSubCategories' => FALSE,
             'where'                => [],
@@ -58,6 +59,9 @@ class Entry extends Concrete
         //add optional category selector
         static::addCategorySelectorToQuery($newsListing, $categories, $settings);
 
+        //add timeRange
+        static::addTimeRange($newsListing, $settings);
+
         //add entry type selector
         if ($settings['entryType'] !== 'all') {
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
@@ -65,7 +69,6 @@ class Entry extends Concrete
 
         //add additional where clauses.
         if (count($settings['where'])) {
-
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }
@@ -82,6 +85,31 @@ class Entry extends Concrete
         $paginator->setItemCountPerPage($settings['itemsPerPage']);
 
         return $paginator;
+    }
+
+    /**
+     * add timeRange restriction
+     *
+     * @param Object\NewsEntry\Listing $newsListing
+     * @param array                    $settings
+     */
+    public static function addTimeRange($newsListing, $settings = [])
+    {
+        if(empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
+            return;
+        }
+
+        $pointer = '>=';
+        if($settings['timeRange'] === 'past') {
+            $pointer = '<';
+        }
+
+        $newsListing->addConditionParam('(
+            ( showEntryUntil IS NOT NULL AND showEntryUntil ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
+            ( dateTo IS NOT NULL AND dateTo ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
+            ( date IS NOT NULL AND date ' . $pointer . ' UNIX_TIMESTAMP(NOW()) )
+        )');
+
     }
 
     /**

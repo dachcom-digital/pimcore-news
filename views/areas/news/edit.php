@@ -86,6 +86,21 @@
     </div>
 
     <div class="t-row">
+        <label><?= $this->translateAdmin('time range') ?></label>
+        <?php if ($this->editmode && $this->select('timeRange')->isEmpty()) {
+            $this->select('timeRange')->setDataFromResource($this->editSettings['listSettings']['timeRange']);
+        } ?>
+
+        <?= $this->select('timeRange', [
+            'store' => [
+                ['all', $this->translateAdmin('all entries') ],
+                ['current', $this->translateAdmin('current entries') ],
+                ['past', $this->translateAdmin('past entries') ]
+            ]
+        ]); ?>
+    </div>
+
+    <div class="t-row">
 
         <div class="t-col-half">
             <label><?= $this->translateAdmin('category') ?></label>

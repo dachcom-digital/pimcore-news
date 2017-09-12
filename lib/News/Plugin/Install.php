@@ -52,6 +52,7 @@ class Install
         Configuration::set('news_list_settings', [
             'sortby'   => 'date',
             'orderby'  => 'desc',
+            'timeRange' => 'all',
             'maxItems' => 0,
             'paginate' => [
                 'itemsPerPage' => 10

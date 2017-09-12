@@ -68,6 +68,9 @@ class News extends Document\Tag\Area\AbstractArea
         $querySettings['sort']['field'] = $view->select('sortby')->getData() ?: 'date';
         $querySettings['sort']['dir'] = $view->select('orderby')->getData() ?: 'desc';
 
+        //set timeRange
+        $querySettings['timeRange'] = $view->select('timeRange')->getData();
+
         //get request data
         $querySettings['request'] = [
             'POST' => $view->getRequest()->getPost(),
