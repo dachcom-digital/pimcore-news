@@ -53,18 +53,21 @@ class Entry extends Concrete
 
         $categories = NULL;
         if ($settings['category'] && $settings['category'] instanceof Category) {
-            $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
+            $categories = static::getCategoriesRecursive($settings['category'],
+                $settings['includeSubCategories']);
         }
 
         //add optional category selector
-        static::addCategorySelectorToQuery($newsListing, $categories, $settings);
+        static::addCategorySelectorToQuery($newsListing, $categories,
+            $settings);
 
         //add timeRange
         static::addTimeRange($newsListing, $settings);
 
         //add entry type selector
         if ($settings['entryType'] !== 'all') {
-            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+            $newsListing->addConditionParam('entryType = ?',
+                $settings['entryType']);
         }
 
         //add additional where clauses.
@@ -95,21 +98,42 @@ class Entry extends Concrete
      */
     public static function addTimeRange($newsListing, $settings = [])
     {
-        if(empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
+        if (empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
             return;
         }
-
-        $pointer = '>=';
-        if($settings['timeRange'] === 'past') {
-            $pointer = '<';
+        if ($settings['timeRange'] === 'past') {
+            $newsListing->addConditionParam('(
+                ( showEntryUntil IS NOT NULL AND showEntryUntil < UNIX_TIMESTAMP(NOW()) ) 
+                OR
+                (
+                    ( showEntryUntil IS NULL OR showEntryUntil < UNIX_TIMESTAMP(NOW()) ) AND
+                    ( dateTo IS NULL OR dateTo < UNIX_TIMESTAMP(NOW()) ) AND
+                    ( date IS NULL OR date < UNIX_TIMESTAMP(NOW()) ) 
+                )
+            )');
+        } else {
+            $newsListing->addConditionParam('(
+                CASE WHEN showEntryUntil IS NOT NULL
+                    THEN 
+                        showEntryUntil >= UNIX_TIMESTAMP(NOW())
+                    ELSE
+                        (CASE WHEN dateTo IS NOT NULL
+                            THEN 
+                                dateTo >= UNIX_TIMESTAMP(NOW()) 
+                            ELSE
+                                (CASE WHEN date IS NOT NULL
+                                    THEN 
+                                        date >= UNIX_TIMESTAMP(NOW())  
+                                    ELSE
+                                        FALSE
+                                    END
+                                )
+                            END
+                        )
+                    END
+                )
+            ');
         }
-
-        $newsListing->addConditionParam('(
-            ( showEntryUntil IS NOT NULL AND showEntryUntil ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
-            ( dateTo IS NOT NULL AND dateTo ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
-            ( date IS NOT NULL AND date ' . $pointer . ' UNIX_TIMESTAMP(NOW()) )
-        )');
-
     }
 
     /**
@@ -119,9 +143,16 @@ class Entry extends Concrete
      * @param null                     $categories
      * @param array                    $settings
      */
-    public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
-    {
-        $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use ($newsListing, $categories, $settings) {
+    public static function addCategorySelectorToQuery(
+        $newsListing,
+        $categories = NULL,
+        $settings = []
+    ) {
+        $newsListing->onCreateQuery(function (\Zend_Db_Select $query) use (
+            $newsListing,
+            $categories,
+            $settings
+        ) {
             if (!empty($categories)) {
                 $query->join(
                     ['relations' => 'object_relations_' . $newsListing->getClassId()],
@@ -135,7 +166,8 @@ class Entry extends Concrete
         });
 
         if (!empty($categories)) {
-            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,', count($categories)), ',') .')', $categories);
+            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,',
+                    count($categories)), ',') . ')', $categories);
         }
     }
 
@@ -162,13 +194,15 @@ class Entry extends Concrete
      *
      * @return array|null
      */
-    public static function getCategoriesRecursive($category, $includeSubCategories = FALSE)
-    {
+    public static function getCategoriesRecursive(
+        $category,
+        $includeSubCategories = FALSE
+    ) {
         if (!$category) {
             return NULL;
         }
 
-        $categories = [ $category->getId() ];
+        $categories = [$category->getId()];
 
         if ($includeSubCategories === TRUE) {
 
@@ -218,9 +252,12 @@ class Entry extends Concrete
             if ($image instanceof Image) {
                 $data['image'] = [
                     '@type'  => 'ImageObject',
-                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail('galleryImage')->getPath(),
-                    'width'  => $image->getThumbnail('galleryImage')->getWidth(),
-                    'height' => $image->getThumbnail('galleryImage')->getHeight(),
+                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail('galleryImage')
+                            ->getPath(),
+                    'width'  => $image->getThumbnail('galleryImage')
+                        ->getWidth(),
+                    'height' => $image->getThumbnail('galleryImage')
+                        ->getHeight(),
                 ];
             }
         }
