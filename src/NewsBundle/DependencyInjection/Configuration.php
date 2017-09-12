@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('sort_by')->end()
                         ->scalarNode('order_by')->end()
+                        ->scalarNode('time_range')->end()
                         ->integerNode('max_items')->end()
                         ->arrayNode('paginate')
                             ->children()

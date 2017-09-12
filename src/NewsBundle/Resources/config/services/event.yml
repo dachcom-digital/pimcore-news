@@ -1,0 +1,21 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+     # event: seo optimizer
+    NewsBundle\EventListener\NewsSeoListener:
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # event: entry types definition
+    NewsBundle\EventListener\EntryTypeListener:
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # event: metadata
+    NewsBundle\EventListener\MetaDataListener:
+        tags:
+            - { name: kernel.event_subscriber }

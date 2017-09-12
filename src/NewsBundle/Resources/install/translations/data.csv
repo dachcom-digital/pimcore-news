@@ -39,3 +39,9 @@
 "news.category";"News Category";"News Kategorie";
 "news.entry_type.all";"All Types";"Alle Beitragstypen";
 "news.entry_type.news";"News";"News";
+"news.date_to";"Date to";"Datum bis";
+"news.display_entry_until";"Display Entry Until";"Zeige Beitrag bis";
+"news.time_range";"Time Range";"Zeitraum";
+"news.time_range.all_entries";"All Entries";"Alle Beiträge";
+"news.time_range.current_entries";"Current Entries";"Aktuelle Einträge";
+"news.time_range.past_entries";"Past Entries";"Vergangene Einträge";

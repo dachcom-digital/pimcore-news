@@ -1,3 +1,6 @@
+imports:
+    - { resource: services/*.yml }
+
 services:
 
     # tool: installer
@@ -33,6 +36,7 @@ services:
         arguments:
             - '@router'
             - '@news.manager.entry_types'
+
     # generator entry links
     news.generator.link:
         parent: news.generator.abstract.link
@@ -42,6 +46,7 @@ services:
     news.generator.abstract.related_entries:
         class: NewsBundle\Generator\AbstractRelatedEntriesGenerator
         abstract: true
+
     # generator related entries
     news.generator.related_entries:
         parent: news.generator.abstract.related_entries
@@ -53,60 +58,9 @@ services:
         abstract: true
         arguments:
             - '@news.generator.link'
+
     # generator head meta
     news.generator.head_meta:
         parent: news.generator.abstract.head_meta
         class: NewsBundle\Generator\HeadMetaGenerator
 
-    # event: seo optimizer
-    news.event_listener.news_seo:
-        class: NewsBundle\EventListener\NewsSeoListener
-        arguments:
-            - '@news.configuration'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    # event: entry types definition
-    news.event_listener.entry_type:
-        class: NewsBundle\EventListener\EntryTypeListener
-        arguments:
-            - '@request_stack'
-            - '@news.configuration'
-            - '@news.manager.entry_types'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    # event: metadata
-    news.event_listener.meta_data:
-        class: NewsBundle\EventListener\MetaDataListener
-        arguments:
-            - '@pimcore.templating.view_helper.head_meta'
-            - '@pimcore.templating.view_helper.head_title'
-            - '@news.generator.head_meta'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    # twig extension: links
-    news.twig.extension.news:
-        class: NewsBundle\Twig\Extension\NewsExtension
-        public: false
-        arguments:
-            - '@news.generator.link'
-        tags:
-            - { name: twig.extension }
-
-    # twig extension: relations
-    news.twig.extension.related:
-        class: NewsBundle\Twig\Extension\RelatedEntriesExtension
-        public: false
-        arguments:
-            - '@news.generator.related_entries'
-        tags:
-            - { name: twig.extension }
-
-    # twig extension: video tag
-    news.twig.extension.video_tag:
-        class: NewsBundle\Twig\Extension\VideoTagExtension
-        public: false
-        tags:
-            - { name: twig.extension }

@@ -88,6 +88,9 @@ class News extends AbstractTemplateAreabrick
         $querySettings['sort']['field'] = $fieldConfiguration['sort_by']['value'];
         $querySettings['sort']['dir'] = $fieldConfiguration['order_by']['value'];
 
+        //set time range
+        $querySettings['timeRange'] = $fieldConfiguration['time_range']['value'];
+
         //get request data
         $querySettings['request'] = [
             'POST' => $info->getRequest()->request->all(),
@@ -210,6 +213,15 @@ class News extends AbstractTemplateAreabrick
             $adminSettings['order_by']['value'] = $orderByElement->getData();
         }
 
+        //set time range
+        $adminSettings['time_range'] = ['store' => $this->getTimeRangeStore(), 'value' => $listConfig['time_range']];
+        $timeRangeElement = $this->getDocumentField('select', 'timeRange');
+        if ($timeRangeElement->isEmpty()) {
+            $timeRangeElement->setDataFromResource($adminSettings['time_range']['value']);
+        } else {
+            $adminSettings['time_range']['value'] = $timeRangeElement->getData();
+        }
+
         //set entry type
         $adminSettings['entry_types'] = ['store' => $this->getEntryTypeStore(), 'value' => 'all'];
         $entryTypeElement = $this->getDocumentField('select', 'entryType');
@@ -247,6 +259,15 @@ class News extends AbstractTemplateAreabrick
         return [
             ['date', $this->translator->trans('news.order_by.descending', [], 'admin')],
             ['name', $this->translator->trans('news.order_by.ascending', [], 'admin')]
+        ];
+    }
+
+    private function getTimeRangeStore()
+    {
+        return [
+            ['all', $this->translator->trans('news.time_range.all_entries', [], 'admin')],
+            ['current', $this->translator->trans('news.time_range.current_entries', [], 'admin')],
+            ['past', $this->translator->trans('news.time_range.past_entries', [], 'admin')]
         ];
     }
 

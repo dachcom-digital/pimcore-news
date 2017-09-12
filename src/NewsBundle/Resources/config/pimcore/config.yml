@@ -9,6 +9,7 @@ news:
     list:
         sort_by: 'date'
         order_by: 'desc'
+        time_range: 'all'
         max_items: 0
         paginate:
             items_per_page: 10

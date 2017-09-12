@@ -52,6 +52,14 @@
 
     <div class="t-row">
 
+        <label>{{ 'news.time_range'|trans({}, 'admin') }}</label>
+        {{ pimcore_select('timeRange', { 'store': config.time_range.store}) }}
+
+    </div>
+
+
+    <div class="t-row">
+
         <div class="t-col-half">
             <label>{{ 'news.category'|trans({}, 'admin') }}</label>
             {{ pimcore_href('category', config.category.href_config) }}

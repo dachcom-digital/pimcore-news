@@ -39,6 +39,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
             'page'                 => 0,
             'itemsPerPage'         => 10,
             'entryType'            => 'all',
+            'timeRange'            => 'all',
             'category'             => NULL,
             'includeSubCategories' => FALSE,
             'where'                => [],
@@ -59,6 +60,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
         //add optional category selector
         static::addCategorySelectorToQuery($newsListing, $categories, $settings);
 
+        //add timeRange
+        static::addTimeRange($newsListing, $settings);
+
         //add entry type selector
         if ($settings['entryType'] !== 'all') {
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
@@ -66,7 +70,6 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add additional where clauses.
         if (count($settings['where'])) {
-
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }
@@ -86,11 +89,35 @@ class Entry extends DataObject\Concrete implements EntryInterface
     }
 
     /**
+     * add time range restriction
+     *
+     * @param DataObject\NewsEntry\Listing $newsListing
+     * @param array                        $settings
+     */
+    public static function addTimeRange($newsListing, $settings = [])
+    {
+        if (empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
+            return;
+        }
+
+        $pointer = '>=';
+        if ($settings['timeRange'] === 'past') {
+            $pointer = '<';
+        }
+
+        $newsListing->addConditionParam('(
+            ( showEntryUntil IS NOT NULL AND showEntryUntil ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
+            ( dateTo IS NOT NULL AND dateTo ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
+            ( date IS NOT NULL AND date ' . $pointer . ' UNIX_TIMESTAMP(NOW()) )
+        )');
+    }
+
+    /**
      * add query join if categories available.
      *
      * @param DataObject\NewsEntry\Listing $newsListing
-     * @param null                     $categories
-     * @param array                    $settings
+     * @param null                         $categories
+     * @param array                        $settings
      */
     public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
     {
@@ -113,9 +140,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
     }
 
     /**
-     * @param QueryBuilder                            $query
+     * @param QueryBuilder                                $query
      * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
-     * @param array                                   $settings
+     * @param array                                       $settings
      */
     protected static function modifyQuery($query, $listing, $settings = [])
     {
@@ -123,7 +150,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
     /**
      * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
-     * @param array                                   $settings
+     * @param array                                       $settings
      */
     protected static function modifyListing($listing, $settings = [])
     {
@@ -131,7 +158,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
     /**
      * @param \Pimcore\Model\DataObject\NewsCategory $category
-     * @param bool                               $includeSubCategories
+     * @param bool                                   $includeSubCategories
      *
      * @return array|null
      */
