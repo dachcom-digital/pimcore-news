@@ -70,6 +70,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add additional where clauses.
         if (count($settings['where'])) {
+
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }
@@ -100,16 +101,42 @@ class Entry extends DataObject\Concrete implements EntryInterface
             return;
         }
 
-        $pointer = '>=';
         if ($settings['timeRange'] === 'past') {
-            $pointer = '<';
-        }
 
-        $newsListing->addConditionParam('(
-            ( showEntryUntil IS NOT NULL AND showEntryUntil ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
-            ( dateTo IS NOT NULL AND dateTo ' . $pointer . ' UNIX_TIMESTAMP(NOW()) ) OR
-            ( date IS NOT NULL AND date ' . $pointer . ' UNIX_TIMESTAMP(NOW()) )
-        )');
+            $newsListing->addConditionParam('(
+                ( showEntryUntil IS NOT NULL AND showEntryUntil < UNIX_TIMESTAMP(NOW()) ) 
+                OR
+                (
+                    ( showEntryUntil IS NULL OR showEntryUntil < UNIX_TIMESTAMP(NOW()) ) AND
+                    ( dateTo IS NULL OR dateTo < UNIX_TIMESTAMP(NOW()) ) AND
+                    ( date IS NULL OR date < UNIX_TIMESTAMP(NOW()) ) 
+                )
+            )');
+
+        } else {
+
+            $newsListing->addConditionParam('(
+                CASE WHEN showEntryUntil IS NOT NULL
+                    THEN 
+                        showEntryUntil >= UNIX_TIMESTAMP(NOW())
+                    ELSE
+                        (CASE WHEN dateTo IS NOT NULL
+                            THEN 
+                                dateTo >= UNIX_TIMESTAMP(NOW()) 
+                            ELSE
+                                (CASE WHEN date IS NOT NULL
+                                    THEN 
+                                        date >= UNIX_TIMESTAMP(NOW())  
+                                    ELSE
+                                        FALSE
+                                    END
+                                )
+                            END
+                        )
+                    END
+                )
+            ');
+        }
     }
 
     /**
