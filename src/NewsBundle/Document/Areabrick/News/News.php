@@ -257,8 +257,8 @@ class News extends AbstractTemplateAreabrick
     private function getOrderByStore()
     {
         return [
-            ['date', $this->translator->trans('news.order_by.descending', [], 'admin')],
-            ['name', $this->translator->trans('news.order_by.ascending', [], 'admin')]
+            ['desc', $this->translator->trans('news.order_by.descending', [], 'admin')],
+            ['asc', $this->translator->trans('news.order_by.ascending', [], 'admin')]
         ];
     }
 
