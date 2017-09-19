@@ -1,5 +1,5 @@
 # Pimcore News
-Pimcore News Plugin. It's also possible to generate custom types like Press, Blog...
+Pimcore News Plugin. It's also possible to generate [custom entry types](docs/20_EntryTypes.md) like Press, Blog...
 
 ## Requirements
 * Pimcore 5. Only with Build 108 or greater.
@@ -35,6 +35,7 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 ### Further Information
 - [Head Meta Generator](docs/10_HeadMetaGenerator.md)
 - [Link Generator](docs/11_LinkGenerator.md)
+- [The Amazing Entry Types](docs/20_EntryTypes.md)
         
 ## Widgets
 TBD
