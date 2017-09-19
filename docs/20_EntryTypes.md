@@ -12,9 +12,9 @@ This Bundles allows you to define as many entry types as you wish. Entry types c
 
 Each type comes with some configuration:
 
-`name`: Set a name for your type. This label will be added to the backend translation.
-`route`: Define a custom static route.
-`custom_layout_id`: Thanks to the pimcore custom layouts, you may want to define a custom layout for your entry type.
+- `name`: Set a name for your type. This label will be added to the backend translation.
+- `route`: Define a custom static route.
+- `custom_layout_id`: Thanks to the pimcore custom layouts, you may want to define a custom layout for your entry type.
 
 **Example**  
 ```yaml
