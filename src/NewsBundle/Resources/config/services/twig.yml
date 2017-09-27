@@ -1,26 +1,21 @@
 services:
 
-    # twig extension: links
-    news.twig.extension.news:
-        class: NewsBundle\Twig\Extension\NewsExtension
+    _defaults:
+        autowire: true
+        autoconfigure: true
         public: false
-        arguments:
-            - '@news.generator.link'
+
+    # twig extension: links
+    NewsBundle\Twig\Extension\NewsExtension:
         tags:
             - { name: twig.extension }
 
     # twig extension: relations
-    news.twig.extension.related:
-        class: NewsBundle\Twig\Extension\RelatedEntriesExtension
-        public: false
-        arguments:
-            - '@news.generator.related_entries'
+    NewsBundle\Twig\Extension\RelatedEntriesExtension:
         tags:
             - { name: twig.extension }
 
     # twig extension: video tag
-    news.twig.extension.video_tag:
-        class: NewsBundle\Twig\Extension\VideoTagExtension
-        public: false
+    NewsBundle\Twig\Extension\VideoTagExtension:
         tags:
             - { name: twig.extension }

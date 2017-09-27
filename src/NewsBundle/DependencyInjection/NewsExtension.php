@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use NewsBundle\Configuration\Configuration as BundleConfiguration;
 
 class NewsExtension extends Extension
 {
@@ -21,7 +22,12 @@ class NewsExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config']));
         $loader->load('services.yml');
 
-        $configManagerDefinition = $container->getDefinition('news.configuration');
+        foreach($config['relations'] as $confName => $confValue) {
+            $definition = $container->findDefinition($confName);
+            $definition->setClass($confValue);
+        }
+
+        $configManagerDefinition = $container->getDefinition(BundleConfiguration::class);
         $configManagerDefinition->addMethodCall('setConfig', [ $config ]);
     }
 }

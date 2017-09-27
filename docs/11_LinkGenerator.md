@@ -5,9 +5,9 @@ The Link Generator creates a valid detail and back link for each entry.
 Just override the build in generator:
 
 ```yaml
-news.generator.link:
-    parent: news.generator.abstract.link
-    class: AppBundle\Generator\LinkGenerator
+news:
+    relations:
+        NewsBundle\Generator\LinkGenerator: AppBundle\Generator\AppLinkGenerator
 ```
 
 And set up your new class:
@@ -18,9 +18,9 @@ And set up your new class:
 namespace AppBundle\Generator;
 
 use NewsBundle\Model\EntryInterface;
-use NewsBundle\Generator\AbstractLinkGenerator;
+use NewsBundle\Generator\LinkGenerator;
 
-class LinkGenerator extends AbstractLinkGenerator
+class AppLinkGenerator extends LinkGenerator
 {
     public function generateDetailLink(EntryInterface $entry, $additionalUrlParams = [])
     {

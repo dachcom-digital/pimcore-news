@@ -2,12 +2,12 @@
 
 namespace NewsBundle\Document\Areabrick\News;
 
+use Symfony\Component\Translation\TranslatorInterface;
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
 use Pimcore\Extension\Document\Areabrick\AbstractTemplateAreabrick;
 use Pimcore\Model\Document\Tag\Area\Info;
 use Pimcore\Model\DataObject;
-use Pimcore\Translation\Translator;
 use Pimcore\Model\Document;
 
 class News extends AbstractTemplateAreabrick
@@ -25,21 +25,21 @@ class News extends AbstractTemplateAreabrick
     protected $entryTypeManager;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
     protected $translator;
 
     /**
      * Form constructor.
      *
-     * @param Configuration    $configuration
-     * @param EntryTypeManager $entryTypeManager
-     * @param Translator       $translator
+     * @param Configuration       $configuration
+     * @param EntryTypeManager    $entryTypeManager
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         Configuration $configuration,
         EntryTypeManager $entryTypeManager,
-        Translator $translator
+        TranslatorInterface $translator
     ) {
         $this->configuration = $configuration;
         $this->entryTypeManager = $entryTypeManager;

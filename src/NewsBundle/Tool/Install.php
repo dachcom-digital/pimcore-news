@@ -12,6 +12,7 @@ use Pimcore\Model\Translation;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Serializer;
 use NewsBundle\Configuration\Configuration;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class Install extends AbstractInstaller
 {
@@ -46,9 +47,9 @@ class Install extends AbstractInstaller
     /**
      * Install constructor.
      *
-     * @param Serializer $serializer
+     * @param SerializerInterface $serializer
      */
-    public function __construct(Serializer $serializer)
+    public function __construct(SerializerInterface $serializer)
     {
         parent::__construct();
 

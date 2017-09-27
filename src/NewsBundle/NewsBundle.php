@@ -2,6 +2,7 @@
 
 namespace NewsBundle;
 
+use NewsBundle\Tool\Install;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
@@ -20,7 +21,7 @@ class NewsBundle extends AbstractPimcoreBundle
      */
     public function getInstaller()
     {
-        return $this->container->get('news.tool.installer');
+        return $this->container->get(Install::class);
     }
 
     /**

@@ -35,6 +35,7 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 ### Further Information
 - [Head Meta Generator](docs/10_HeadMetaGenerator.md)
 - [Link Generator](docs/11_LinkGenerator.md)
+- [Related Entries Generator](docs/12_RelatedEntriesGenerator.md)
 - [The Amazing Entry Types](docs/20_EntryTypes.md)
         
 ## Widgets

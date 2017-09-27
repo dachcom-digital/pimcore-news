@@ -20,7 +20,7 @@ class SettingsController extends AdminController
     public function getEntryTypesAction(Request $request)
     {
         /** @var EntryTypeManager $configuration */
-        $entryTypeManager = $this->container->get('news.manager.entry_types');
+        $entryTypeManager = $this->container->get(EntryTypeManager::class);
 
         /** @var Translator $translator */
         $translator = $this->container->get('pimcore.translator');

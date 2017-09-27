@@ -1,0 +1,12 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    # tool: installer
+    NewsBundle\Tool\Install: ~
+
+    # configuration
+    NewsBundle\Configuration\Configuration: ~

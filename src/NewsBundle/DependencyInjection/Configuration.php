@@ -2,6 +2,9 @@
 
 namespace NewsBundle\DependencyInjection;
 
+use NewsBundle\Generator\HeadMetaGenerator;
+use NewsBundle\Generator\LinkGenerator;
+use NewsBundle\Generator\RelatedEntriesGenerator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,7 +16,14 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('news');
         $rootNode
             ->children()
-
+                ->arrayNode('relations')
+                ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('NewsBundle\Generator\HeadMetaGenerator')->defaultValue(HeadMetaGenerator::class)->end()
+                        ->scalarNode('NewsBundle\Generator\LinkGenerator')->defaultValue(LinkGenerator::class)->end()
+                        ->scalarNode('NewsBundle\Generator\RelatedEntriesGenerator')->defaultValue(RelatedEntriesGenerator::class)->end()
+                    ->end()
+                ->end()
                 ->arrayNode('list')
                     ->isRequired()
                     ->children()
@@ -41,14 +51,11 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-
                 ->arrayNode('detail')
                     ->children()
                     ->end()
                 ->end()
-
                 ->arrayNode('entry_types')
-
                     ->children()
                         ->scalarNode('default')->end()
                         ->arrayNode('items')
@@ -62,9 +69,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-
                 ->end()
-
             ->end();
 
         return $treeBuilder;
