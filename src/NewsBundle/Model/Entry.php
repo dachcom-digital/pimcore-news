@@ -100,51 +100,33 @@ class Entry extends DataObject\Concrete implements EntryInterface
             return;
         }
 
+        $identifier = '>=';
         if ($settings['timeRange'] === 'past') {
-            $newsListing->addConditionParam('(
-                CASE WHEN showEntryUntil IS NOT NULL
-                    THEN 
-                        showEntryUntil < UNIX_TIMESTAMP(NOW())
-                    ELSE
-                        (CASE WHEN dateTo IS NOT NULL
-                            THEN 
-                                dateTo < UNIX_TIMESTAMP(NOW()) 
-                            ELSE
-                                (CASE WHEN date IS NOT NULL
-                                    THEN 
-                                        date < UNIX_TIMESTAMP(NOW())  
-                                    ELSE
-                                        FALSE
-                                    END
-                                )
-                            END
-                        )
-                    END
-                )
-            ');
-        } else {
-            $newsListing->addConditionParam('(
-                CASE WHEN showEntryUntil IS NOT NULL
-                    THEN 
-                        showEntryUntil >= UNIX_TIMESTAMP(NOW())
-                    ELSE
-                        (CASE WHEN dateTo IS NOT NULL
-                            THEN 
-                                dateTo >= UNIX_TIMESTAMP(NOW()) 
-                            ELSE
-                                (CASE WHEN date IS NOT NULL
-                                    THEN 
-                                        date >= UNIX_TIMESTAMP(NOW())  
-                                    ELSE
-                                        FALSE
-                                    END
-                                )
-                            END
-                        )
-                    END
-                )
-            ');
+            $identifier = '<';
         }
+
+        $newsListing->addConditionParam(sprintf('(
+            CASE WHEN showEntryUntil IS NOT NULL
+                THEN 
+                    showEntryUntil %1$s UNIX_TIMESTAMP(NOW())
+                ELSE
+                    (CASE WHEN dateTo IS NOT NULL
+                        THEN 
+                            dateTo %1$s UNIX_TIMESTAMP(NOW()) 
+                        ELSE
+                            (CASE WHEN date IS NOT NULL
+                                THEN 
+                                    date %1$s UNIX_TIMESTAMP(NOW())  
+                                ELSE
+                                    FALSE
+                                END
+                            )
+                        END
+                    )
+                END
+            )
+        ', $identifier)
+        );
     }
 
     /**
