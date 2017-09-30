@@ -70,7 +70,6 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add additional where clauses.
         if (count($settings['where'])) {
-
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }
@@ -102,19 +101,28 @@ class Entry extends DataObject\Concrete implements EntryInterface
         }
 
         if ($settings['timeRange'] === 'past') {
-
             $newsListing->addConditionParam('(
-                ( showEntryUntil IS NOT NULL AND showEntryUntil < UNIX_TIMESTAMP(NOW()) ) 
-                OR
-                (
-                    ( showEntryUntil IS NULL OR showEntryUntil < UNIX_TIMESTAMP(NOW()) ) AND
-                    ( dateTo IS NULL OR dateTo < UNIX_TIMESTAMP(NOW()) ) AND
-                    ( date IS NULL OR date < UNIX_TIMESTAMP(NOW()) ) 
+                CASE WHEN showEntryUntil IS NOT NULL
+                    THEN 
+                        showEntryUntil < UNIX_TIMESTAMP(NOW())
+                    ELSE
+                        (CASE WHEN dateTo IS NOT NULL
+                            THEN 
+                                dateTo < UNIX_TIMESTAMP(NOW()) 
+                            ELSE
+                                (CASE WHEN date IS NOT NULL
+                                    THEN 
+                                        date < UNIX_TIMESTAMP(NOW())  
+                                    ELSE
+                                        FALSE
+                                    END
+                                )
+                            END
+                        )
+                    END
                 )
-            )');
-
+            ');
         } else {
-
             $newsListing->addConditionParam('(
                 CASE WHEN showEntryUntil IS NOT NULL
                     THEN 
@@ -196,12 +204,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
         }
 
         $categories = [$category->getId()];
-
         if ($includeSubCategories === TRUE) {
-
             $entries = DataObject\NewsCategory::getList();
             $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
-
             foreach ($entries->load() as $entry) {
                 $categories[] = $entry->getId();
             }
@@ -216,8 +221,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
      */
     public function getImage()
     {
-        if (count($this->getImages()) > 0) {
-            return $this->getImages()[0];
+        $images = $this->getImages();
+        if (count($images) > 0) {
+            return $images[0];
         }
 
         return NULL;
@@ -241,10 +247,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
             $data['author'] = $this->getAuthor();
         }
 
-        if (count($this->getImages()) > 0) {
-
-            $image = $this->getImages()[0];
-
+        $images = $this->getImages();
+        if (count($images) > 0) {
+            $image = $images[0];
             if ($image instanceof Image) {
                 $data['image'] = [
                     '@type'  => 'ImageObject',
