@@ -77,10 +77,10 @@ class Category extends DataObject\Concrete implements CategoryInterface
      */
     public function getEntries($includeChildCategories = FALSE)
     {
-        $list = DataObject\NewsCategory::getList();
+        $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition('enabled = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
+            $list->setCondition('o_published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
@@ -89,7 +89,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
                 $categoriesWhere[] = 'categories LIKE ",' . $cat . ',%"';
             }
 
-            $list->setCondition('enabled = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
+            $list->setCondition('o_published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         return $list->getObjects();
@@ -114,10 +114,10 @@ class Category extends DataObject\Concrete implements CategoryInterface
         ],
         $includeChildCategories = FALSE
     ) {
-        $list = DataObject\NewsCategory::getList();
+        $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition("enabled = 1 AND categories LIKE '%," . $this->getId() . ",%'");
+            $list->setCondition("o_published = 1 AND categories LIKE '%," . $this->getId() . ",%'");
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
@@ -126,7 +126,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
                 $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
             }
 
-            $list->setCondition('enabled = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
+            $list->setCondition('o_published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         $list->setOrderKey($sort['name']);
