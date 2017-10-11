@@ -16,7 +16,7 @@ interface CategoryInterface
      * Get localized fields -
      * @return array
      */
-    public function getLocalizedfields();
+    public function getLocalizedFields();
 
     /**
      * Get first level of categories

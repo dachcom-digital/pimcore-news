@@ -9,6 +9,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 {
     /**
      * Get all Categories
+     *
      * @return array
      */
     public static function getAll()
@@ -19,9 +20,10 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Get localized fields -
+     *
      * @return array
      */
-    public function getLocalizedfields()
+    public function getLocalizedFields()
     {
         $preValue = $this->preGetValue('localizedfields');
         if ($preValue !== NULL && !\Pimcore::inAdmin()) {
@@ -34,7 +36,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Get first level of categories
-
+     *
      * @return $this
      */
     public function getFirstLevel()
@@ -96,7 +98,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get Products from the Category with Paging
+     * Get News from the Category with Paging
      *
      * @param int   $page
      * @param int   $itemsPerPage
@@ -158,6 +160,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Get Level of Category
+     *
      * @return int
      */
     public function getLevel()
@@ -167,6 +170,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Returns all Children from this Category
+     *
      * @return array
      */
     public function getCatChildren()
@@ -176,12 +180,12 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Get Category hierarchy
+     *
      * @return array
      */
     public function getHierarchy()
     {
         $hierarchy = [];
-
         $category = $this;
 
         do {
@@ -194,6 +198,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 
     /**
      * Get all child Categories
+     *
      * @return array
      */
     public function getChildCategories()
