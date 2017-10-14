@@ -82,7 +82,7 @@ class NewsSeoListener implements EventSubscriberInterface
         if ($fromCopy) {
             foreach ($languages as $language) {
                 //always reset stored url if element just has been copied.
-                $object->setDetailUrl('', $language);
+                $object->setDetailUrl(NULL, $language);
             }
         }
 
@@ -95,7 +95,7 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         foreach ($languages as $language) {
-            $realUrl = '';
+            $realUrl = NULL;
 
             $currentDetailUrl = $object->getDetailUrl($language);
             $title = $object->getName($language);
