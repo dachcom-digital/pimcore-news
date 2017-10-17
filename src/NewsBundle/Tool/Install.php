@@ -11,8 +11,10 @@ use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
 use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Serializer;
+use NewsBundle\NewsBundle;
 use NewsBundle\Configuration\Configuration;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class Install extends AbstractInstaller
 {
@@ -47,7 +49,7 @@ class Install extends AbstractInstaller
     /**
      * Install constructor.
      *
-     * @param SerializerInterface $serializer
+     * @param SerializerInterface      $serializer
      * @param TokenStorageUserResolver $resolver
      */
     public function __construct(TokenStorageUserResolver $resolver, SerializerInterface $serializer)
@@ -66,12 +68,21 @@ class Install extends AbstractInstaller
     public function install()
     {
         $this->installStaticRoutes();
-        $this->copyConfigFiles();
+        $this->installOrUpdateConfigFile();
         $this->installClasses();
         $this->installTranslations();
         $this->createFolders();
 
         return TRUE;
+    }
+
+    /**
+     * For now, just update the config file to the current version.
+     * {@inheritdoc}
+     */
+    public function update()
+    {
+        $this->installOrUpdateConfigFile();
     }
 
     /**
@@ -124,21 +135,29 @@ class Install extends AbstractInstaller
      */
     public function canBeUpdated()
     {
-        return FALSE;
+        $needUpdate = FALSE;
+        if ($this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
+            $config = Yaml::parse(file_get_contents(Configuration::SYSTEM_CONFIG_FILE_PATH));
+            if ($config['version'] !== NewsBundle::BUNDLE_VERSION) {
+                $needUpdate = TRUE;
+            }
+        }
+
+        return $needUpdate;
     }
 
     /**
-     * copy sample config file - if not exists.
+     * install/update config file
      */
-    private function copyConfigFiles()
+    private function installOrUpdateConfigFile()
     {
-        if (!$this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
-            $this->fileSystem->copy(
-                $this->installSourcesPath . '/config.yml',
-                Configuration::SYSTEM_CONFIG_FILE_PATH
-            );
+        if (!$this->fileSystem->exists(Configuration::SYSTEM_CONFIG_DIR_PATH)) {
+            $this->fileSystem->mkdir(Configuration::SYSTEM_CONFIG_DIR_PATH);
         }
 
+        $config = ['version' => NewsBundle::BUNDLE_VERSION];
+        $yml = Yaml::dump($config);
+        file_put_contents(Configuration::SYSTEM_CONFIG_FILE_PATH, $yml);
     }
 
     /**
@@ -275,7 +294,7 @@ class Install extends AbstractInstaller
     {
         $userId = 0;
         $user = $this->resolver->getUser();
-        if($user instanceof User) {
+        if ($user instanceof User) {
             $userId = $this->resolver->getUser()->getId();
         }
 

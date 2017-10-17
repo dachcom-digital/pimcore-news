@@ -4,6 +4,8 @@ namespace NewsBundle\Configuration;
 
 class Configuration
 {
+    const SYSTEM_CONFIG_DIR_PATH = PIMCORE_PRIVATE_VAR . '/bundles/NewsBundle';
+
     const SYSTEM_CONFIG_FILE_PATH = PIMCORE_PRIVATE_VAR . '/bundles/NewsBundle/config.yml';
 
     /**
