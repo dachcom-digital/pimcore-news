@@ -2,13 +2,13 @@
 
 namespace NewsBundle\Tool;
 
-use Pimcore\Cache\Runtime;
-use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
-
-use Pimcore\Model\Staticroute;
 use Pimcore\Tool;
+use Pimcore\Model\User;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Translation;
+use Pimcore\Model\Staticroute;
+use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
+use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Serializer;
 use NewsBundle\Configuration\Configuration;
@@ -16,6 +16,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class Install extends AbstractInstaller
 {
+    /**
+     * @var TokenStorageUserResolver
+     */
+    protected $resolver;
+
     /**
      * @var Serializer
      */
@@ -40,19 +45,16 @@ class Install extends AbstractInstaller
     ];
 
     /**
-     * @var User
-     */
-    protected $_user;
-
-    /**
      * Install constructor.
      *
      * @param SerializerInterface $serializer
+     * @param TokenStorageUserResolver $resolver
      */
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(TokenStorageUserResolver $resolver, SerializerInterface $serializer)
     {
         parent::__construct();
 
+        $this->resolver = $resolver;
         $this->serializer = $serializer;
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
@@ -184,8 +186,8 @@ class Install extends AbstractInstaller
             $root = DataObject\Folder::create([
                 'o_parentId'         => 1,
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser(),
-                'o_userModification' => $this->_getUser(),
+                'o_userOwner'        => $this->getUserId(),
+                'o_userModification' => $this->getUserId(),
                 'o_key'              => 'news',
                 'o_published'        => TRUE,
             ]);
@@ -195,8 +197,8 @@ class Install extends AbstractInstaller
             DataObject\Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser(),
-                'o_userModification' => $this->_getUser(),
+                'o_userOwner'        => $this->getUserId(),
+                'o_userModification' => $this->getUserId(),
                 'o_key'              => 'entries',
                 'o_published'        => TRUE,
             ]);
@@ -206,8 +208,8 @@ class Install extends AbstractInstaller
             DataObject\Folder::create([
                 'o_parentId'         => $root->getId(),
                 'o_creationDate'     => time(),
-                'o_userOwner'        => $this->_getUser(),
-                'o_userModification' => $this->_getUser(),
+                'o_userOwner'        => $this->getUserId(),
+                'o_userModification' => $this->getUserId(),
                 'o_key'              => 'categories',
                 'o_published'        => TRUE,
             ]);
@@ -267,15 +269,17 @@ class Install extends AbstractInstaller
     }
 
     /**
-     * @return User
+     * @return int
      */
-    protected function _getUser()
+    protected function getUserId()
     {
-        if (!$this->_user) {
-            $this->_user = Runtime::get('pimcore_admin_user');
+        $userId = 0;
+        $user = $this->resolver->getUser();
+        if($user instanceof User) {
+            $userId = $this->resolver->getUser()->getId();
         }
 
-        return $this->_user;
+        return $userId;
     }
 
 }
