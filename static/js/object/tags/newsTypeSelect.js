@@ -11,13 +11,13 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
 
     getLayoutEdit: function () {
 
-        var obj = this.getObject(),
+        var _ = this, obj = this.getObject(),
             store = new Ext.data.JsonStore({
                 proxy: {
                     type: 'ajax',
                     url: '/plugin/News/admin_Settings/get-news-types',
-                    extraParams:  {
-                        'objectId' : obj.id
+                    extraParams: {
+                        'objectId': obj.id
                     },
                     reader: {
                         type: 'json',
@@ -28,7 +28,7 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
                 },
                 fields: ['key', 'value', 'customLayoutId'],
                 listeners: {
-                    load: function(store, records, success, operation) {
+                    load: function (store, records, success, operation) {
                         if (!success) {
                             pimcore.helpers.showNotification(t('error'), t('error_loading_options'), 'error', operation.getError());
                         }
@@ -54,7 +54,7 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
                 autoLoadOnValue: true,
                 value: this.data,
                 listConfig: {
-                    getInnerTpl: function() {
+                    getInnerTpl: function () {
                         return '<tpl for="."><tpl if="published == true">{key}<tpl else><div class="x-combo-item-disabled x-item-disabled">{key}</div></tpl></tpl>';
                     }
                 }
@@ -66,18 +66,31 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
 
         this.component = new Ext.form.ComboBox(options);
 
-        this.component.getStore().on('load',function() {
+        this.component.getStore().on('load', function () {
+
+            var componentValue = this.component.getValue();
 
             //changedEntryType only exists if object just has been reloaded!
-            if(typeof obj.options === 'object' && obj.options.changedEntryType !== undefined) {
-                this.component.setValue(obj.options.changedEntryType);
+            if (typeof obj.options === 'object' && obj.options.changedEntryType !== undefined) {
+                componentValue = obj.options.changedEntryType;
                 //happens after a new object has been created.
-            } else if( this.component.getValue() === null) {
+            } else if (this.component.getValue() === null) {
                 var firstRecord = this.component.getStore().getAt(0);
-                this.component.setValue(firstRecord.get('value'));
+                componentValue = firstRecord.get('value');
             }
 
-            if(this.component.getStore().getCount() === 1) {
+            var currentLayout = obj.data.currentLayoutId,
+                componentLayoutId = this.component.getStore().findRecord('value', componentValue).get('customLayoutId'),
+                objectLayoutId = this.component.getStore().findRecord('customLayoutId', currentLayout).get('customLayoutId');
+
+            //if there is still a missmatch between store layout and current layout: reset to object layout!
+            if (componentLayoutId !== objectLayoutId) {
+                componentValue = this.component.getStore().findRecord('customLayoutId', currentLayout).get('value');
+            }
+
+            this.component.setValue(componentValue);
+
+            if (this.component.getStore().getCount() === 1) {
                 this.component.setReadOnly(true);
             }
 
@@ -87,11 +100,11 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
 
             var currentLayout = obj.data.currentLayoutId;
 
-            if(currentLayout === '') {
+            if (currentLayout === '') {
                 currentLayout = null;
             }
 
-            if(record.data.customLayoutId === currentLayout) {
+            if (record.data.customLayoutId === currentLayout) {
                 return true;
             }
 
@@ -99,11 +112,11 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
                 this.canContinue = false;
                 return true;
             } else {
-                if(obj.isDirty()) {
+                if (obj.isDirty()) {
                     Ext.Msg.confirm(
                         t('element_has_unsaved_changes'),
                         t('element_unsaved_changes_message'),
-                        function(buttonId) {
+                        function (buttonId) {
                             if (buttonId === 'yes') {
                                 this.canContinue = true;
                                 combo.select(record);
@@ -124,23 +137,20 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
 
             var currentLayout = obj.data.currentLayoutId;
 
-            if(currentLayout === '') {
+            if (currentLayout === '') {
                 currentLayout = null;
             }
 
-            if(record.data.customLayoutId === currentLayout) {
+            if (record.data.customLayoutId === currentLayout) {
                 return true;
             }
 
             var clId = null, options = {};
 
-            if(!isNaN(record.data.customLayoutId)) {
-
+            if (!isNaN(record.data.customLayoutId)) {
                 clId = record.data.customLayoutId;
-
                 options.layoutId = clId;
                 options.changedEntryType = combo.getValue();
-
                 this.reloadObject(obj, options);
             }
         }.bind(this));
@@ -148,7 +158,7 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
         return this.component;
     },
 
-    reloadObject: function(obj, options) {
+    reloadObject: function (obj, options) {
 
         window.setTimeout(function (id, options) {
             pimcore.helpers.openObject(id, 'object', options);

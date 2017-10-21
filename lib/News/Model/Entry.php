@@ -6,11 +6,32 @@ use Pimcore\Model\Object;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\Object\Concrete;
 use Pimcore\Model\Object\NewsCategory;
+use Pimcore\Tool;
 
 class Entry extends Concrete
 {
     /**
+     * Admin Element Style.
+     *
+     * @return \Pimcore\Model\Element\AdminStyle
+     */
+    public function getElementAdminStyle()
+    {
+        if (empty($this->o_elementAdminStyle)) {
+            $class = '\\News\\Model\\AdminStyle';
+            if (Tool::classExists($class)) {
+                $this->o_elementAdminStyle = new AdminStyle($this);
+            } else {
+                return parent::getElementAdminStyle();
+            }
+        }
+
+        return $this->o_elementAdminStyle;
+    }
+
+    /**
      * Get all News
+     *
      * @return array
      */
     public static function getAll()
@@ -91,7 +112,7 @@ class Entry extends Concrete
     }
 
     /**
-     * add timeRange restriction
+     * add time range restriction
      *
      * @param Object\NewsEntry\Listing $newsListing
      * @param array                    $settings
@@ -101,39 +122,34 @@ class Entry extends Concrete
         if (empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
             return;
         }
+
+        $identifier = '>=';
         if ($settings['timeRange'] === 'past') {
-            $newsListing->addConditionParam('(
-                ( showEntryUntil IS NOT NULL AND showEntryUntil < UNIX_TIMESTAMP(NOW()) ) 
-                OR
-                (
-                    ( showEntryUntil IS NULL OR showEntryUntil < UNIX_TIMESTAMP(NOW()) ) AND
-                    ( dateTo IS NULL OR dateTo < UNIX_TIMESTAMP(NOW()) ) AND
-                    ( date IS NULL OR date < UNIX_TIMESTAMP(NOW()) ) 
-                )
-            )');
-        } else {
-            $newsListing->addConditionParam('(
-                CASE WHEN showEntryUntil IS NOT NULL
-                    THEN 
-                        showEntryUntil >= UNIX_TIMESTAMP(NOW())
-                    ELSE
-                        (CASE WHEN dateTo IS NOT NULL
-                            THEN 
-                                dateTo >= UNIX_TIMESTAMP(NOW()) 
-                            ELSE
-                                (CASE WHEN date IS NOT NULL
-                                    THEN 
-                                        date >= UNIX_TIMESTAMP(NOW())  
-                                    ELSE
-                                        FALSE
-                                    END
-                                )
-                            END
-                        )
-                    END
-                )
-            ');
+            $identifier = '<';
         }
+
+        $newsListing->addConditionParam(sprintf('(
+            CASE WHEN showEntryUntil IS NOT NULL
+                THEN 
+                    showEntryUntil %1$s UNIX_TIMESTAMP(NOW())
+                ELSE
+                    (CASE WHEN dateTo IS NOT NULL
+                        THEN 
+                            dateTo %1$s UNIX_TIMESTAMP(NOW()) 
+                        ELSE
+                            (CASE WHEN date IS NOT NULL
+                                THEN 
+                                    date %1$s UNIX_TIMESTAMP(NOW())  
+                                ELSE
+                                    FALSE
+                                END
+                            )
+                        END
+                    )
+                END
+            )
+        ', $identifier)
+        );
     }
 
     /**
@@ -219,6 +235,7 @@ class Entry extends Concrete
 
     /**
      * Get Image for Product
+     *
      * @return bool|\Pimcore\Model\Asset
      */
     public function getImage()

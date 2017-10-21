@@ -12,13 +12,14 @@ class CustomLayout
     /**
      * @param \Zend_EventManager_Event $e
      *
-     * @return bool
+     * @return void
      */
     public static function setNewsTypeLayout(\Zend_EventManager_Event $e)
     {
         /** @var \Pimcore\Model\Object\NewsEntry $object */
         $object = $e->getParam('object');
         $target = $e->getTarget();
+        $requestedLayoutId = $target->getParam('layoutId');
 
         /** @var \Pimcore\Model\Tool\Admin\EventDataContainer $returnValueContainer */
         $returnValueContainer = $e->getParam('returnValueContainer');
@@ -26,17 +27,28 @@ class CustomLayout
 
         //find out which layout has been defined.
         if (!$object instanceof NewsEntry) {
-            return FALSE;
+            return;
         }
 
-        //this param is available if user is reloading the project. do not interfere.
-        if (!is_null($target->getParam('layoutId')) && !empty($target->getParam('layoutId'))) {
-            return FALSE;
-        }
-
-        $layoutId = NULL;
+        $layoutId = 0;
         $layoutType = $object->getEntryType();
-        $newsTypes = NewsTypes::getTypes();
+        $newsTypes = NewsTypes::getTypes($object);
+
+        //this param is available if user is reloading the object. do not interfere.
+        if (!is_null($requestedLayoutId) &&
+            !empty($requestedLayoutId) &&
+            $requestedLayoutId !== '0'
+        ) {
+            return;
+        }
+
+        //request of default layout definition
+        if($requestedLayoutId === '0') {
+            $data['currentLayoutId'] = 0;
+            $data['layout'] = $object->getClass()->getLayoutDefinitions();
+            $returnValueContainer->setData($data);
+            return;
+        }
 
         //watch out, a new object is coming in!
         if(is_null($layoutType)) {
@@ -48,17 +60,14 @@ class CustomLayout
             if (!isset($type['customLayoutId']) || !is_numeric($type['customLayoutId'])) {
                 continue;
             }
-
             if ($layoutType === $typeName) {
                 $layoutId = $type['customLayoutId'];
                 break;
             }
         }
 
-        if (!is_null($layoutId)) {
-
+        if ($layoutId !== 0) {
             $customLayout = NULL;
-
             try {
                 $customLayout = CustomLayoutDefinition::getById($layoutId);
             } catch (\Exception$e) {
@@ -70,8 +79,13 @@ class CustomLayout
                 Service::enrichLayoutDefinition($customLayoutDefinition, $object);
                 $data['layout'] = $customLayoutDefinition;
                 $data['currentLayoutId'] = $layoutId;
-
+            } else {
+                $data['currentLayoutId'] = 0;
+                $data['layout'] = $object->getClass()->getLayoutDefinitions();
             }
+        } else {
+            $data['currentLayoutId'] = 0;
+            $data['layout'] = $object->getClass()->getLayoutDefinitions();
         }
 
         $returnValueContainer->setData($data);

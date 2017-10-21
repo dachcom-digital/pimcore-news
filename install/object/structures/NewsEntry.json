@@ -870,7 +870,7 @@
 		],
 		"locked":false
 	},
-	"icon":null,
+	"icon":"\/plugins\/News\/static\/img\/entry.svg",
 	"previewUrl":null,
 	"propertyVisibility":{
 		"grid":{

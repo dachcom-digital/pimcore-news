@@ -288,7 +288,7 @@
 		],
 		"locked":false
 	},
-	"icon":null,
+	"icon":"\/plugins\/News\/static\/img\/category.svg",
 	"previewUrl":null,
 	"propertyVisibility":{
 		"grid":{

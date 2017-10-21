@@ -25,9 +25,12 @@ class NewsTypes
         $newsTypes = static::getTypesFromConfig();
 
         $validLayouts = NULL;
-
+        $masterLayoutAvailable = FALSE;
         if (!is_null($object)) {
             $validLayouts = Object\Service::getValidLayouts($object);
+            if(isset($validLayouts[0])) {
+                $masterLayoutAvailable = TRUE;
+            }
         }
 
         foreach ($newsTypes as $typeId => &$type) {
@@ -43,17 +46,22 @@ class NewsTypes
                 if (isset($list[0]) && $list[0] instanceof Object\ClassDefinition\CustomLayout) {
                     $customLayoutId = (int)$list[0]->getId();
                 } else {
-                    $customLayoutId = NULL; //reset field -> custom layout is not available!
+                    $customLayoutId = 0; //reset layout to default -> custom layout is not available!
                 }
+            } else if(is_numeric($type['customLayoutId'])) {
+                $customLayoutId = $type['customLayoutId'];
             }
 
-            //remove types if user is not allowed to use it!
-            $allowMasterLayout = isset($validLayouts[0]);
-
-            if ((!$allowMasterLayout || !is_null($customLayoutId)) && !is_null($validLayouts) && !isset($validLayouts[$customLayoutId])) {
-                unset($newsTypes[ $typeId]);
+            //remove types if valid layout is set and user is not allowed to use it!
+            if(!is_null($customLayoutId)) {
+                // custom layout found: check if user has rights to use it! if not: remove from selection!
+                if($masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
+                    unset($newsTypes[$typeId]);
+                } else {
+                    $type['customLayoutId'] = $customLayoutId;
+                }
             } else {
-                $type['customLayoutId'] = $customLayoutId;
+                $type['customLayoutId'] = 0;
             }
         }
 
@@ -87,7 +95,7 @@ class NewsTypes
                 'news' => [
                     'name'           => 'News',
                     'route'          => '',
-                    'customLayoutId' => NULL
+                    'customLayoutId' => 0
                 ]
             ];
         }
