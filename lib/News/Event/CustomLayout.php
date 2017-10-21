@@ -2,6 +2,7 @@
 
 namespace News\Event;
 
+use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Model\Object\NewsEntry;
 use Pimcore\Model\Object\Service;
 use Pimcore\Model\Object\ClassDefinition\CustomLayout as CustomLayoutDefinition;
@@ -66,11 +67,23 @@ class CustomLayout
             }
         }
 
+        //check if user is allowed to open this object.
+        if(!isset($newsTypes[$layoutType])) {
+            $user = AdminTool::getCurrentUser();
+            if(!$user->isAdmin()) {
+                $data['_invalidNewsType'] = TRUE;
+                $data['layout'] = NULL;
+                $data['currentLayoutId'] = NULL;
+                $returnValueContainer->setData($data);
+                return;
+            }
+        }
+
         if ($layoutId !== 0) {
             $customLayout = NULL;
             try {
                 $customLayout = CustomLayoutDefinition::getById($layoutId);
-            } catch (\Exception$e) {
+            } catch (\Exception $e) {
                 //not found. fail silently.
             }
 

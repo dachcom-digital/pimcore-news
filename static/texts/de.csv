@@ -5,3 +5,5 @@
 "news_install_failed","News Plugin konnte nicht installiert werden. Bitte überprüfe die Log-Dateien."
 "news_uninstalled_successfully","News Plugin wurde erfolgreich deinstalliert. Bitte Pimcore neuladen!"
 "news_uninstall_failed","News Plugin konnte nicht deinstalliert werden. Bitte überprüfe die Log-Dateien."
+"news_permission_error","News Beitragstyp: Zugriff nicht erlaubt."
+"news_no_permission_for_newstype","Sie haben keine Berechtigung dieses News Objekt zu öffnen. Beitragstyp ist:"

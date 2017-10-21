@@ -15,10 +15,8 @@
         <pluginNamespaces>
             <namespace>News</namespace>
         </pluginNamespaces>
-        <pluginJsPaths>
-            <path>/plugins/News/static/js/startup.js</path>
-        </pluginJsPaths>
         <pluginJsPaths-extjs6>
+            <path>/plugins/News/static/js/startup.js</path>
             <path>/plugins/News/static/js/object/data/newsTypeSelect.js</path>
             <path>/plugins/News/static/js/object/tags/newsTypeSelect.js</path>
         </pluginJsPaths-extjs6>

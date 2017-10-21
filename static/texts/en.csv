@@ -5,3 +5,5 @@
 "news_install_failed","Could not install News plugin. See log for more details."
 "news_uninstalled_successfully","Successfully uninstalled News plugin. Please don't forget to reload pimcore!"
 "news_uninstall_failed","Could not uninstall News plugin. See log for more details."
+"news_permission_error","News Type: Permission denied."
+"news_no_permission_for_newstype","You have no permission to open this news object type. Entry Type is: "
