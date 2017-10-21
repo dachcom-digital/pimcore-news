@@ -4,7 +4,7 @@ namespace News\Model;
 
 use Pimcore\Model;
 
-class AdminStyle extends \Pimcore\Model\Element\AdminStyle
+class AdminStyle extends Model\Element\AdminStyle
 {
     /**
      * @var Model\Object\AbstractObject
