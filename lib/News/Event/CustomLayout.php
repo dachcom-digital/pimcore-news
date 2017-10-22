@@ -44,7 +44,7 @@ class CustomLayout
         }
 
         //request of default layout definition
-        if($requestedLayoutId === '0') {
+        if ($requestedLayoutId === '0') {
             $data['currentLayoutId'] = 0;
             $data['layout'] = $object->getClass()->getLayoutDefinitions();
             $returnValueContainer->setData($data);
@@ -52,9 +52,13 @@ class CustomLayout
         }
 
         //watch out, a new object is coming in!
-        if(is_null($layoutType)) {
+        if (is_null($layoutType)) {
             $defaultType = NewsTypes::getDefaultType();
             $layoutType = $defaultType['key'];
+            //check if default type exists for current user. if not: use the first available type!
+            if (!isset($newsTypes[$layoutType])) {
+                $layoutType = array_keys($newsTypes)[0];
+            }
         }
 
         foreach ($newsTypes as $typeName => $type) {
@@ -68,9 +72,9 @@ class CustomLayout
         }
 
         //check if user is allowed to open this object.
-        if(!isset($newsTypes[$layoutType])) {
+        if (!isset($newsTypes[$layoutType])) {
             $user = AdminTool::getCurrentUser();
-            if(!$user->isAdmin()) {
+            if (!$user->isAdmin()) {
                 $data['_invalidNewsType'] = TRUE;
                 $data['layout'] = NULL;
                 $data['currentLayoutId'] = NULL;

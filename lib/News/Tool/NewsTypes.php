@@ -28,7 +28,7 @@ class NewsTypes
         $masterLayoutAvailable = FALSE;
         if (!is_null($object)) {
             $validLayouts = Object\Service::getValidLayouts($object);
-            if(isset($validLayouts[0])) {
+            if (isset($validLayouts[0])) {
                 $masterLayoutAvailable = TRUE;
             }
         }
@@ -48,14 +48,14 @@ class NewsTypes
                 } else {
                     $customLayoutId = 0; //reset layout to default -> custom layout is not available!
                 }
-            } else if(is_numeric($type['customLayoutId'])) {
+            } elseif (is_numeric($type['customLayoutId'])) {
                 $customLayoutId = $type['customLayoutId'];
             }
 
             //remove types if valid layout is set and user is not allowed to use it!
-            if(!is_null($customLayoutId)) {
+            if (!is_null($customLayoutId)) {
                 // custom layout found: check if user has rights to use it! if not: remove from selection!
-                if($masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
+                if ($masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
                     unset($newsTypes[$typeId]);
                 } else {
                     $type['customLayoutId'] = $customLayoutId;
@@ -70,6 +70,7 @@ class NewsTypes
 
     /**
      * Extract first type element and add first key value as "key" to reference.
+     *
      * @return mixed
      */
     public static function getDefaultType()
@@ -111,14 +112,14 @@ class NewsTypes
     public static function getRouteInfo($entryType)
     {
         //use cache.
-        if(isset(static::$routeData[$entryType])) {
+        if (isset(static::$routeData[$entryType])) {
             return static::$routeData[$entryType];
         }
 
         $routeData = ['name' => 'news_detail', 'urlParams' => []];
         $types = static::getTypesFromConfig();
 
-        if(isset($types[$entryType]) && !empty($types[$entryType]['route'])) {
+        if (isset($types[$entryType]) && !empty($types[$entryType]['route'])) {
             $routeData['name'] = $types[$entryType]['route'];
         }
 
