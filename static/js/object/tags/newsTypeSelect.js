@@ -79,13 +79,15 @@ pimcore.object.tags.newsTypeSelect = Class.create(pimcore.object.tags.select, {
                 componentValue = firstRecord.get('value');
             }
 
-            var currentLayout = obj.data.currentLayoutId,
-                componentLayoutId = this.component.getStore().findRecord('value', componentValue).get('customLayoutId'),
-                objectLayoutId = this.component.getStore().findRecord('customLayoutId', currentLayout).get('customLayoutId');
+            var currentLayoutId = obj.data.currentLayoutId,
+                componentLayoutRecord = this.component.getStore().findRecord('value', componentValue),
+                componentLayoutId = componentLayoutRecord ? componentLayoutRecord.get('customLayoutId') : this.component.getStore().getAt(0).get('customLayoutId'),
+                objectLayoutRecord = this.component.getStore().findRecord('customLayoutId', currentLayoutId),
+                objectLayoutId = objectLayoutRecord ? objectLayoutRecord.get('customLayoutId') : currentLayoutId;
 
-            //if there is still a missmatch between store layout and current layout: reset to object layout!
-            if (componentLayoutId !== objectLayoutId) {
-                componentValue = this.component.getStore().findRecord('customLayoutId', currentLayout).get('value');
+            //if there is still a miss-match between store layout and current layout: reset to object layout!
+            if (objectLayoutRecord && componentLayoutId !== objectLayoutId) {
+                componentValue = objectLayoutRecord.get('value');
             }
 
             this.component.setValue(componentValue);
