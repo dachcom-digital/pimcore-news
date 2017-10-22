@@ -35,11 +35,15 @@ class CustomLayout
         $layoutType = $object->getEntryType();
         $newsTypes = NewsTypes::getTypes($object);
 
+        //remove layouts from pimcore layout selector.
+        $data['validLayouts'] = [];
+
         //this param is available if user is reloading the object. do not interfere.
         if (!is_null($requestedLayoutId) &&
             !empty($requestedLayoutId) &&
             $requestedLayoutId !== '0'
         ) {
+            $returnValueContainer->setData($data);
             return;
         }
 
