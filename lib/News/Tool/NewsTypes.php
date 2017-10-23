@@ -6,6 +6,7 @@ use Pimcore\Model\Site;
 use Pimcore\Model\Staticroute;
 use Pimcore\Model\Object;
 use Pimcore\Model\Object\ClassDefinition;
+use Pimcore\Translate\Admin as TranslateAdapter;
 use News\Model\Configuration;
 
 class NewsTypes
@@ -55,7 +56,7 @@ class NewsTypes
             //remove types if valid layout is set and user is not allowed to use it!
             if (!is_null($customLayoutId)) {
                 // custom layout found: check if user has rights to use it! if not: remove from selection!
-                if ($masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
+                if ($validLayouts !== NULL && $masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
                     unset($newsTypes[$typeId]);
                 } else {
                     $type['customLayoutId'] = $customLayoutId;
@@ -82,6 +83,40 @@ class NewsTypes
 
         return $firstElement;
     }
+
+    /**
+     * @param $name
+     * @return array|mixed
+     */
+    public static function getTypeInfo($name)
+    {
+        $info = [];
+        $types = static::getTypes();
+
+        $locale = $_REQUEST['systemLocale'];
+        $translator = NULL;
+
+        if (!$locale) {
+            if (\Zend_Registry::isRegistered('Zend_Locale')) {
+                $locale = \Zend_Registry::get('Zend_Locale');
+            } else {
+                $locale = new \Zend_Locale('en');
+            }
+        }
+
+        if ($locale) {
+            $translator = new TranslateAdapter($locale);
+        }
+
+        if (isset($types[$name])) {
+            $info = $types[$name];
+            //translate name.
+            $info['name'] = !is_null($translator) ? $translator->translate($types[$name]['name']) : $types[$name]['name'];
+        }
+
+        return $info;
+    }
+
 
     /**
      * @return array|mixed|null

@@ -2,6 +2,7 @@
 
 namespace News\Model;
 
+use News\Tool\NewsTypes;
 use Pimcore\Model;
 
 class AdminStyle extends Model\Element\AdminStyle
@@ -28,9 +29,10 @@ class AdminStyle extends Model\Element\AdminStyle
     public function getElementQtipConfig()
     {
         if ($this->element instanceof Model\Object\NewsEntry) {
+            $entryTypeInfo = NewsTypes::getTypeInfo($this->element->getEntryType());
             return [
                 'title' => 'ID: ' . $this->element->getId(),
-                'text'  => $this->element->getClass()->getName() . ' | Type: ' . $this->element->getEntryType()
+                'text'  => $this->element->getClass()->getName() . ' | Type: ' . $entryTypeInfo['name']
             ];
         }
 
