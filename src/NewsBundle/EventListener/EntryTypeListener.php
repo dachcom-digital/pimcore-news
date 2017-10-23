@@ -4,6 +4,7 @@ namespace NewsBundle\EventListener;
 
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
+use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Event\AdminEvents;
 use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
 use Pimcore\Model\DataObject\NewsEntry;
@@ -36,8 +37,11 @@ class EntryTypeListener implements EventSubscriberInterface
      * @param Configuration    $configuration
      * @param EntryTypeManager $entryTypeManager
      */
-    public function __construct(RequestStack $requestStack, Configuration $configuration, EntryTypeManager $entryTypeManager)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        Configuration $configuration,
+        EntryTypeManager $entryTypeManager
+    ) {
         $this->requestStack = $requestStack;
         $this->configuration = $configuration;
         $this->entryTypeManager = $entryTypeManager;
@@ -61,19 +65,48 @@ class EntryTypeListener implements EventSubscriberInterface
         /** @var \Pimcore\Model\DataObject\NewsEntry $object */
         $object = $e->getArgument('object');
         $data = $e->getArgument('data');
+        $requestedLayoutId = $this->requestStack->getCurrentRequest()->get('layoutId');
 
         if (!$object instanceof NewsEntry) {
             return;
         }
 
-        $layoutId = NULL;
-        $layoutType = $object->getEntryType();
+        //remove layouts from pimcore layout selector.
+        $data['validLayouts'] = [];
 
-        $entryTypes = $this->entryTypeManager->getTypes();
+        //this param is available if user is reloading the object. do not interfere.
+        if (!is_null($requestedLayoutId) &&
+            !empty($requestedLayoutId) &&
+            $requestedLayoutId !== '0'
+        ) {
+            $e->setArgument('data', $data);
+            return;
+        }
+
+        $layoutId = 0;
+        $layoutType = $object->getEntryType();
+        $entryTypes = $this->entryTypeManager->getTypes($object);
+
+        //define default type
+        $defaultLayoutType = $this->entryTypeManager->getDefaultType();
+
+        //check if default type exists for current user. if not: use the first available type!
+        if((is_null($layoutType) && !isset($entryTypes[$defaultLayoutType])) && !isset($entryTypes[$layoutType])) {
+            $defaultLayoutType = array_keys($entryTypes)[0];
+        }
+
+        //request of default layout definition
+        if($requestedLayoutId === '0') {
+            $data['currentLayoutId'] = 0;
+            $data['layout'] = $object->getClass()->getLayoutDefinitions();
+            $e->setArgument('data', $data);
+            return;
+        }
 
         //watch out, a new object is coming in!
         if (is_null($layoutType)) {
-            $layoutType = $this->entryTypeManager->getDefaultType();
+            $layoutType = $defaultLayoutType;
+
         }
 
         foreach ($entryTypes as $typeName => $type) {
@@ -87,10 +120,20 @@ class EntryTypeListener implements EventSubscriberInterface
             }
         }
 
-        if (!is_null($layoutId)) {
+        //check if user is allowed to open this object.
+        if(!isset($entryTypes[$layoutType])) {
+            $user = AdminTool::getCurrentUser();
+            if(!$user->isAdmin()) {
+                $data['_invalidEntryType'] = TRUE;
+                $data['layout'] = NULL;
+                $data['currentLayoutId'] = NULL;
+                $e->setArgument('data', $data);
+                return;
+            }
+        }
 
+        if ($layoutId !== 0) {
             $customLayout = NULL;
-
             try {
                 $customLayout = CustomLayout::getById($layoutId);
             } catch (\Exception $e) {
@@ -102,7 +145,13 @@ class EntryTypeListener implements EventSubscriberInterface
                 Service::enrichLayoutDefinition($customLayoutDefinition, $object);
                 $data['layout'] = $customLayoutDefinition;
                 $data['currentLayoutId'] = $layoutId;
+            } else {
+                $data['layout'] = $object->getClass()->getLayoutDefinitions();
+                $data['currentLayoutId'] = 0;
             }
+        } else {
+            $data['layout'] = $object->getClass()->getLayoutDefinitions();
+            $data['currentLayoutId'] = 0;
         }
 
         $e->setArgument('data', $data);

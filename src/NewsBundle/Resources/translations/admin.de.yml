@@ -1,3 +1,5 @@
 "news": "News"
 "news.name": "News Plugin"
 "news.type_select": "Beitragstyp Auswahl"
+"news.permission_error": "News Beitragstyp: Zugriff nicht erlaubt"
+"news.no_permission_for_entry_type": "Sie haben keine Berechtigung dieses News Objekt zu öffnen. Beitragstyp ist:"

@@ -1,3 +1,5 @@
 "news": "News"
 "news.name": "News Plugin"
 "news.type_select": "Entry Type Selector"
+"news.permission_error": "News Type: Permission denied."
+"news.no_permission_for_entry_type": "You have no permission to open this news object type. Entry Type is:"

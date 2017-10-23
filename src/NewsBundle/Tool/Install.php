@@ -83,6 +83,8 @@ class Install extends AbstractInstaller
     public function update()
     {
         $this->installOrUpdateConfigFile();
+        $this->installTranslations();
+
     }
 
     /**

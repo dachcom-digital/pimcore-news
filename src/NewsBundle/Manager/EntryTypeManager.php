@@ -7,6 +7,7 @@ use Pimcore\Model\Site;
 use Pimcore\Model\Staticroute;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class EntryTypeManager
 {
@@ -21,13 +22,20 @@ class EntryTypeManager
     protected $routeData = [];
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * EntryTypeManager constructor.
      *
      * @param Configuration $configuration
+     * @param TranslatorInterface $translator
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(Configuration $configuration, TranslatorInterface $translator)
     {
         $this->configuration = $configuration;
+        $this->translator = $translator;
     }
 
     /**
@@ -40,19 +48,20 @@ class EntryTypeManager
         $entryTypes = $this->getTypesFromConfig();
 
         $validLayouts = NULL;
-
+        $masterLayoutAvailable = FALSE;
         if (!is_null($object)) {
             $validLayouts = DataObject\Service::getValidLayouts($object);
+            if(array_key_exists(0, $validLayouts)) {
+                $masterLayoutAvailable = TRUE;
+            }
         }
 
         foreach ($entryTypes as $typeId => &$type) {
-
             if($type['custom_layout_id'] === 0) {
                 $type['custom_layout_id'] = NULL;
             }
 
             $customLayoutId = $type['custom_layout_id'];
-
             //if string (name) is given, get layout via listing
             if (is_string($customLayoutId)) {
                 $list = new ClassDefinition\CustomLayout\Listing();
@@ -62,17 +71,20 @@ class EntryTypeManager
                 if (isset($list[0]) && $list[0] instanceof DataObject\ClassDefinition\CustomLayout) {
                     $customLayoutId = (int)$list[0]->getId();
                 } else {
-                    $customLayoutId = NULL; //reset field -> custom layout is not available!
+                    $customLayoutId = 0; //reset layout to default -> custom layout is not available!
                 }
             }
 
-            //remove types if user is not allowed to use it!
-            $allowMasterLayout = isset($validLayouts[0]);
-
-            if ((!$allowMasterLayout || !is_null($customLayoutId)) && !is_null($validLayouts) && !isset($validLayouts[$customLayoutId])) {
-                unset($entryTypes[$typeId]);
+            //remove types if valid layout is set and user is not allowed to use it!
+            if(!is_null($customLayoutId)) {
+                // custom layout found: check if user has rights to use it! if not: remove from selection!
+                if(!is_null($validLayouts) && $masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
+                    unset($entryTypes[$typeId]);
+                } else {
+                    $type['custom_layout_id'] = $customLayoutId;
+                }
             } else {
-                $type['custom_layout_id'] = $customLayoutId;
+                $type['custom_layout_id'] = 0;
             }
         }
 
@@ -87,6 +99,24 @@ class EntryTypeManager
     {
         $entryTypeConfig = $this->configuration->getConfig('entry_types');
         return $entryTypeConfig['default'];
+    }
+
+    /**
+     * @param $typeName
+     * @return array|mixed
+     */
+    public function getTypeInfo($typeName)
+    {
+        $info = [];
+        $types = $this->getTypes();
+
+        if (isset($types[$typeName])) {
+            $info = $types[$typeName];
+            //translate name.
+            $info['name'] = $this->translator->trans($types[$typeName]['name'], [], 'admin');
+        }
+
+        return $info;
     }
 
     /**

@@ -68,16 +68,35 @@ pimcore.object.tags.entryTypeSelect = Class.create(pimcore.object.tags.select, {
 
         this.component.getStore().on('load',function() {
 
+            var componentValue = this.component.getValue();
+
             //changedEntryType only exists if object just has been reloaded!
-            if(typeof obj.options === 'object' && obj.options.changedEntryType !== undefined) {
-                this.component.setValue(obj.options.changedEntryType);
+            if (typeof obj.options === 'object' && obj.options.changedEntryType !== undefined) {
+                componentValue = obj.options.changedEntryType;
                 //happens after a new object has been created.
-            } else if(this.component.getValue() === null) {
+            } else if (this.component.getValue() === null) {
                 var firstRecord = this.component.getStore().getAt(0);
-                this.component.setValue(firstRecord.get('default'));
+                componentValue = firstRecord.get('default');
+                //check if default exists. if not, use first record.
+                if(!this.component.getStore().findRecord('value', componentValue)) {
+                    componentValue = this.component.getStore().getAt(0).get('value');
+                }
             }
 
-            if(this.component.getStore().getCount() === 1) {
+            var currentLayoutId = obj.data.currentLayoutId,
+                componentLayoutRecord = this.component.getStore().findRecord('value', componentValue),
+                componentLayoutId = componentLayoutRecord ? componentLayoutRecord.get('custom_layout_id') : this.component.getStore().getAt(0).get('custom_layout_id'),
+                objectLayoutRecord = this.component.getStore().findRecord('custom_layout_id', currentLayoutId),
+                objectLayoutId = objectLayoutRecord ? objectLayoutRecord.get('custom_layout_id') : currentLayoutId;
+
+            //if there is still a miss-match between store layout and current layout: reset to object layout!
+            if (objectLayoutRecord && componentLayoutId !== objectLayoutId) {
+                componentValue = objectLayoutRecord.get('value');
+            }
+
+            this.component.setValue(componentValue);
+
+            if (this.component.getStore().getCount() === 1) {
                 this.component.setReadOnly(true);
             }
 

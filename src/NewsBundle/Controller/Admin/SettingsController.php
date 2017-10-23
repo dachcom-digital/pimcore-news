@@ -52,6 +52,7 @@ class SettingsController extends AdminController
         if ($object instanceof DataObject\NewsEntry) {
             $object->setEntryType($entryTypeId);
             Version::disable();
+            $object->setOmitMandatoryCheck(true);
             $object->save();
             Version::enable();
         }

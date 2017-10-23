@@ -6,10 +6,30 @@ use CoreShop\Component\Resource\ImplementedByPimcoreException;
 use Pimcore\Db\ZendCompatibility\QueryBuilder;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Asset\Image;
+use Pimcore\Tool;
 use Zend\Paginator\Paginator;
 
 class Entry extends DataObject\Concrete implements EntryInterface
 {
+    /**
+     * Admin Element Style.
+     *
+     * @return \Pimcore\Model\Element\AdminStyle
+     */
+    public function getElementAdminStyle()
+    {
+        if (empty($this->o_elementAdminStyle)) {
+            $class = '\\NewsBundle\\Model\\AdminStyle';
+            if (Tool::classExists($class)) {
+                $this->o_elementAdminStyle = new AdminStyle($this);
+            } else {
+                return parent::getElementAdminStyle();
+            }
+        }
+
+        return $this->o_elementAdminStyle;
+    }
+
     /**
      * Get all News
      * @return array
