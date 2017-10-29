@@ -55,7 +55,6 @@ class Install extends AbstractInstaller
     public function __construct(TokenStorageUserResolver $resolver, SerializerInterface $serializer)
     {
         parent::__construct();
-
         $this->resolver = $resolver;
         $this->serializer = $serializer;
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
@@ -72,8 +71,6 @@ class Install extends AbstractInstaller
         $this->installClasses();
         $this->installTranslations();
         $this->createFolders();
-
-        return TRUE;
     }
 
     /**
@@ -84,7 +81,6 @@ class Install extends AbstractInstaller
     {
         $this->installOrUpdateConfigFile();
         $this->installTranslations();
-
     }
 
     /**
