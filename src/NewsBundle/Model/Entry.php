@@ -2,7 +2,7 @@
 
 namespace NewsBundle\Model;
 
-use CoreShop\Component\Resource\ImplementedByPimcoreException;
+use NewsBundle\Exception\ImplementedByPimcoreException;
 use Pimcore\Db\ZendCompatibility\QueryBuilder;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Asset\Image;

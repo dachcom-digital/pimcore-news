@@ -1,6 +1,6 @@
 <?php
 
-namespace CoreShop\Component\Resource;
+namespace NewsBundle\Exception;
 
 class ImplementedByPimcoreException extends \InvalidArgumentException
 {
