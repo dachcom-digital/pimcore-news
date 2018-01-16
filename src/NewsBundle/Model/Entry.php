@@ -162,7 +162,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
             if (!empty($categories)) {
                 $query->join(
                     ['relations' => 'object_relations_' . $newsListing->getClassId()],
-                    "relations.src_id = o_id",
+                    'relations.src_id = oo_id',
                     ''
                 );
             }
