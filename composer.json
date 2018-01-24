@@ -1,7 +1,7 @@
 {
     "name": "dachcom-digital/news",
     "type": "pimcore-plugin",
-    "license": "GPL-3.0+",
+    "license": "GPL-3.0-or-later",
     "description": "Pimcore 4.x News Plugin",
     "keywords": ["pimcore", "news"],
     "homepage": "https://github.com/dachcom-digital/pimcore-news",
