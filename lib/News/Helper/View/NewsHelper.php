@@ -142,8 +142,9 @@ class NewsHelper extends \Zend_View_Helper_Abstract
             Entry::addCategorySelectorToQuery($newsListing, $categories);
         }
 
-        if ($settings['entryType'] !== 'all') {
-            $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        if (in_array('all', $settings['entryTypes']) !== TRUE) {
+            $newsListing->addConditionParam('entryType IN (' . rtrim(str_repeat('?,',
+                    count($settings['entryTypes'])), ',') . ')', $settings['entryTypes']);
         }
         $newsListing->addConditionParam('o_id != ?', $news->getId());
 

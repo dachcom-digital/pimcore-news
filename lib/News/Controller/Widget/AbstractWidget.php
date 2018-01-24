@@ -15,6 +15,11 @@ abstract class AbstractWidget
     protected $areaSettings = [];
 
     /**
+     * @var array
+     */
+    protected $widgetOptions = [];
+
+    /**
      * @var \Pimcore\View
      */
     protected $view;
@@ -24,11 +29,13 @@ abstract class AbstractWidget
      *
      * @param string $widgetName
      * @param array  $areaSettings
+     * @param array  $widgetOptions
      */
-    public function __construct($widgetName = '', $areaSettings = [])
+    public function __construct($widgetName = '', $areaSettings = [], $widgetOptions = [])
     {
         $this->widgetName = $widgetName;
         $this->areaSettings = $areaSettings;
+        $this->widgetOptions = $widgetOptions;
     }
 
     /**

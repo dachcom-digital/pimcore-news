@@ -17,7 +17,7 @@ Pimcore News Plugin
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~1.5.0",
+    "dachcom-digital/news" : "~1.6.0",
 }
 ```
 

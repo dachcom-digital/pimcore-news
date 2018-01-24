@@ -31,8 +31,8 @@ class News extends Document\Tag\Area\AbstractArea
         $querySettings['includeSubCategories'] = $includeSubCategories;
 
         //set entry type
-        $entryType = $view->select('entryType')->getData() ?: 'all';
-        $querySettings['entryType'] = $entryType;
+        $entryTypes = $view->multiselect('entryType')->getData() ?: ['all'];
+        $querySettings['entryTypes'] = $entryTypes;
 
         //set limit
         $limit = (int)$view->numeric('limit')->getData();
@@ -77,6 +77,12 @@ class News extends Document\Tag\Area\AbstractArea
             'GET'  => $view->getRequest()->getQuery()
         ];
 
+        $response = \Pimcore::getEventManager()->trigger('news.action.querySettings', $this, ['querySettings' => $querySettings]);
+
+        if ($response->stopped()) {
+            $querySettings = $response->last();
+        }
+
         //load Query
         $newsObjects = Object\NewsEntry::getEntriesPaging($querySettings);
 
@@ -94,7 +100,7 @@ class News extends Document\Tag\Area\AbstractArea
 
             $newsTypes = NewsTypes::getTypesFromConfig();
             $adminSettings['entryTypes']['store'] = [['all', $view->translateAdmin('all entry types')]];
-            $adminSettings['entryTypes']['default'] = 'all';
+            $adminSettings['entryTypes']['default'] = ['all'];
             foreach ($newsTypes as $typeKey => $typeData) {
                 $adminSettings['entryTypes']['store'][] = [$typeKey, $view->translateAdmin($typeData['name'])];
             }
@@ -105,14 +111,16 @@ class News extends Document\Tag\Area\AbstractArea
         $mainClasses[] = 'area';
         $mainClasses[] = 'news-' . $layoutName;
 
-        if ($entryType !== 'all') {
-            $mainClasses[] = 'entry-type-' . str_replace(['_', ' '], ['-'], strtolower($entryType));
+        foreach($entryTypes as $entryType) {
+            if ( $entryType !== 'all' ) {
+                $mainClasses[] = 'entry-type-' . str_replace(['_', ' '], ['-'], strtolower($entryType));
+            }
         }
 
         //prepare WidgetSettings
         $widgetSettings = $querySettings;
         $widgetSettings['showPagination'] = $showPagination;
-        $widgetSettings['entryType'] = $entryType;
+        $widgetSettings['entryTypes'] = $entryTypes;
         $widgetSettings['paginator'] = $newsObjects;
         $widgetSettings['layoutName'] = $layoutName;
 
@@ -127,7 +135,7 @@ class News extends Document\Tag\Area\AbstractArea
             'category'       => $category,
             'showPagination' => $showPagination,
             'paginator'      => $newsObjects,
-            'entryType'      => $entryType,
+            'entryTypes'     => $entryTypes,
             'layoutName'     => $layoutName,
             'widgetHandler'  => $widgetHandler,
 

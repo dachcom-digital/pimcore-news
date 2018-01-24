@@ -126,11 +126,11 @@
         <div class="t-col-half">
 
             <label><?= $this->translateAdmin('entry type') ?></label>
-            <?php if ($this->editmode && $this->select('entryType')->isEmpty()) {
-                $this->select('entryType')->setDataFromResource($this->editSettings['entryTypes']['default']);
+            <?php if ($this->editmode && $this->multiselect('entryType')->isEmpty()) {
+                $this->multiselect('entryType')->setDataFromResource($this->editSettings['entryTypes']['default']);
             } ?>
 
-            <?= $this->select('entryType', ['store' => $this->editSettings['entryTypes']['store']]); ?>
+            <?= $this->multiselect('entryType', ['store' => $this->editSettings['entryTypes']['store']]); ?>
 
         </div>
 

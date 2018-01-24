@@ -10,6 +10,8 @@ use Pimcore\Tool;
 
 class Entry extends Concrete
 {
+    protected $events;
+
     /**
      * Admin Element Style.
      *
@@ -58,7 +60,7 @@ class Entry extends Concrete
             ],
             'page'                 => 0,
             'itemsPerPage'         => 10,
-            'entryType'            => 'all',
+            'entryTypes'           => ['all'],
             'timeRange'            => 'all',
             'category'             => NULL,
             'includeSubCategories' => FALSE,
@@ -70,7 +72,7 @@ class Entry extends Concrete
         $newsListing = Object\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
-        $newsListing->setGroupBy('o_id');
+        $newsListing->setGroupBy(['o_id', 'o_type']);
 
         $categories = NULL;
         if ($settings['category'] && $settings['category'] instanceof Category) {
@@ -86,9 +88,9 @@ class Entry extends Concrete
         static::addTimeRange($newsListing, $settings);
 
         //add entry type selector
-        if ($settings['entryType'] !== 'all') {
-            $newsListing->addConditionParam('entryType = ?',
-                $settings['entryType']);
+        if (in_array('all', $settings['entryTypes']) !== TRUE) {
+            $newsListing->addConditionParam('entryType IN (' . rtrim(str_repeat('?,',
+                    count($settings['entryTypes'])), ',') . ')', $settings['entryTypes']);
         }
 
         //add additional where clauses.

@@ -1,5 +1,13 @@
 # Upgrade Notes
 
+#### Update from Version 1.5.x to Version 1.6.0
+- The entryType selector from area settings has changed from select to multiselect
+- Copy install/migration/15to16.php into your web root
+- Check the select statement and make sure it retrieves only the entryType editables
+- execute the script in your browser
+- clear pimcore cache
+- alternatively you can manually edit all news areas, set the correct entryType and save them again
+
 #### Update from Version 1.4.x to Version 1.5.0
 - New object element (in `NewsEntry` class): `dateTo` (date field, after `date`)
 - New object element (in `NewsEntry` class): `showEntryUntil` (date field, after `dateTo`)
