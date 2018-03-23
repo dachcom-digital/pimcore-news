@@ -7,7 +7,7 @@
         <div class="detail-entry-gallery light-box entry-gallery">
             {% for image in entry.getImages() %}
                 <a href="{{ image.getFullPath() }}" class="item{{ loop.index > 1 ? ' hidden'  : '' }}" data-src="{{ image.getThumbnail('contentImage') }}">
-                    {{ image.getThumbnail('galleryImage').getHtml({'class': 'img-responsive'})|raw }}
+                    {{ image.getThumbnail(news_thumbnail('gallery_image')).getHtml({'class': 'img-responsive'})|raw }}
                 </a>
             {% endfor %}
         </div>

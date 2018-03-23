@@ -6,7 +6,7 @@
 
         <div class="detail-entry-image entry-image">
             <a href="{{ entry.getFullPath() }}" class="item" data-src="{{ entry.getImage().getThumbnail('contentImage') }}">
-                {{ entry.getImage().getThumbnail('galleryImage').getHtml({'class': 'img-responsive'})|raw }}
+                {{ entry.getImage().getThumbnail(news_thumbnail('gallery_image')).getHtml({'class': 'img-responsive'})|raw }}
             </a>
         </div>
 

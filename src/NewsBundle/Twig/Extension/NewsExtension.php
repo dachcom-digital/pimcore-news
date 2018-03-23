@@ -13,13 +13,20 @@ class NewsExtension extends \Twig_Extension
     private $linkGenerator;
 
     /**
+     * @var array
+     */
+    private $imageThumbnails;
+
+    /**
      * NewsExtension constructor.
      *
      * @param LinkGeneratorInterface $linkGenerator
+     * @param array                  $imageThumbnails
      */
-    public function __construct(LinkGeneratorInterface $linkGenerator)
+    public function __construct(LinkGeneratorInterface $linkGenerator, array $imageThumbnails)
     {
         $this->linkGenerator = $linkGenerator;
+        $this->imageThumbnails = $imageThumbnails;
     }
 
     /**
@@ -36,6 +43,10 @@ class NewsExtension extends \Twig_Extension
             new \Twig_Function(
                 'news_entry_backlink',
                 [$this, 'generateBackLink']
+            ),
+            new \Twig_Function(
+                'news_thumbnail',
+                [$this, 'getNewsThumbnail']
             ),
         ];
     }
@@ -58,5 +69,17 @@ class NewsExtension extends \Twig_Extension
     public function generateBackLink(EntryInterface $entry)
     {
         return $this->linkGenerator->generateBackLink($entry);
+    }
+
+    /**
+     * Get a thumbnail name from config
+     *
+     * @param string $thumbnail
+     *
+     * @return string
+     */
+    public function getNewsThumbnail(string $thumbnail)
+    {
+        return in_array($thumbnail, $this->imageThumbnails) ? $this->imageThumbnails[$thumbnail] : '';
     }
 }

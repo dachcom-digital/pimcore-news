@@ -7,6 +7,8 @@ services:
 
     # twig extension: links
     NewsBundle\Twig\Extension\NewsExtension:
+        arguments:
+            $imageThumbnails: '%image_thumbnails%'
         tags:
             - { name: twig.extension }
 

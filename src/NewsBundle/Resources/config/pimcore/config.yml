@@ -5,6 +5,11 @@ pimcore:
                 map:
                     entryTypeSelect: NewsBundle\CoreExtension\EntryTypeSelect
 
+parameters:
+    image_thumbnails:
+        content_image: 'contentImage'
+        gallery_image: 'galleryImage'
+
 news:
     list:
         sort_by: 'date'
