@@ -8,7 +8,7 @@ use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
 class NewsBundle extends AbstractPimcoreBundle
 {
-    const BUNDLE_VERSION = '2.0.3';
+    const BUNDLE_VERSION = '2.0.4';
 
     /**
      * @param ContainerBuilder $container
