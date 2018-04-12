@@ -217,7 +217,7 @@
 										"width":null,
 										"queryColumnType":"varchar",
 										"columnType":"varchar",
-										"columnLength":255,
+										"columnLength":190,
 										"phpdocType":"string",
 										"regex":"",
 										"name":"detailUrl",
