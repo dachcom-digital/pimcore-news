@@ -80,7 +80,7 @@ class News extends AbstractTemplateAreabrick
         $querySettings['page'] = (int)$info->getRequest()->query->get('page');
 
         //only latest
-        if ($fieldConfiguration['latest']['value'] === TRUE) {
+        if ($fieldConfiguration['latest']['value'] === true) {
             $querySettings['where']['latest = ?'] = 1;
         }
 
@@ -105,7 +105,10 @@ class News extends AbstractTemplateAreabrick
         $mainClasses[] = 'news-' . $fieldConfiguration['layouts']['value'];
 
         if ($fieldConfiguration['entry_types']['value'] !== 'all') {
-            $mainClasses[] = 'entry-type-' . str_replace(['_', ' '], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
+            $mainClasses[] = 'entry-type-' . str_replace([
+                    '_',
+                    ' '
+                ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
         }
 
         //prepare WidgetSettings
@@ -155,8 +158,14 @@ class News extends AbstractTemplateAreabrick
         $adminSettings['latest'] = ['value' => (bool)$this->getDocumentField('checkbox', 'latest')->getData()];
 
         //category
-        $hrefConfig = ['types' => ['object'], 'subtypes' => ['object' => ['object']], 'classes' => ['NewsCategory'], 'width' => '95%'];
-        $adminSettings['category'] = ['value' => NULL, 'href_config' => $hrefConfig];
+        $hrefConfig = [
+            'types'    => ['object'],
+            'subtypes' => ['object' => ['object']],
+            'classes'  => ['NewsCategory'],
+            'width'    => '95%'
+        ];
+
+        $adminSettings['category'] = ['value' => null, 'href_config' => $hrefConfig];
         $categoryElement = $this->getDocumentField('href', 'category');
         if (!$categoryElement->isEmpty()) {
             $adminSettings['category']['value'] = $categoryElement->getElement();
@@ -248,10 +257,14 @@ class News extends AbstractTemplateAreabrick
 
     private function getSortByStore()
     {
-        return [
-            ['date', $this->translator->trans('news.sort_by.date', [], 'admin')],
-            ['name', $this->translator->trans('news.sort_by.name', [], 'admin')]
-        ];
+        $listConfig = $this->configuration->getConfig('list');
+
+        $store = [];
+        foreach ($listConfig['sort_by_store'] as $key => $value) {
+            $store[] = [$key, $this->translator->trans($value, [], 'admin')];
+        }
+
+        return $store;
     }
 
     private function getOrderByStore()
@@ -294,7 +307,7 @@ class News extends AbstractTemplateAreabrick
      */
     public function hasEditTemplate()
     {
-        return TRUE;
+        return true;
     }
 
     /**

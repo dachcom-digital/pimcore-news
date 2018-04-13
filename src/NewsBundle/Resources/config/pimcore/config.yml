@@ -13,6 +13,9 @@ parameters:
 news:
     list:
         sort_by: 'date'
+        sort_by_store:
+            date: 'news.sort_by.date'
+            name: 'news.sort_by.name'
         order_by: 'desc'
         time_range: 'all'
         max_items: 0
