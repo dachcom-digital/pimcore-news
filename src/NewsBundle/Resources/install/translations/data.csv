@@ -1,47 +1,48 @@
-"key";"en";"de";
-"news.news";"news";"News";
-"news.top_entries";"top Entries";"Top Beiträge";
-"news.show_only_top_entries";"Show only top Entries";"Nur Top Beiträge anzeigen";
-"news.pagination";"Pagination";"Paginierung";
-"news.show_pagination";"Show Pagination";"Paginierung anzeigen";
-"news.maximum_number_of_entries";"Maximum Number of Entries";"Maximale Anzahl der anzuzeigenden Beiträge";
-"news.category";"Category";"Kategorie";
-"news.categories";"Categories";"Kategorien";
-"news.latest_news";"is top entry";"Ist ein Top Beitrag";
-"news.author";"Author";"Autor";
-"news.entry_type";"Entry Type";"Beitragstyp";
-"news.all_entry_types";"All Entry Types";"Alle Beitragstypen";
-"news.entry_type_output_limit";"You can limit your output to a specific entry type. please note that all entries linked in the assigned category(s) also gets applied to the entry type filter.";"Sie können die Ausgabe auf einen Beitragstyp beschränken. Beachten Sie, dass alle Einträge der zugewiesenen Kategorie(n) dadurch ebenfalls gefiltert werden.";
-"news.lead";"Lead";"Auszug";
-"news.seo";"SEO";"SEO";
-"news.seo_title";"SEO Title";"SEO Titel";
-"news.seo_description";"SEO Description";"SEO Beschreibung";
-"news.detail_url";"Detail-Url";"Detail Url";
-"news.relations_settings";"Relations & Settings";"Relationen & Einstellungen";
-"news.url_changing_notification";"Please <b>reload</b> your object after changing the detail url.<div>Keep in mind that changing the detail url itself will change the url to your detail page.</div>";"Bitte laden Sie das Objekt <b>neu</b> nachdem Sie die Detail-Url geändert haben.<div>Beachten Sie, dass eine Änderung an der Detail-Url die Url zur Detail-Seite ändert!</div>";
-"news.date";"Date";"Datum";
-"news.media";"Media";"Medien";
-"news.images";"Images";"Bilder";
-"news.redirect_link";"Redirect Link";"Detail-Link überschreiben";
-"news.sort_by";"Sort by";"Sortieren nach";
-"news.sort_by.date";"Date";"Datum";
-"news.sort_by.name";"Name";"Name";
-"news.order_by";"Sort direction";"Sortierung";
-"news.order_by.descending";"descending";"Absteigend";
-"news.order_by.ascending";"ascending";"Aufsteigend";
-"news.entries_per_page";"Entries per Page";"Beiträge pro Seite";
-"news.layout";"Layout";"Layout";
-"news.list";"list";"Liste";
-"news.latest";"latest";"Liste Kompakt";
-"news.subcategories";"subcategories";"Unterkategorien";
-"news.include_subcategories";"Include subcategories";"Inklusive Unterkategorien";
-"news.entry";"News Article";"News Beitrag";
-"news.category";"News Category";"News Kategorie";
-"news.entry_type.all";"All Types";"Alle Beitragstypen";
-"news.entry_type.news";"News";"News";
-"news.date_to";"Date to";"Datum bis";
-"news.display_entry_until";"Display Entry Until";"Zeige Beitrag bis";
-"news.time_range";"Time Range";"Zeitraum";
-"news.time_range.all_entries";"All Entries";"Alle Beiträge";
-"news.time_range.current_entries";"Current Entries";"Aktuelle Einträge";
-"news.time_range.past_entries";"Past Entries";"Vergangene Einträge";
+"key","en","de",
+"news.news","news","News",
+"news.top_entries","top Entries","Top Beiträge",
+"news.show_only_top_entries","Show only top Entries","Nur Top Beiträge anzeigen",
+"news.pagination","Pagination","Paginierung",
+"news.show_pagination","Show Pagination","Paginierung anzeigen",
+"news.maximum_number_of_entries","Maximum Number of Entries","Maximale Anzahl der anzuzeigenden Beiträge",
+"news.category","Category","Kategorie",
+"news.single_objects","Single Entries","Einzelne Beiträge",
+"news.categories","Categories","Kategorien",
+"news.latest_news","is top entry","Ist ein Top Beitrag",
+"news.author","Author","Autor",
+"news.entry_type","Entry Type","Beitragstyp",
+"news.all_entry_types","All Entry Types","Alle Beitragstypen",
+"news.entry_type_output_limit","You can limit your output to a specific entry type. please note that all entries linked in the assigned category(s) also gets applied to the entry type filter.","Sie können die Ausgabe auf einen Beitragstyp beschränken. Beachten Sie, dass alle Einträge der zugewiesenen Kategorie(n) dadurch ebenfalls gefiltert werden.",
+"news.lead","Lead","Auszug",
+"news.seo","SEO","SEO",
+"news.seo_title","SEO Title","SEO Titel",
+"news.seo_description","SEO Description","SEO Beschreibung",
+"news.detail_url","Detail-Url","Detail Url",
+"news.relations_settings","Relations & Settings","Relationen & Einstellungen",
+"news.url_changing_notification","Please <b>reload</b> your object after changing the detail url.<div>Keep in mind that changing the detail url itself will change the url to your detail page.</div>","Bitte laden Sie das Objekt <b>neu</b> nachdem Sie die Detail-Url geändert haben.<div>Beachten Sie, dass eine Änderung an der Detail-Url die Url zur Detail-Seite ändert!</div>",
+"news.date","Date","Datum",
+"news.media","Media","Medien",
+"news.images","Images","Bilder",
+"news.redirect_link","Redirect Link","Detail-Link überschreiben",
+"news.sort_by","Sort by","Sortieren nach",
+"news.sort_by.date","Date","Datum",
+"news.sort_by.name","Name","Name",
+"news.order_by","Sort direction","Sortierung",
+"news.order_by.descending","descending","Absteigend",
+"news.order_by.ascending","ascending","Aufsteigend",
+"news.entries_per_page","Entries per Page","Beiträge pro Seite",
+"news.layout","Layout","Layout",
+"news.list","list","Liste",
+"news.latest","latest","Liste Kompakt",
+"news.subcategories","subcategories","Unterkategorien",
+"news.include_subcategories","Include subcategories","Inklusive Unterkategorien",
+"news.entry","News Article","News Beitrag",
+"news.category","News Category","News Kategorie",
+"news.entry_type.all","All Types","Alle Beitragstypen",
+"news.entry_type.news","News","News",
+"news.date_to","Date to","Datum bis",
+"news.display_entry_until","Display Entry Until","Zeige Beitrag bis",
+"news.time_range","Time Range","Zeitraum",
+"news.time_range.all_entries","All Entries","Alle Beiträge",
+"news.time_range.current_entries","Current Entries","Aktuelle Einträge",
+"news.time_range.past_entries","Past Entries","Vergangene Einträge",

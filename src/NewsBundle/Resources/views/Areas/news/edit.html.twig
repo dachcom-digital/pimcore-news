@@ -74,6 +74,13 @@
 
     <div class="t-row">
 
+        <label>{{ 'news.single_objects'|trans({}, 'admin') }}</label>
+        {{ pimcore_multihref('singleObjects', config.single_objects.multi_href_config) }}
+
+    </div>
+
+    <div class="t-row">
+
         <div class="t-col-half">
 
             <label>{{ 'news.entry_type'|trans({}, 'admin') }}</label>

@@ -48,7 +48,9 @@ class News extends AbstractTemplateAreabrick
     }
 
     /**
-     * @param Document\Tag\Area\Info $info
+     * @param Info $info
+     * @return null|\Symfony\Component\HttpFoundation\Response|void
+     * @throws \Exception
      */
     public function action(Info $info)
     {
@@ -62,6 +64,7 @@ class News extends AbstractTemplateAreabrick
 
         $querySettings['category'] = $fieldConfiguration['category']['value'];
         $querySettings['includeSubCategories'] = $fieldConfiguration['include_subcategories']['value'];
+        $querySettings['singleObjects'] = $fieldConfiguration['single_objects']['value'];
         $querySettings['entryType'] = $fieldConfiguration['entry_types']['value'];
 
         //set limit
@@ -174,6 +177,21 @@ class News extends AbstractTemplateAreabrick
         //subcategories
         $adminSettings['include_subcategories'] = ['value' => (bool)$this->getDocumentField('checkbox', 'includeSubCategories')->getData()];
 
+        //single objects
+        $multiHrefConfig = [
+            'types'    => ['object'],
+            'subtypes' => ['object' => ['object']],
+            'classes'  => ['NewsEntry'],
+            'width'    => '510px',
+            'height'   => '150px'
+        ];
+
+        $adminSettings['single_objects'] = ['value' => null, 'multi_href_config' => $multiHrefConfig];
+        $singleObjectsElement = $this->getDocumentField('multihref', 'singleObjects');
+        if (!$singleObjectsElement->isEmpty()) {
+            $adminSettings['single_objects']['value'] = $singleObjectsElement->getElements();
+        }
+
         //show pagination
         $adminSettings['show_pagination'] = ['value' => (bool)$this->getDocumentField('checkbox', 'showPagination')->getData()];
 
@@ -243,6 +261,9 @@ class News extends AbstractTemplateAreabrick
         return $adminSettings;
     }
 
+    /**
+     * @return array
+     */
     private function getLayoutStore()
     {
         $listConfig = $this->configuration->getConfig('list');
@@ -255,6 +276,9 @@ class News extends AbstractTemplateAreabrick
         return $store;
     }
 
+    /**
+     * @return array
+     */
     private function getSortByStore()
     {
         $listConfig = $this->configuration->getConfig('list');
@@ -267,6 +291,9 @@ class News extends AbstractTemplateAreabrick
         return $store;
     }
 
+    /**
+     * @return array
+     */
     private function getOrderByStore()
     {
         return [
@@ -275,6 +302,9 @@ class News extends AbstractTemplateAreabrick
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getTimeRangeStore()
     {
         return [
@@ -284,6 +314,9 @@ class News extends AbstractTemplateAreabrick
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getEntryTypeStore()
     {
         $store = [

@@ -32,7 +32,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
     /**
      * Get all News
+     *
      * @return array
+     * @throws \Exception
      */
     public static function getAll()
     {
@@ -46,8 +48,8 @@ class Entry extends DataObject\Concrete implements EntryInterface
      * Get News from the Category with Paging
      *
      * @param array $params
-     *
      * @return Paginator
+     * @throws \Exception
      */
     public static function getEntriesPaging(array $params = [])
     {
@@ -60,8 +62,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
             'itemsPerPage'         => 10,
             'entryType'            => 'all',
             'timeRange'            => 'all',
-            'category'             => NULL,
-            'includeSubCategories' => FALSE,
+            'category'             => null,
+            'includeSubCategories' => false,
+            'singleObjects'        => [],
             'where'                => [],
             'request'              => []
 
@@ -72,7 +75,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         $newsListing->setOrder($settings['sort']['dir']);
         $newsListing->setGroupBy('o_id');
 
-        $categories = NULL;
+        $categories = null;
         if ($settings['category'] && $settings['category'] instanceof Category) {
             $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
         }
@@ -82,6 +85,14 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add timeRange
         static::addTimeRange($newsListing, $settings);
+
+        //add single entry types
+        if (count($settings['singleObjects']) > 0) {
+            $singleObjectIds = implode(',', array_map(function($object) {
+                return $object->getId();
+            }, $settings['singleObjects']));
+            $newsListing->addConditionParam('oo_id IN(' . $singleObjectIds . ')');
+        }
 
         //add entry type selector
         if ($settings['entryType'] !== 'all') {
@@ -156,7 +167,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
      * @param null                         $categories
      * @param array                        $settings
      */
-    public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = [])
+    public static function addCategorySelectorToQuery($newsListing, $categories = null, $settings = [])
     {
         $newsListing->onCreateQuery(function (QueryBuilder $query) use ($newsListing, $categories, $settings) {
             if (!empty($categories)) {
@@ -177,36 +188,36 @@ class Entry extends DataObject\Concrete implements EntryInterface
     }
 
     /**
-     * @param QueryBuilder                                $query
-     * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
-     * @param array                                       $settings
+     * @param QueryBuilder                 $query
+     * @param DataObject\NewsEntry\Listing $listing
+     * @param array                        $settings
      */
     protected static function modifyQuery($query, $listing, $settings = [])
     {
     }
 
     /**
-     * @param \Pimcore\Model\DataObject\NewsEntry\Listing $listing
-     * @param array                                       $settings
+     * @param DataObject\NewsEntry\Listing $listing
+     * @param array                        $settings
      */
     protected static function modifyListing($listing, $settings = [])
     {
     }
 
     /**
-     * @param \Pimcore\Model\DataObject\NewsCategory $category
-     * @param bool                                   $includeSubCategories
-     *
+     * @param DataObject\NewsCategory $category
+     * @param bool                    $includeSubCategories
      * @return array|null
+     * @throws \Exception
      */
-    public static function getCategoriesRecursive($category, $includeSubCategories = FALSE)
+    public static function getCategoriesRecursive($category, $includeSubCategories = false)
     {
         if (!$category) {
-            return NULL;
+            return null;
         }
 
         $categories = [$category->getId()];
-        if ($includeSubCategories === TRUE) {
+        if ($includeSubCategories === true) {
             $entries = DataObject\NewsCategory::getList();
             $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
             foreach ($entries->load() as $entry) {
@@ -219,6 +230,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
     /**
      * Get single image for entry
+     *
      * @return bool|\Pimcore\Model\Asset
      */
     public function getImage()
@@ -228,7 +240,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
             return $images[0];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -268,7 +280,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * {@inheritdoc}
      */
-    public function getName($language = NULL)
+    public function getName($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
@@ -276,7 +288,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLead($language = NULL)
+    public function getLead($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
@@ -284,7 +296,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * {@inheritdoc}
      */
-    public function getDescription($language = NULL)
+    public function getDescription($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
@@ -292,7 +304,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRedirectLink($language = NULL)
+    public function getRedirectLink($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
@@ -300,7 +312,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * {@inheritdoc}
      */
-    public function getDetailUrl($language = NULL)
+    public function getDetailUrl($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
