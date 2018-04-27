@@ -2,6 +2,7 @@
 
 namespace NewsBundle\Generator;
 
+use Pimcore\Model\DataObject\ClassDefinition;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use NewsBundle\Manager\EntryTypeManager;
 use NewsBundle\Model\EntryInterface;
@@ -33,42 +34,40 @@ class LinkGenerator implements LinkGeneratorInterface
     }
 
     /**
-     * @param       $entry
-     * @param array $additionalUrlParams
+     * @param EntryInterface $entry
+     * @param array          $additionalUrlParams
      *
      * @return string
      */
     public function generateDetailLink(EntryInterface $entry, $additionalUrlParams = [])
     {
-        $href = NULL;
-        $isRedirectLink = FALSE;
+        $path = null;
 
         if ($entry->getRedirectLink() instanceof Document) {
-            $href = $entry->getRedirectLink()->getFullPath();
-            $isRedirectLink = TRUE;
+            $path = $entry->getRedirectLink()->getFullPath();
+            return Tool::getHostUrl() . $path;
         }
 
-        $eventParams = [];
+        $staticRouteInfo = $this->entryTypeManager->getRouteInfo($entry->getEntryType());
 
-        if (is_null($href)) {
-            $staticRouteInfo = $this->entryTypeManager->getRouteInfo($entry->getEntryType());
+        /** @var ClassDefinition\LinkGeneratorInterface $linkGenerator */
+        if ($linkGenerator = $entry->getClass()->getLinkGenerator()) {
+            $lgParams = array_merge($additionalUrlParams, $linkGeneratorParams = [
+                'document'        => null,
+                'context'         => $this,
+                'staticRouteInfo' => $staticRouteInfo
+            ]);
 
-            $params = array_merge([
-                'entry' => $entry->getDetailUrl()
-            ], $additionalUrlParams);
-
-            $href = $this->urlGenerator->generate($staticRouteInfo['name'], $params);
-
-            $eventParams['staticRouteName'] = $staticRouteInfo['name'];
-            $eventParams['routeParams'] = $params;
+            return $linkGenerator->generate($entry, $lgParams);
         }
 
-        $absPath = Tool::getHostUrl() . $href;
+        $params = array_merge([
+            'entry' => $entry->getDetailUrl()
+        ], $additionalUrlParams);
 
-        $eventParams['url'] = $absPath;
-        $eventParams['isRedirectLink'] = $isRedirectLink;
+        $path = $this->urlGenerator->generate($staticRouteInfo['name'], $params);
 
-        return $absPath;
+        return Tool::getHostUrl() . $path;
     }
 
     /**
@@ -82,7 +81,6 @@ class LinkGenerator implements LinkGeneratorInterface
         $backLink = '';
         if (count($categories) > 0) {
             $backLinkPage = $categories[0]->getBackLinkTarget();
-
             if ($backLinkPage instanceof Document\Page) {
                 $backLink = $backLinkPage->getFullPath();
             }
@@ -92,7 +90,7 @@ class LinkGenerator implements LinkGeneratorInterface
             if (
                 isset($_SERVER['HTTP_REFERER'])
                 && preg_match('@^[^/]+://[^/]+@', $_SERVER['HTTP_REFERER'])
-                && strpos($_SERVER['HTTP_REFERER'], Tool::getHostUrl()) !== FALSE
+                && strpos($_SERVER['HTTP_REFERER'], Tool::getHostUrl()) !== false
             ) {
                 $backLink = $_SERVER['HTTP_REFERER'];
             }

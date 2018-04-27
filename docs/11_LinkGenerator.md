@@ -1,7 +1,12 @@
 # Link Generator
 The Link Generator creates a valid detail and back link for each entry.
 
-## Create a custom Generator
+# Pimcore Link Generator
+If you want to use the default Pimcore [Link Generator](https://pimcore.com/docs/5.x/Development_Documentation/Objects/Object_Classes/Class_Settings/Link_Generator.html),
+just implement it like described in the link.
+If no default Link Generator Service has been defined, the News Bundle will proceed with the internal Class.
+
+## Create a custom generator
 Just override the build in generator:
 
 ```yaml
