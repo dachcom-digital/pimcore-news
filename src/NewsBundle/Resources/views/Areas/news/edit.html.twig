@@ -29,8 +29,15 @@
 
     <div class="t-row">
 
-        <label>{{ 'news.maximum_number_of_entries'|trans({}, 'admin') }}</label>
-        {{ pimcore_numeric('limit', {'decimalPrecision': 0, 'minValue': 0 }) }}
+        <div class="t-col-half">
+            <label>{{ 'news.maximum_number_of_entries'|trans({}, 'admin') }}</label>
+            {{ pimcore_numeric('limit', {'decimalPrecision': 0, 'minValue': 0 }) }}
+        </div>
+
+        <div class="t-col-half">
+            <label>{{ 'news.offset'|trans({}, 'admin') }}</label>
+            {{ pimcore_numeric('offset', {'decimalPrecision': 0, 'minValue': 0 }) }}
+        </div>
 
     </div>
 

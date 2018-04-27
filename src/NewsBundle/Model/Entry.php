@@ -59,6 +59,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
                 'dir'   => 'desc'
             ],
             'page'                 => 0,
+            'offset'               => 0,
             'itemsPerPage'         => 10,
             'entryType'            => 'all',
             'timeRange'            => 'all',
@@ -70,6 +71,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         ], $params);
 
+        /** @var DataObject\NewsEntry\Listing $newsListing */
         $newsListing = DataObject\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
@@ -88,7 +90,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add single entry types
         if (count($settings['singleObjects']) > 0) {
-            $singleObjectIds = implode(',', array_map(function($object) {
+            $singleObjectIds = implode(',', array_map(function ($object) {
                 return $object->getId();
             }, $settings['singleObjects']));
             $newsListing->addConditionParam('oo_id IN(' . $singleObjectIds . ')');
@@ -104,6 +106,11 @@ class Entry extends DataObject\Concrete implements EntryInterface
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }
+        }
+
+        //add offset
+        if (is_numeric($settings['offset']) && $settings['offset'] > 0) {
+            $newsListing->setOffset($settings['offset']);
         }
 
         //do not allow empty names

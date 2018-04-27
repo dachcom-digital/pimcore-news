@@ -66,6 +66,7 @@ class News extends AbstractTemplateAreabrick
         $querySettings['includeSubCategories'] = $fieldConfiguration['include_subcategories']['value'];
         $querySettings['singleObjects'] = $fieldConfiguration['single_objects']['value'];
         $querySettings['entryType'] = $fieldConfiguration['entry_types']['value'];
+        $querySettings['offset'] = $fieldConfiguration['offset']['value'];
 
         //set limit
         $limit = $fieldConfiguration['max_items']['value'];
@@ -220,6 +221,15 @@ class News extends AbstractTemplateAreabrick
             $limitElement->setDataFromResource($adminSettings['max_items']['value']);
         } else {
             $adminSettings['max_items']['value'] = (int)$limitElement->getData();
+        }
+
+        //set offset
+        $adminSettings['offset'] = ['value' => 0];
+        $offsetElement = $this->getDocumentField('numeric', 'offset');
+        if ($offsetElement->isEmpty()) {
+            $offsetElement->setDataFromResource($adminSettings['offset']['value']);
+        } else {
+            $adminSettings['offset']['value'] = (int)$offsetElement->getData();
         }
 
         //set sort by
