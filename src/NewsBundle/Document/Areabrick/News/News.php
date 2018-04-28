@@ -85,7 +85,7 @@ class News extends AbstractTemplateAreabrick
 
         //only latest
         if ($fieldConfiguration['latest']['value'] === true) {
-            $querySettings['where']['latest = ?'] = 1;
+            $querySettings['onlyLatest'] = true;
         }
 
         //set sort
@@ -115,22 +115,7 @@ class News extends AbstractTemplateAreabrick
                 ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
         }
 
-        //prepare WidgetSettings
-        //@todo: implement widget handler
-
-        //$widgetSettings = $querySettings;
-        //$widgetSettings['showPagination'] = $fieldConfiguration['show_pagination']['value'];
-        //$widgetSettings['entryType'] = $fieldConfiguration['entry_types']['value'];
-        //$widgetSettings['layoutName'] = $fieldConfiguration['layouts']['value'];
-        //$widgetSettings['paginator'] = $newsObjects;
-
-        //$widgetHandler = new WidgetHandler($widgetSettings);
-        //$widgetHandler->passHelperPaths($view->getHelperPaths());
-        //$widgetHandler->setEditMode($view->editmode);
-
         $params = [
-            //'widgetHandler'  => $widgetHandler,
-
             'main_classes'    => implode(' ', $mainClasses),
             'category'        => $fieldConfiguration['category']['value'],
             'show_pagination' => $fieldConfiguration['show_pagination']['value'],
@@ -340,6 +325,11 @@ class News extends AbstractTemplateAreabrick
         return $store;
     }
 
+    /**
+     * @param $type
+     * @param $inputName
+     * @return null|Document\Tag
+     */
     private function getDocumentField($type, $inputName)
     {
         return $this->getDocumentTag($this->document, $type, $inputName);

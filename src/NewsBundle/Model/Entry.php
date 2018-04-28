@@ -64,6 +64,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
             'entryType'            => 'all',
             'timeRange'            => 'all',
             'category'             => null,
+            'onlyLatest'           => false,
             'includeSubCategories' => false,
             'singleObjects'        => [],
             'where'                => [],
@@ -99,6 +100,11 @@ class Entry extends DataObject\Concrete implements EntryInterface
         //add entry type selector
         if ($settings['entryType'] !== 'all') {
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
+        }
+
+        //show only latest
+        if ($settings['onlyLatest'] === true) {
+            $newsListing->addConditionParam('latest = ?', 1);
         }
 
         //add additional where clauses.

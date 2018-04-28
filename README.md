@@ -37,9 +37,6 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 - [Link Generator](docs/11_LinkGenerator.md)
 - [Related Entries Generator](docs/12_RelatedEntriesGenerator.md)
 - [The Amazing Entry Types](docs/20_EntryTypes.md)
-        
-## Widgets
-TBD
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  
