@@ -2,6 +2,7 @@
 
 namespace NewsBundle\Document\Areabrick\News;
 
+use NewsBundle\Registry\PresetRegistry;
 use Symfony\Component\Translation\TranslatorInterface;
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
@@ -12,6 +13,9 @@ use Pimcore\Model\Document;
 
 class News extends AbstractTemplateAreabrick
 {
+    /**
+     * @var Document
+     */
     protected $document;
 
     /**
@@ -30,21 +34,29 @@ class News extends AbstractTemplateAreabrick
     protected $translator;
 
     /**
+     * @var PresetRegistry
+     */
+    protected $presetRegistry;
+
+    /**
      * Form constructor.
      *
      * @param Configuration       $configuration
      * @param EntryTypeManager    $entryTypeManager
      * @param TranslatorInterface $translator
+     * @param PresetRegistry      $presetRegistry
      */
     public function __construct(
         Configuration $configuration,
         EntryTypeManager $entryTypeManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        PresetRegistry $presetRegistry
     ) {
         $this->configuration = $configuration;
         $this->entryTypeManager = $entryTypeManager;
         $this->configuration = $configuration;
         $this->translator = $translator;
+        $this->presetRegistry = $presetRegistry;
     }
 
     /**
@@ -57,81 +69,102 @@ class News extends AbstractTemplateAreabrick
         $this->document = $info->getDocument();
 
         $view = $info->getView();
-
-        $querySettings = [];
-
         $fieldConfiguration = $this->setDefaultFieldValues();
 
-        $querySettings['category'] = $fieldConfiguration['category']['value'];
-        $querySettings['includeSubCategories'] = $fieldConfiguration['include_subcategories']['value'];
-        $querySettings['singleObjects'] = $fieldConfiguration['single_objects']['value'];
-        $querySettings['entryType'] = $fieldConfiguration['entry_types']['value'];
-        $querySettings['offset'] = $fieldConfiguration['offset']['value'];
+        $isPresetMode = false;
+        $subParams = [];
 
-        //set limit
-        $limit = $fieldConfiguration['max_items']['value'];
+        //check if preset has been selected at first
+        if ($this->isPresetMode($fieldConfiguration)) {
+            $isPresetMode = true;
+            $preset = $this->presetRegistry->get($fieldConfiguration['presets']['value']);
+            $preset->setInfo($info);
+            $subParams['preset_name'] = $fieldConfiguration['presets']['value'];
+            $subParams['preset'] = [];
+            foreach ($preset->getViewParams() as $key => $param) {
+                $subParams['preset'][$key] = $param;
+            }
+        } else {
 
-        //set pagination
-        $calculatedItemsPerPage = $fieldConfiguration['paginate']['items_per_page']['value'];
+            $querySettings = [];
+            $querySettings['category'] = $fieldConfiguration['category']['value'];
+            $querySettings['includeSubCategories'] = $fieldConfiguration['include_subcategories']['value'];
+            $querySettings['singleObjects'] = $fieldConfiguration['single_objects']['value'];
+            $querySettings['entryType'] = $fieldConfiguration['entry_types']['value'];
+            $querySettings['offset'] = $fieldConfiguration['offset']['value'];
 
-        if ($calculatedItemsPerPage > $limit) {
-            $calculatedItemsPerPage = $limit;
+            //set limit
+            $limit = $fieldConfiguration['max_items']['value'];
+
+            //set pagination
+            $calculatedItemsPerPage = $fieldConfiguration['paginate']['items_per_page']['value'];
+
+            if ($calculatedItemsPerPage > $limit) {
+                $calculatedItemsPerPage = $limit;
+            }
+
+            $querySettings['itemsPerPage'] = $calculatedItemsPerPage;
+
+            //set paged
+            $querySettings['page'] = (int)$info->getRequest()->query->get('page');
+
+            //only latest
+            if ($fieldConfiguration['latest']['value'] === true) {
+                $querySettings['onlyLatest'] = true;
+            }
+
+            //set sort
+            $querySettings['sort']['field'] = $fieldConfiguration['sort_by']['value'];
+            $querySettings['sort']['dir'] = $fieldConfiguration['order_by']['value'];
+
+            //set time range
+            $querySettings['timeRange'] = $fieldConfiguration['time_range']['value'];
+
+            $mainClasses = [];
+            $mainClasses[] = 'area';
+            $mainClasses[] = 'news-' . $fieldConfiguration['layouts']['value'];
+
+            if ($fieldConfiguration['entry_types']['value'] !== 'all') {
+                $mainClasses[] = 'entry-type-' . str_replace([
+                        '_',
+                        ' '
+                    ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
+            }
+
+            //finally load query
+            $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
+
+            $subParams = [
+                'main_classes'    => implode(' ', $mainClasses),
+                'category'        => $fieldConfiguration['category']['value'],
+                'show_pagination' => $fieldConfiguration['show_pagination']['value'],
+                'entry_type'      => $fieldConfiguration['entry_types']['value'],
+                'layout_name'     => $fieldConfiguration['layouts']['value'],
+                'paginator'       => $newsObjects,
+                'query_settings'  => $querySettings
+            ];
         }
 
-        $querySettings['itemsPerPage'] = $calculatedItemsPerPage;
-
-        //set paged
-        $querySettings['page'] = (int)$info->getRequest()->query->get('page');
-
-        //only latest
-        if ($fieldConfiguration['latest']['value'] === true) {
-            $querySettings['onlyLatest'] = true;
-        }
-
-        //set sort
-        $querySettings['sort']['field'] = $fieldConfiguration['sort_by']['value'];
-        $querySettings['sort']['dir'] = $fieldConfiguration['order_by']['value'];
-
-        //set time range
-        $querySettings['timeRange'] = $fieldConfiguration['time_range']['value'];
-
-        //get request data
-        $querySettings['request'] = [
-            'POST' => $info->getRequest()->request->all(),
-            'GET'  => $info->getRequest()->query->all()
-        ];
-
-        //load Query
-        $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
-
-        $mainClasses = [];
-        $mainClasses[] = 'area';
-        $mainClasses[] = 'news-' . $fieldConfiguration['layouts']['value'];
-
-        if ($fieldConfiguration['entry_types']['value'] !== 'all') {
-            $mainClasses[] = 'entry-type-' . str_replace([
-                    '_',
-                    ' '
-                ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
-        }
-
-        $params = [
-            'main_classes'    => implode(' ', $mainClasses),
-            'category'        => $fieldConfiguration['category']['value'],
-            'show_pagination' => $fieldConfiguration['show_pagination']['value'],
-            'entry_type'      => $fieldConfiguration['entry_types']['value'],
-            'layout_name'     => $fieldConfiguration['layouts']['value'],
-            'paginator'       => $newsObjects,
-
+        $systemParams = [
+            'is_preset_mode' => $isPresetMode,
             //system/editmode related
-            'config'          => $fieldConfiguration,
-            'query_settings'  => $querySettings
-
+            'config'         => $fieldConfiguration
         ];
 
+        $params = array_merge($systemParams, $subParams);
         foreach ($params as $key => $value) {
             $view->{$key} = $value;
         }
+    }
+
+    /**
+     * @param $fieldConfiguration
+     * @return bool
+     */
+    private function isPresetMode($fieldConfiguration)
+    {
+        return $fieldConfiguration['presets']['value'] !== 'none'
+            && $this->presetRegistry->has($fieldConfiguration['presets']['value']);
     }
 
     /**
@@ -142,6 +175,22 @@ class News extends AbstractTemplateAreabrick
         $adminSettings = [];
 
         $listConfig = $this->configuration->getConfig('list');
+
+        //set presets
+        $presetData = $this->getPresetsStore();
+        $adminSettings['presets'] = [
+            'store' => $presetData['store'],
+            'value' => 'none',
+            'info'  => $presetData['info']
+        ];
+
+        $presetElement = $this->getDocumentField('select', 'presets');
+        // if value is empty or service has been removed, reset element.
+        if ($presetElement->isEmpty() || count($presetData['store']) === 1) {
+            $presetElement->setDataFromResource($adminSettings['presets']['value']);
+        } else {
+            $adminSettings['presets']['value'] = $presetElement->getData();
+        }
 
         //set latest
         $adminSettings['latest'] = ['value' => (bool)$this->getDocumentField('checkbox', 'latest')->getData()];
@@ -254,6 +303,33 @@ class News extends AbstractTemplateAreabrick
         }
 
         return $adminSettings;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPresetsStore()
+    {
+        $data = [
+            'store' => [
+                ['none', $this->translator->trans('news.no_preset', [], 'admin')]
+            ],
+            'info'  => []
+        ];
+
+        $services = $this->presetRegistry->getList();
+
+        foreach ($services as $alias => $service) {
+            $name = $this->translator->trans($service->getName(), [], 'admin');
+            $description = !empty($service->getDescription())
+                ? $this->translator->trans($service->getDescription(), [], 'admin')
+                : null;
+
+            $data['store'][] = [$alias, $name];
+            $data['info'][] = ['name' => $alias, 'description' => $description];
+        }
+
+        return $data;
     }
 
     /**

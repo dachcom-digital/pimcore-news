@@ -33,10 +33,11 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 - *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
 
 ### Further Information
-- [Head Meta Generator](docs/10_HeadMetaGenerator.md)
-- [Link Generator](docs/11_LinkGenerator.md)
-- [Related Entries Generator](docs/12_RelatedEntriesGenerator.md)
-- [The Amazing Entry Types](docs/20_EntryTypes.md)
+- [Head Meta Generator](./docs/10_HeadMetaGenerator.md)
+- [Link Generator](./docs/11_LinkGenerator.md)
+- [Related Entries Generator](./docs/12_RelatedEntriesGenerator.md)
+- [The Amazing Entry Types](./docs/20_EntryTypes.md)
+- [Presets](./docs/30_Presets.md) (new!)
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  

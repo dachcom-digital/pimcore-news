@@ -8,9 +8,9 @@ use Zend\Paginator\Paginator;
 class Category extends DataObject\Concrete implements CategoryInterface
 {
     /**
-     * Get all Categories
-     *
+     * Get all categories
      * @return array
+     * @throws \Exception
      */
     public static function getAll()
     {
@@ -19,14 +19,14 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get localized fields -
+     * Get localized fields
      *
      * @return array
      */
     public function getLocalizedFields()
     {
         $preValue = $this->preGetValue('localizedfields');
-        if ($preValue !== NULL && !\Pimcore::inAdmin()) {
+        if ($preValue !== null && !\Pimcore::inAdmin()) {
             return $preValue;
         }
 
@@ -46,7 +46,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Returns all Child Categories from $category
+     * Returns all child categories from $category
      *
      * @param Category $category
      *
@@ -71,13 +71,13 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get News from the Category
+     * Get news from the category
      *
      * @param bool $includeChildCategories
-     *
      * @return array
+     * @throws \Exception
      */
-    public function getEntries($includeChildCategories = FALSE)
+    public function getEntries($includeChildCategories = false)
     {
         $list = DataObject\NewsEntry::getList();
 
@@ -98,14 +98,14 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get News from the Category with Paging
+     * Get paged entries from category
      *
      * @param int   $page
      * @param int   $itemsPerPage
      * @param array $sort
      * @param bool  $includeChildCategories
-     *
      * @return Paginator
+     * @throws \Exception
      */
     public function getEntriesPaging(
         $page = 0,
@@ -114,18 +114,18 @@ class Category extends DataObject\Concrete implements CategoryInterface
             'name'      => 'name',
             'direction' => 'asc'
         ],
-        $includeChildCategories = FALSE
+        $includeChildCategories = false
     ) {
         $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition("o_published = 1 AND categories LIKE '%," . $this->getId() . ",%'");
+            $list->setCondition('o_published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
 
             foreach ($categories as $cat) {
-                $categoriesWhere[] = "categories LIKE '%," . $cat . ",%'";
+                $categoriesWhere[] = 'categories LIKE "%,' . $cat . ',%"';
             }
 
             $list->setCondition('o_published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
@@ -142,7 +142,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Checks if category is child of hierachy
+     * Checks if category is child of hierarchy
      *
      * @param Category $category
      * @param int      $level to check hierarchy (0 = topMost)
@@ -159,7 +159,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get Level of Category
+     * Get level of category
      *
      * @return int
      */
@@ -169,7 +169,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Returns all Children from this Category
+     * Returns all children from this category
      *
      * @return array
      */
@@ -179,7 +179,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get Category hierarchy
+     * Get category hierarchy
      *
      * @return array
      */
@@ -197,9 +197,10 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get all child Categories
+     * Get all child categories
      *
      * @return array
+     * @throws \Exception
      */
     public function getChildCategories()
     {

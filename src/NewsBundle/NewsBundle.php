@@ -2,6 +2,7 @@
 
 namespace NewsBundle;
 
+use NewsBundle\DependencyInjection\CompilerPass\PresetPass;
 use NewsBundle\Tool\Install;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
@@ -16,6 +17,7 @@ class NewsBundle extends AbstractPimcoreBundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+        $container->addCompilerPass(new PresetPass());
     }
 
     /**
@@ -37,12 +39,32 @@ class NewsBundle extends AbstractPimcoreBundle
     /**
      * @return string[]
      */
+    public function getEditmodeJsPaths()
+    {
+        return [
+            '/bundles/news/js/admin/area.js'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
     public function getJsPaths()
     {
         return [
             '/bundles/news/js/startup.js',
             '/bundles/news/js/object/data/entryTypeSelect.js',
             '/bundles/news/js/object/tags/entryTypeSelect.js'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEditmodeCssPaths()
+    {
+        return [
+            '/bundles/news/css/admin-editmode.css',
         ];
     }
 

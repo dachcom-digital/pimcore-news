@@ -1,7 +1,11 @@
 {% block news_list_wrapper %}
 
     {% block news_list_content %}
-        {% include '@News/List/Layout/' ~ pimcore_select('layout').getData() ~ '.html.twig' %}
+        {% if is_preset_mode == true %}
+            {% include '@News/List/Preset/' ~ preset_name ~ '.html.twig' %}
+        {% else %}
+            {% include '@News/List/Layout/' ~ layout_name ~ '.html.twig' %}
+        {% endif %}
     {% endblock news_list_content %}
 
 {% endblock news_list_wrapper %}

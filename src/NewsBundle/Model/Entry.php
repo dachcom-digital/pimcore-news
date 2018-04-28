@@ -45,7 +45,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     }
 
     /**
-     * Get News from the Category with Paging
+     * Get paged entries
      *
      * @param array $params
      * @return Paginator
@@ -107,7 +107,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
             $newsListing->addConditionParam('latest = ?', 1);
         }
 
-        //add additional where clauses.
+        //add additional where clauses
         if (count($settings['where'])) {
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
