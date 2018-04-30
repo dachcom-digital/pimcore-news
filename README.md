@@ -1,5 +1,5 @@
 # Pimcore News
-Pimcore News Plugin. It's also possible to generate [custom entry types](docs/20_EntryTypes.md) like Press, Blog...
+Pimcore News Bundle. It's also possible to generate [custom entry types](docs/20_EntryTypes.md) like Press or Event.
 
 ## Requirements
 * Pimcore 5.
@@ -28,9 +28,9 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 - The detail page always stays the same (see static route), no matter where you placed the area element.
 - It's possible to override the detail url in the news object.
 
-## Extending News Object
-- *Meta Information* Tab: Extend News with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.  
-- *Relations & Settings* Tab: Extend News with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).  
+## Extending Entry Object
+- *Meta Information* Tab: Extend Entries with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.
+- *Relations & Settings* Tab: Extend Entries with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).
 
 ### Further Information
 - [Head Meta Generator](./docs/10_HeadMetaGenerator.md)

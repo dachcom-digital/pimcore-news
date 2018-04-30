@@ -2,7 +2,7 @@
 
 ![](http://g.recordit.co/i08dUpt52i.gif)
 
-This Bundles allows you to define as many entry types as you wish. Entry types could be:
+This Bundles allows you to define as many entry types as you want. Entry types could be:
 
 - news
 - press

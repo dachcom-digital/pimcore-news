@@ -5,21 +5,20 @@ A preset is completely independent and allows you to create custom queries and v
 
 ## Use Case
 By default your customer wants to add entries with different settings.
-He's able to do so with the default parameters placed the edit window.
+He's able to do so with the default parameters available in the edit window.
 But sometimes there are also special use cases. For example:
 
 - Show two news and one event entry in one special view
 - Show one top news and two dedicated events
 
-For that you would use presets.
-A preset allows you to create a custom list of entries
-and also a custom view to display your data.
+For that you would use presets:
+A preset allows you to create a custom list of entries and also a custom view to display your data.
 
 ## Create a new Preset
 Learn how to create a custom preset.
 
 ### Configuration
-First we need to register a new Preset:
+First we need to register a new preset:
 
 ```yml
 AppBundle\Services\NewsBundle\Preset\SpecialPreset:
@@ -46,7 +45,7 @@ class SpecialPreset implements PresetInterface
     protected $info;
 
     /**
-     * Returns name for drop down selection.
+     * Returns the name for drop down selection.
      * This value gets applied via translation engine
      * so use a good translation string like "news.preset.my_preset_name
      *
@@ -104,7 +103,7 @@ class SpecialPreset implements PresetInterface
 ```
 
 ## Twig View
-Add a view to `app/Resources/NewsBundle/views/List/Preset/special.html.twig`:
+Add a view file to `app/Resources/NewsBundle/views/List/Preset/special.html.twig`:
 > **Note:** The view name has to be the same as your defined service.
 > **Note:** All your parameters are stored in the `preset` variable.
 
