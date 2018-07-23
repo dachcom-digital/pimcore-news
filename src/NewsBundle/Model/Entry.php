@@ -108,7 +108,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         }
 
         //add additional where clauses
-        if (count($settings['where'])) {
+        if (count($settings['where']) > 0) {
             foreach ($settings['where'] as $condition => $val) {
                 $newsListing->addConditionParam($condition, $val);
             }

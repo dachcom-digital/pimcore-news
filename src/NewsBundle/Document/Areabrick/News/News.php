@@ -221,7 +221,7 @@ class News extends AbstractTemplateAreabrick
             'height'   => '150px'
         ];
 
-        $adminSettings['single_objects'] = ['value' => null, 'multi_href_config' => $multiHrefConfig];
+        $adminSettings['single_objects'] = ['value' => [], 'multi_href_config' => $multiHrefConfig];
         $singleObjectsElement = $this->getDocumentField('multihref', 'singleObjects');
         if (!$singleObjectsElement->isEmpty()) {
             $adminSettings['single_objects']['value'] = $singleObjectsElement->getElements();
