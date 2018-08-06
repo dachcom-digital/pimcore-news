@@ -69,12 +69,12 @@ class NewsSeoListener implements EventSubscriberInterface
     {
         $languages = \Pimcore\Tool::getValidLanguages();
 
-        $fromCopy = FALSE;
+        $fromCopy = false;
 
         $objectClass = 'Pimcore\\Model\\DataObject\\' . $className;
         foreach ($languages as $language) {
-            if ($this->isFromCopy($object, $objectClass, $language) === TRUE) {
-                $fromCopy = TRUE;
+            if ($this->isFromCopy($object, $objectClass, $language) === true) {
+                $fromCopy = true;
                 break;
             }
         }
@@ -82,11 +82,11 @@ class NewsSeoListener implements EventSubscriberInterface
         if ($fromCopy) {
             foreach ($languages as $language) {
                 //always reset stored url if element just has been copied.
-                $object->setDetailUrl(NULL, $language);
+                $object->setDetailUrl(null, $language);
             }
         }
 
-        $oldObject = NULL;
+        $oldObject = null;
         if ($object->getId()) {
 
             //@todo: use versions?
@@ -95,7 +95,7 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         foreach ($languages as $language) {
-            $realUrl = NULL;
+            $realUrl = null;
 
             $currentDetailUrl = $object->getDetailUrl($language);
             $title = $object->getName($language);
@@ -114,7 +114,7 @@ class NewsSeoListener implements EventSubscriberInterface
 
             $versionUrl = $realUrl;
 
-            $oldDetailUrl = NULL;
+            $oldDetailUrl = null;
             if ($oldObject instanceof $objectClass) {
                 $oldDetailUrl = $oldObject->getDetailUrl($language);
             }
@@ -162,7 +162,7 @@ class NewsSeoListener implements EventSubscriberInterface
         $url = $obj->getDetailUrl($language);
 
         if (empty($url)) {
-            return FALSE;
+            return false;
         }
 
         $duplicateUrlObjects = $objectClass::getByLocalizedfields(
@@ -170,7 +170,7 @@ class NewsSeoListener implements EventSubscriberInterface
             ['limit' => 1, 'condition' => ' AND name = "' . Db::get()->quote($name) . '" AND ooo_id != ' . (int)$obj->getId()]
         );
 
-        return count($duplicateUrlObjects) === 1;
+        return is_array($duplicateUrlObjects) && count($duplicateUrlObjects) === 1;
     }
 
     /**
@@ -189,7 +189,8 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         $string = preg_replace(['/®/', '/©/'], '', $string);
-        $string = transliterator_transliterate("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
+        $string = transliterator_transliterate("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
+            $string);
         // Remove repeating hyphens and spaces (e.g. 'foo---bar' becomes 'foo-bar')
         $string = preg_replace('/[-\s]+/', '-', $string);
 
