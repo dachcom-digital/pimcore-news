@@ -16,7 +16,7 @@
 
     "autoload": {
         "psr-4": {
-            "NewsBundle\\": "src/"
+            "NewsBundle\\": "src/NewsBundle"
         }
     },
 
