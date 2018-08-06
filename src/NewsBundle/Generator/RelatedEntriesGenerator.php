@@ -12,7 +12,8 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
      * @param EntryInterface $news
      * @param array          $params
      *
-     * @return mixed
+     * @return DataObject\NewsEntry[]|DataObject\NewsEntry\Listing
+     * @throws \Exception
      */
     public function generateRelatedEntries(EntryInterface $news, $params = [])
     {
@@ -24,8 +25,8 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
             'limit'                => 4,
             'where'                => [],
             'entryType'            => $news->getEntryType(),
-            'includeSubCategories' => FALSE,
-            'ignoreCategory'       => FALSE
+            'includeSubCategories' => false,
+            'ignoreCategory'       => false
 
         ], $params);
 
@@ -34,7 +35,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
             'limit' => $settings['limit']
         ]);
         if (is_string($settings['sort']) && strtolower($settings['sort']) === 'random') {
-            $newsListing->setOrderKey('RAND()', FALSE);
+            $newsListing->setOrderKey('RAND()', false);
         } else {
             $newsListing->setOrderKey($settings['sort']['field']);
             $newsListing->setOrder($settings['sort']['dir']);

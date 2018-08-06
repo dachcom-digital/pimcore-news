@@ -19,15 +19,15 @@ class NewsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config']));
+        $loader = new YamlFileLoader($container, new FileLocator([__DIR__ . '/../Resources/config']));
         $loader->load('services.yml');
 
-        foreach($config['relations'] as $confName => $confValue) {
+        foreach ($config['relations'] as $confName => $confValue) {
             $definition = $container->findDefinition($confName);
             $definition->setClass($confValue);
         }
 
         $configManagerDefinition = $container->getDefinition(BundleConfiguration::class);
-        $configManagerDefinition->addMethodCall('setConfig', [ $config ]);
+        $configManagerDefinition->addMethodCall('setConfig', [$config]);
     }
 }

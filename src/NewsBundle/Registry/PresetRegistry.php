@@ -18,7 +18,8 @@ class PresetRegistry
     {
         if (!in_array(PresetInterface::class, class_implements($service), true)) {
             throw new \InvalidArgumentException(
-                sprintf('%s needs to implement "%s", "%s" given.', get_class($service), PresetInterface::class, implode(', ', class_implements($service)))
+                sprintf('%s needs to implement "%s", "%s" given.', get_class($service), PresetInterface::class,
+                    implode(', ', class_implements($service)))
             );
         }
 
@@ -27,6 +28,7 @@ class PresetRegistry
 
     /**
      * @param $alias
+     *
      * @return bool
      */
     public function has($alias)
@@ -36,6 +38,7 @@ class PresetRegistry
 
     /**
      * @param $alias
+     *
      * @return PresetInterface
      * @throws \Exception
      */

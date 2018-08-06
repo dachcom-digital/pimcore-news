@@ -9,6 +9,7 @@ interface EntryInterface
 {
     /**
      * Get all News
+     *
      * @return array
      */
     public static function getAll();
@@ -29,7 +30,7 @@ interface EntryInterface
      * @param null                         $categories
      * @param array                        $settings
      */
-    public static function addCategorySelectorToQuery($newsListing, $categories = NULL, $settings = []);
+    public static function addCategorySelectorToQuery($newsListing, $categories = null, $settings = []);
 
     /**
      * @param DataObject\NewsCategory $category
@@ -37,27 +38,28 @@ interface EntryInterface
      *
      * @return array|null
      */
-    public static function getCategoriesRecursive($category, $includeSubCategories = FALSE);
+    public static function getCategoriesRecursive($category, $includeSubCategories = false);
 
     /**
      * Get single image for entry
+     *
      * @return bool|\Pimcore\Model\Asset
      */
     public function getImage();
 
-    public function getName($language = NULL);
+    public function getName($language = null);
 
-    public function getLead($language = NULL);
+    public function getLead($language = null);
 
-    public function getDescription($language = NULL);
+    public function getDescription($language = null);
 
     public function getJsonLDData();
 
     public function getEntryType();
 
-    public function getRedirectLink($language = NULL);
+    public function getRedirectLink($language = null);
 
-    public function getDetailUrl($language = NULL);
+    public function getDetailUrl($language = null);
 
     public function getCategories();
 

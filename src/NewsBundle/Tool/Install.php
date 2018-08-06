@@ -125,7 +125,7 @@ class Install extends AbstractInstaller
      */
     public function needsReloadAfterInstall()
     {
-        return FALSE;
+        return false;
     }
 
     /**
@@ -133,11 +133,11 @@ class Install extends AbstractInstaller
      */
     public function canBeUpdated()
     {
-        $needUpdate = FALSE;
+        $needUpdate = false;
         if ($this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
             $config = Yaml::parse(file_get_contents(Configuration::SYSTEM_CONFIG_FILE_PATH));
             if ($config['version'] !== NewsBundle::BUNDLE_VERSION) {
-                $needUpdate = TRUE;
+                $needUpdate = true;
             }
         }
 
@@ -168,7 +168,7 @@ class Install extends AbstractInstaller
             $class = new DataObject\ClassDefinition();
             $id = $class->getDao()->getIdByName($className);
 
-            if ($id !== FALSE) {
+            if ($id !== false) {
                 continue;
 
             }
@@ -187,7 +187,7 @@ class Install extends AbstractInstaller
     public function installTranslations()
     {
         $csv = $this->installSourcesPath . '/translations/data.csv';
-        Translation\Admin::importTranslationsFromFile($csv, TRUE, Tool\Admin::getLanguages());
+        Translation\Admin::importTranslationsFromFile($csv, true, Tool\Admin::getLanguages());
     }
 
     /**
@@ -206,7 +206,7 @@ class Install extends AbstractInstaller
                 'o_userOwner'        => $this->getUserId(),
                 'o_userModification' => $this->getUserId(),
                 'o_key'              => 'news',
-                'o_published'        => TRUE,
+                'o_published'        => true,
             ]);
         }
 
@@ -217,7 +217,7 @@ class Install extends AbstractInstaller
                 'o_userOwner'        => $this->getUserId(),
                 'o_userModification' => $this->getUserId(),
                 'o_key'              => 'entries',
-                'o_published'        => TRUE,
+                'o_published'        => true,
             ]);
         }
 
@@ -228,11 +228,11 @@ class Install extends AbstractInstaller
                 'o_userOwner'        => $this->getUserId(),
                 'o_userModification' => $this->getUserId(),
                 'o_key'              => 'categories',
-                'o_published'        => TRUE,
+                'o_published'        => true,
             ]);
         }
 
-        return TRUE;
+        return true;
 
     }
 
@@ -272,7 +272,7 @@ class Install extends AbstractInstaller
             $path = realpath(dirname(__FILE__) . '/../Resources/install/classes') . '/' . $filename;
             $path = realpath($path);
 
-            if (FALSE === $path || !is_file($path)) {
+            if (false === $path || !is_file($path)) {
                 throw new \RuntimeException(sprintf(
                     'Class export for class "%s" was expected in "%s" but file does not exist',
                     $className, $path

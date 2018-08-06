@@ -8,6 +8,7 @@ class EntryTypeSelect extends Select
 {
     /**
      * Static type of this element
+     *
      * @var string
      */
     public $fieldtype = 'entryTypeSelect';

@@ -73,7 +73,7 @@ class HeadMetaGenerator implements HeadMetaGeneratorInterface
         $ogUrl = $href;
         $ogType = 'article';
 
-        $ogImage = NULL;
+        $ogImage = null;
 
         if ($entry->getImage() instanceof Asset\Image) {
             $ogImage = Tool::getHostUrl() . $entry->getImage()->getThumbnail('contentImage');

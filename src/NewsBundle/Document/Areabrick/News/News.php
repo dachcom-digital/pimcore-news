@@ -61,6 +61,7 @@ class News extends AbstractTemplateAreabrick
 
     /**
      * @param Info $info
+     *
      * @return null|\Symfony\Component\HttpFoundation\Response|void
      * @throws \Exception
      */
@@ -159,6 +160,7 @@ class News extends AbstractTemplateAreabrick
 
     /**
      * @param $fieldConfiguration
+     *
      * @return bool
      */
     private function isPresetMode($fieldConfiguration)
@@ -210,7 +212,9 @@ class News extends AbstractTemplateAreabrick
         }
 
         //subcategories
-        $adminSettings['include_subcategories'] = ['value' => (bool)$this->getDocumentField('checkbox', 'includeSubCategories')->getData()];
+        $adminSettings['include_subcategories'] = [
+            'value' => (bool)$this->getDocumentField('checkbox', 'includeSubCategories')->getData()
+        ];
 
         //single objects
         $multiHrefConfig = [
@@ -404,6 +408,7 @@ class News extends AbstractTemplateAreabrick
     /**
      * @param $type
      * @param $inputName
+     *
      * @return null|Document\Tag
      */
     private function getDocumentField($type, $inputName)

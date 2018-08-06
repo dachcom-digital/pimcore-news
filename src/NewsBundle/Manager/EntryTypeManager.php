@@ -29,7 +29,7 @@ class EntryTypeManager
     /**
      * EntryTypeManager constructor.
      *
-     * @param Configuration $configuration
+     * @param Configuration       $configuration
      * @param TranslatorInterface $translator
      */
     public function __construct(Configuration $configuration, TranslatorInterface $translator)
@@ -43,22 +43,22 @@ class EntryTypeManager
      *
      * @return array|mixed|null
      */
-    public function getTypes($object = NULL)
+    public function getTypes($object = null)
     {
         $entryTypes = $this->getTypesFromConfig();
 
-        $validLayouts = NULL;
-        $masterLayoutAvailable = FALSE;
+        $validLayouts = null;
+        $masterLayoutAvailable = false;
         if (!is_null($object)) {
             $validLayouts = DataObject\Service::getValidLayouts($object);
-            if(array_key_exists(0, $validLayouts)) {
-                $masterLayoutAvailable = TRUE;
+            if (array_key_exists(0, $validLayouts)) {
+                $masterLayoutAvailable = true;
             }
         }
 
         foreach ($entryTypes as $typeId => &$type) {
-            if($type['custom_layout_id'] === 0) {
-                $type['custom_layout_id'] = NULL;
+            if ($type['custom_layout_id'] === 0) {
+                $type['custom_layout_id'] = null;
             }
 
             $customLayoutId = $type['custom_layout_id'];
@@ -76,9 +76,9 @@ class EntryTypeManager
             }
 
             //remove types if valid layout is set and user is not allowed to use it!
-            if(!is_null($customLayoutId)) {
+            if (!is_null($customLayoutId)) {
                 // custom layout found: check if user has rights to use it! if not: remove from selection!
-                if(!is_null($validLayouts) && $masterLayoutAvailable === FALSE && !isset($validLayouts[$customLayoutId])) {
+                if (!is_null($validLayouts) && $masterLayoutAvailable === false && !isset($validLayouts[$customLayoutId])) {
                     unset($entryTypes[$typeId]);
                 } else {
                     $type['custom_layout_id'] = $customLayoutId;
@@ -93,6 +93,7 @@ class EntryTypeManager
 
     /**
      * Get Default Entry Type
+     *
      * @return mixed
      */
     public function getDefaultType()
@@ -103,6 +104,7 @@ class EntryTypeManager
 
     /**
      * @param $typeName
+     *
      * @return array|mixed
      */
     public function getTypeInfo($typeName)
@@ -162,14 +164,14 @@ class EntryTypeManager
             $routeData['name'] = $types[$entryType]['route'];
         }
 
-        $siteId = NULL;
+        $siteId = null;
         if (Site::isSiteRequest()) {
             $siteId = Site::getCurrentSite()->getId();
         }
 
         $route = Staticroute::getByName($routeData['name'], $siteId);
 
-        if(empty($route)) {
+        if (empty($route)) {
             throw new \Exception(sprintf('"%s" route is not available. please add it to your static routes', $routeData['name']));
         }
         $variables = explode(',', $route->getVariables());

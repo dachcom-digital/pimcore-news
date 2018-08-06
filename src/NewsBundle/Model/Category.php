@@ -9,6 +9,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
 {
     /**
      * Get all categories
+     *
      * @return array
      * @throws \Exception
      */
@@ -74,6 +75,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
      * Get news from the category
      *
      * @param bool $includeChildCategories
+     *
      * @return array
      * @throws \Exception
      */
@@ -104,6 +106,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
      * @param int   $itemsPerPage
      * @param array $sort
      * @param bool  $includeChildCategories
+     *
      * @return Paginator
      * @throws \Exception
      */

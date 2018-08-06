@@ -8,19 +8,21 @@ interface CategoryInterface
 {
     /**
      * Get all Categories
+     *
      * @return array
      */
     public static function getAll();
 
     /**
      * Get localized fields -
+     *
      * @return array
      */
     public function getLocalizedFields();
 
     /**
      * Get first level of categories
-
+     *
      * @return $this
      */
     public function getFirstLevel();
@@ -41,7 +43,7 @@ interface CategoryInterface
      *
      * @return array
      */
-    public function getEntries($includeChildCategories = FALSE);
+    public function getEntries($includeChildCategories = false);
 
     /**
      * Get Products from the Category with Paging
@@ -60,7 +62,7 @@ interface CategoryInterface
             'name'      => 'name',
             'direction' => 'asc'
         ],
-        $includeChildCategories = FALSE
+        $includeChildCategories = false
     );
 
     /**
@@ -75,24 +77,28 @@ interface CategoryInterface
 
     /**
      * Get Level of Category
+     *
      * @return int
      */
     public function getLevel();
 
     /**
      * Returns all Children from this Category
+     *
      * @return array
      */
     public function getCatChildren();
 
     /**
      * Get Category hierarchy
+     *
      * @return array
      */
     public function getHierarchy();
 
     /**
      * Get all child Categories
+     *
      * @return array
      */
     public function getChildCategories();

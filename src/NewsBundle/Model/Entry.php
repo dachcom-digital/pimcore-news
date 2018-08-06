@@ -48,6 +48,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
      * Get paged entries
      *
      * @param array $params
+     *
      * @return Paginator
      * @throws \Exception
      */
@@ -196,7 +197,8 @@ class Entry extends DataObject\Concrete implements EntryInterface
         });
 
         if (!empty($categories)) {
-            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,', count($categories)), ',') . ')', $categories);
+            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,',
+                    count($categories)), ',') . ')', $categories);
         }
     }
 
@@ -220,6 +222,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
     /**
      * @param DataObject\NewsCategory $category
      * @param bool                    $includeSubCategories
+     *
      * @return array|null
      * @throws \Exception
      */

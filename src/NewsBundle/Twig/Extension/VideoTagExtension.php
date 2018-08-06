@@ -21,7 +21,7 @@ class VideoTagExtension extends \Twig_Extension
 
     /**
      * @param \Pimcore\Model\DataObject\Data\Video $videoType
-     * @param array                            $customOptions
+     * @param array                                $customOptions
      *
      * @return string
      */

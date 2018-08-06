@@ -11,19 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SettingsController extends AdminController
 {
-
     /**
      * @param Request $request
      *
-     * @return \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function getEntryTypesAction(Request $request)
     {
         /** @var EntryTypeManager $configuration */
-        $entryTypeManager = $this->container->get(EntryTypeManager::class);
+        $entryTypeManager = $this->get(EntryTypeManager::class);
 
         /** @var Translator $translator */
-        $translator = $this->container->get('pimcore.translator');
+        $translator = $this->get('pimcore.translator');
 
         $newsObject = DataObject::getById(intval($request->get('objectId')));
 
@@ -39,11 +38,17 @@ class SettingsController extends AdminController
 
         return $this->json([
             'options' => $valueArray,
-            'success' => TRUE,
+            'success' => true,
             'message' => ''
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Exception
+     */
     public function changeEntryTypeAction(Request $request)
     {
         $entryTypeId = $request->get('entryTypeId');
@@ -59,7 +64,7 @@ class SettingsController extends AdminController
 
         return $this->json([
             'entryTypeId' => $entryTypeId,
-            'success'     => TRUE,
+            'success'     => true,
             'message'     => ''
         ]);
     }

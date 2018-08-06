@@ -33,7 +33,7 @@ class EntryTypeListener implements EventSubscriberInterface
     /**
      * RestrictionServiceListener constructor.
      *
-     * @param RequestStack    $requestStack
+     * @param RequestStack     $requestStack
      * @param Configuration    $configuration
      * @param EntryTypeManager $entryTypeManager
      */
@@ -91,12 +91,12 @@ class EntryTypeListener implements EventSubscriberInterface
         $defaultLayoutType = $this->entryTypeManager->getDefaultType();
 
         //check if default type exists for current user. if not: use the first available type!
-        if((is_null($layoutType) && !isset($entryTypes[$defaultLayoutType])) && !isset($entryTypes[$layoutType])) {
+        if ((is_null($layoutType) && !isset($entryTypes[$defaultLayoutType])) && !isset($entryTypes[$layoutType])) {
             $defaultLayoutType = array_keys($entryTypes)[0];
         }
 
         //request of default layout definition
-        if($requestedLayoutId === '0') {
+        if ($requestedLayoutId === '0') {
             $data['currentLayoutId'] = 0;
             $data['layout'] = $object->getClass()->getLayoutDefinitions();
             $e->setArgument('data', $data);
@@ -121,19 +121,19 @@ class EntryTypeListener implements EventSubscriberInterface
         }
 
         //check if user is allowed to open this object.
-        if(!isset($entryTypes[$layoutType])) {
+        if (!isset($entryTypes[$layoutType])) {
             $user = AdminTool::getCurrentUser();
-            if(!$user->isAdmin()) {
-                $data['_invalidEntryType'] = TRUE;
-                $data['layout'] = NULL;
-                $data['currentLayoutId'] = NULL;
+            if (!$user->isAdmin()) {
+                $data['_invalidEntryType'] = true;
+                $data['layout'] = null;
+                $data['currentLayoutId'] = null;
                 $e->setArgument('data', $data);
                 return;
             }
         }
 
         if ($layoutId !== 0) {
-            $customLayout = NULL;
+            $customLayout = null;
             try {
                 $customLayout = CustomLayout::getById($layoutId);
             } catch (\Exception $e) {
