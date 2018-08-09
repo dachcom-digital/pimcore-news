@@ -21,7 +21,7 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 
 ## Important to know
 - The detail url is based on the title for each language. If the detail url field is empty, the title will be transformed to a valid url slug.
-- The News Bundle will install two classes (`NewsEntry` and `NewsCategory`). If you're going to modify them, please be sure that you're follow our [upgrade notes](UPGRADE.md) in case we're changing the class structure.
+- The News Bundle will install two classes (`NewsEntry` and `NewsCategory`). If you're going to modify them, please make sure that you're follow our [upgrade notes](UPGRADE.md) in case we're changing the class structure.
 
 ## Good to know
 - News can be placed at any place on your website through the news area element. Use it as list, latest or even as a custom layout.
