@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.1.0 to Version 2.1.1
+- implemented [PackageVersionTrait](https://github.com/pimcore/pimcore/blob/master/lib/Extension/Bundle/Traits/PackageVersionTrait.php)
+
 #### Update from Version 2.0.x to Version 2.1.0
 - **[NEW FEATURE]**: Single Objects added: Add single entries to your area
 - **[NEW FEATURE]**: Offset Configuration: Add a Offset to your Entry List

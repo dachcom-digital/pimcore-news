@@ -4,12 +4,13 @@ namespace NewsBundle;
 
 use NewsBundle\DependencyInjection\CompilerPass\PresetPass;
 use NewsBundle\Tool\Install;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class NewsBundle extends AbstractPimcoreBundle
 {
-    const BUNDLE_VERSION = '2.1.0';
+    use PackageVersionTrait;
 
     /**
      * @param ContainerBuilder $container
@@ -18,14 +19,6 @@ class NewsBundle extends AbstractPimcoreBundle
     {
         parent::build($container);
         $container->addCompilerPass(new PresetPass());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVersion()
-    {
-        return self::BUNDLE_VERSION;
     }
 
     /**
@@ -68,4 +61,11 @@ class NewsBundle extends AbstractPimcoreBundle
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getComposerPackageName(): string
+    {
+        return 'dachcom-digital/news';
+    }
 }
