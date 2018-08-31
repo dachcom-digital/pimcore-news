@@ -2,6 +2,7 @@
 
 namespace NewsBundle\Tool;
 
+use PackageVersions\Versions;
 use Pimcore\Tool;
 use Pimcore\Model\User;
 use Pimcore\Model\DataObject;
@@ -47,6 +48,11 @@ class Install extends AbstractInstaller
     ];
 
     /**
+     * @var string
+     */
+    private $currentVersion;
+
+    /**
      * Install constructor.
      *
      * @param SerializerInterface      $serializer
@@ -59,6 +65,8 @@ class Install extends AbstractInstaller
         $this->serializer = $serializer;
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
+        $this->currentVersion = Versions::getVersion(NewsBundle::PACKAGE_NAME);
+
     }
 
     /**
@@ -136,7 +144,7 @@ class Install extends AbstractInstaller
         $needUpdate = false;
         if ($this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
             $config = Yaml::parse(file_get_contents(Configuration::SYSTEM_CONFIG_FILE_PATH));
-            if ($config['version'] !== NewsBundle::BUNDLE_VERSION) {
+            if ($config['version'] !== $this->currentVersion) {
                 $needUpdate = true;
             }
         }
@@ -153,7 +161,7 @@ class Install extends AbstractInstaller
             $this->fileSystem->mkdir(Configuration::SYSTEM_CONFIG_DIR_PATH);
         }
 
-        $config = ['version' => NewsBundle::BUNDLE_VERSION];
+        $config = ['version' => $this->currentVersion];
         $yml = Yaml::dump($config);
         file_put_contents(Configuration::SYSTEM_CONFIG_FILE_PATH, $yml);
     }

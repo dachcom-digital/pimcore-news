@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class NewsBundle extends AbstractPimcoreBundle
 {
     use PackageVersionTrait;
+    const PACKAGE_NAME = 'dachcom-digital/news';
 
     /**
      * @param ContainerBuilder $container
@@ -66,6 +67,6 @@ class NewsBundle extends AbstractPimcoreBundle
      */
     protected function getComposerPackageName(): string
     {
-        return 'dachcom-digital/news';
+        return self::PACKAGE_NAME;
     }
 }
