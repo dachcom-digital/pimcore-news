@@ -62,7 +62,8 @@ class LinkGenerator implements LinkGeneratorInterface
         }
 
         $params = array_merge([
-            'entry' => $entry->getDetailUrl()
+            'entry' => $entry->getDetailUrl(),
+            'site' => $staticRouteInfo['site']
         ], $additionalUrlParams);
 
         $path = $this->urlGenerator->generate($staticRouteInfo['name'], $params);

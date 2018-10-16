@@ -3,10 +3,14 @@
 namespace NewsBundle\Manager;
 
 use NewsBundle\Configuration\Configuration;
+use Pimcore\Http\Request\Resolver\DocumentResolver;
+use Pimcore\Http\Request\Resolver\EditmodeResolver;
+use Pimcore\Http\Request\Resolver\SiteResolver;
 use Pimcore\Model\Site;
 use Pimcore\Model\Staticroute;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
+use Pimcore\Tool;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class EntryTypeManager
@@ -27,15 +31,42 @@ class EntryTypeManager
     protected $translator;
 
     /**
+     * @var SiteResolver
+     */
+    protected $siteResolver;
+
+    /**
+     * @var EditmodeResolver
+     */
+    protected $editmodeResolver;
+
+    /**
+     * @var DocumentResolver
+     */
+    protected $documentResolver;
+
+    /**
      * EntryTypeManager constructor.
      *
      * @param Configuration       $configuration
      * @param TranslatorInterface $translator
+     * @param SiteResolver        $siteResolver
+     * @param EditmodeResolver    $editmodeResolver
+     * @param DocumentResolver    $documentResolver
      */
-    public function __construct(Configuration $configuration, TranslatorInterface $translator)
-    {
+    public function __construct(
+        Configuration $configuration,
+        TranslatorInterface $translator,
+        SiteResolver $siteResolver,
+        EditmodeResolver $editmodeResolver,
+        DocumentResolver $documentResolver
+    ) {
         $this->configuration = $configuration;
         $this->translator = $translator;
+        $this->siteResolver = $siteResolver;
+        $this->editmodeResolver = $editmodeResolver;
+        $this->documentResolver = $documentResolver;
+
     }
 
     /**
@@ -164,12 +195,22 @@ class EntryTypeManager
             $routeData['name'] = $types[$entryType]['route'];
         }
 
-        $siteId = null;
-        if (Site::isSiteRequest()) {
-            $siteId = Site::getCurrentSite()->getId();
+        $site = null;
+        if (!$this->editmodeResolver->isEditmode()) {
+            if ($this->siteResolver->isSiteRequest()) {
+                $site = $this->siteResolver->getSite();
+            }
+        } else {
+            $currentDocument = $this->documentResolver->getDocument();
+            $site = Tool\Frontend::getSiteForDocument($currentDocument);
         }
 
-        $route = Staticroute::getByName($routeData['name'], $siteId);
+        $routeData['site'] = null;
+        if ($site instanceof Site) {
+            $routeData['site'] = $site->getId();
+        }
+
+        $route = Staticroute::getByName($routeData['name'], $routeData['site']);
 
         if (empty($route)) {
             throw new \Exception(sprintf('"%s" route is not available. please add it to your static routes', $routeData['name']));
