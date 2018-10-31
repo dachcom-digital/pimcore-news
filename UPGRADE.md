@@ -2,6 +2,8 @@
 
 #### Update from Version 2.1.0 to Version 2.1.1
 - implemented [PackageVersionTrait](https://github.com/pimcore/pimcore/blob/master/lib/Extension/Bundle/Traits/PackageVersionTrait.php)
+- PHP 7.2 ready
+- Fix Link Generator on Multisites
 
 #### Update from Version 2.0.x to Version 2.1.0
 - **[NEW FEATURE]**: Single Objects added: Add single entries to your area
