@@ -125,7 +125,7 @@ class NewsSeoListener implements EventSubscriberInterface
                     ['limit' => 1, 'condition' => ' AND ooo_id != ' . (int)$object->getId() . ' AND name <> ""']
                 );
 
-                if (count($sameUrlObject) === 1) {
+                if (is_array($sameUrlObject) && count($sameUrlObject) === 1) {
                     $nextPossibleVersion = $sameUrlObject;
 
                     $version = 1;
