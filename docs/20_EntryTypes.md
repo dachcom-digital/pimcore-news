@@ -21,17 +21,17 @@ Each type comes with some configuration:
 news:
     entry_types:
         default: 'blog' # the default entry type to start with
-            items:
-                news:
-                    name: 'news.entry_type.news'
-                    route: 'news_detail'
-                    custom_layout_id: 0
-                blog:
-                    name: 'news.entry_type.blog'
-                    route: 'blog_detail'
-                    custom_layout_id: 1
-                press:
-                    name: 'news.entry_type.press'
-                    route: 'blog_detail'
-                    custom_layout_id: 1
+        items:
+            news:
+                name: 'news.entry_type.news'
+                route: 'news_detail'
+                custom_layout_id: 0
+            blog:
+                name: 'news.entry_type.blog'
+                route: 'blog_detail'
+                custom_layout_id: 1
+            press:
+                name: 'news.entry_type.press'
+                route: 'blog_detail'
+                custom_layout_id: 1
 ```
