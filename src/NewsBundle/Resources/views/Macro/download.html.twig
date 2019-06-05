@@ -3,13 +3,19 @@
     {% if download is not null %}
 
         {% if title == 'filename' %}
-            {% set title = download.getFileName %}
+            {% set title = download.getFileName() %}
         {% endif %}
 
         {% set download_path = download.getFullPath() %}
         {% set download_size = download.getFileSize('kb', 2) %}
         {% set download_type = download.getFilename()|split('.')|last %}
-        {% set download_name = (download.getMetadata('name')) ? download.getMetadata('name') : title|default('Download'|trans) %}
+
+        {% set download_name = title|default('Download'|trans) %}
+        {% if download.getMetadata('name') %}
+            {% set download_name = download.getMetadata('name') %}
+        {% elseif download.getMetadata('title') %}
+            {% set download_name = download.getMetadata('title') %}
+        {% endif %}
 
         <li class="item">
             <a href="{{ download_path }}" target="_blank" class="icon-download-{{ download_type }}">
