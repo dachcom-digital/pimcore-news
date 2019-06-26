@@ -42,6 +42,9 @@ class LinkGenerator implements LinkGeneratorInterface
     public function generateDetailLink(EntryInterface $entry, $additionalUrlParams = [])
     {
         $path = null;
+        $defaultParams = [
+            'entry' => $entry->getDetailUrl()
+        ];
 
         if ($entry->getRedirectLink() instanceof Document) {
             $path = $entry->getRedirectLink()->getFullPath();
@@ -61,10 +64,11 @@ class LinkGenerator implements LinkGeneratorInterface
             return $linkGenerator->generate($entry, $lgParams);
         }
 
-        $params = array_merge([
-            'entry' => $entry->getDetailUrl(),
-            'site' => $staticRouteInfo['site']
-        ], $additionalUrlParams);
+        if ($staticRouteInfo['site'] !== null) {
+            $defaultParams['site'] = $staticRouteInfo['site'];
+        }
+
+        $params = array_merge($defaultParams, $additionalUrlParams);
 
         $path = $this->urlGenerator->generate($staticRouteInfo['name'], $params);
 
