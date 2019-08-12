@@ -3,7 +3,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     # manager entry types
     NewsBundle\Manager\EntryTypeManager: ~
