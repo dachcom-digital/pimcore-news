@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.1.2 to Version 2.2.0
+- bundle is now compatible with pimcore 6
+
 #### Update from Version 2.1.0 to Version 2.1.1
 - implemented [PackageVersionTrait](https://github.com/pimcore/pimcore/blob/master/lib/Extension/Bundle/Traits/PackageVersionTrait.php)
 - PHP 7.2 ready
