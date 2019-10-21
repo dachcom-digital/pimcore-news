@@ -3,7 +3,8 @@ If the available configurability is not sufficient, you can now extend the confi
 
 ### Eventlistener
 Create an eventlistener that listens to the ``NewsEvents::NEWS_BRICK_QUERY_BUILD`` event
-````<?php
+```php
+<?php
   
   namespace AppBundle\EventListener;
   
@@ -54,10 +55,8 @@ Create an eventlistener that listens to the ``NewsEvents::NEWS_BRICK_QUERY_BUILD
               return;
           }
   
-          $elements = $configuration->getElements();
-  
+          $elements = $configuration->getElements(); // or whatever Method applies to your Class 
           $querySettings['<yourproperty>'] = $elements;
-  
           $event->setQuerySettings($querySettings);
       }
   
@@ -74,10 +73,10 @@ Create an eventlistener that listens to the ``NewsEvents::NEWS_BRICK_QUERY_BUILD
           return $this->tagRenderer->getTag($document, $type, $inputName, $options);
       }
   }
-````
+```
 
 ### Service registration
-````yaml
+```yaml
 services:
     AppBundle\EventListener\NewsBrickModifierListener:
         autowire: true
@@ -85,32 +84,30 @@ services:
         public: false
         tags:
             - { name: kernel.event_subscriber }
-````
+```
 
 ### TWIG
 Create a new File in your app-resource-directory: NewsBundle/view/Areas/news/edit_custom.html.twig and use common pimcore-methods to add your configuration:
 
-````twig
+```twig
 <div class="t-row">
-
     <div class="t-col-full">
         <label>{{ 'news.<yourpropertyname>'|trans({}, 'admin') }}</label>
-        {{ pimcore_multihref('<yourproperty>', {
+        {{ pimcore_your_property_type('<yourproperty>', {
             'types'    : ['object', 'folder'],
             'width'    : '510px',
             'height'   : '150px',
             ...
         }) }}
     </div>
-
 </div>
-````
+```
 
 ### Modify Listing
 Create a class that extends ``\NewsBundle\Model\Entry`` and add this method to use your new configuration-values
 
-`````php
-/**
+```php
+    /**
      * @param DataObject\NewsEntry\Listing $listing
      * @param array                        $settings
      */
@@ -119,4 +116,4 @@ Create a class that extends ``\NewsBundle\Model\Entry`` and add this method to u
         # for example, add a condition
         $listing->addConditionParam('<define your condition>');
     }
-`````
+```
