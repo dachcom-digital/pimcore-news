@@ -2,7 +2,10 @@
 
 namespace NewsBundle\Document\Areabrick\News;
 
+use NewsBundle\Event\NewsBrickEvent;
+use NewsBundle\NewsEvents;
 use NewsBundle\Registry\PresetRegistry;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
@@ -39,6 +42,12 @@ class News extends AbstractTemplateAreabrick
     protected $presetRegistry;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+
+    /**
      * Form constructor.
      *
      * @param Configuration       $configuration
@@ -50,13 +59,15 @@ class News extends AbstractTemplateAreabrick
         Configuration $configuration,
         EntryTypeManager $entryTypeManager,
         TranslatorInterface $translator,
-        PresetRegistry $presetRegistry
+        PresetRegistry $presetRegistry,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->configuration = $configuration;
         $this->entryTypeManager = $entryTypeManager;
         $this->configuration = $configuration;
         $this->translator = $translator;
         $this->presetRegistry = $presetRegistry;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -132,8 +143,10 @@ class News extends AbstractTemplateAreabrick
                     ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
             }
 
-            //finally load query
-            $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
+            $event = new NewsBrickEvent($info, $querySettings);
+            $this->eventDispatcher->dispatch(NewsEvents::NEWS_BRICK_QUERY_BUILD, $event);
+            
+            $newsObjects = DataObject\NewsEntry::getEntriesPaging($event->getQuerySettings());
 
             $subParams = [
                 'main_classes'    => implode(' ', $mainClasses),

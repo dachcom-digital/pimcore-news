@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.2.0 to Version 2.2.1
+- made extensible with custom configuration fields
+
 #### Update from Version 2.1.2 to Version 2.2.0
 - bundle is now compatible with pimcore 6
 
