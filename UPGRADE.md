@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.2.1 to Version 2.2.2
+- remove jquery dependency
+
 #### Update from Version 2.2.0 to Version 2.2.1
 - made extensible with custom configuration fields
 
