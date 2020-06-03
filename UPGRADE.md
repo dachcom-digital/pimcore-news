@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.2.2 to Version 2.2.3
+- add possibility to add additional view params (@Sarah-Hasler)
+
 #### Update from Version 2.2.1 to Version 2.2.2
 - remove jquery dependency
 
