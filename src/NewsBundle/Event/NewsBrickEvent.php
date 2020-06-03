@@ -18,6 +18,11 @@ class NewsBrickEvent extends Event
     protected $querySettings;
 
     /**
+     * @var array
+     */
+    protected $additionalViewParams;
+
+    /**
      * @param Info  $info
      * @param array $querySettings
      */
@@ -49,5 +54,29 @@ class NewsBrickEvent extends Event
     public function setQuerySettings(array $querySettings)
     {
         $this->querySettings = $querySettings;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalViewParams()
+    {
+        if (!is_array($this->additionalViewParams)) {
+            return [];
+        }
+
+        return $this->additionalViewParams;
+    }
+
+    /**
+     * @param array $additionalViewParams
+     */
+    public function addAdditionalViewParams(array $additionalViewParams)
+    {
+        if (!is_array($this->additionalViewParams)) {
+            $this->additionalViewParams = [];
+        }
+
+        $this->additionalViewParams = array_merge($this->additionalViewParams, $additionalViewParams);
     }
 }

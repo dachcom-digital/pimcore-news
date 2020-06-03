@@ -145,17 +145,21 @@ class News extends AbstractTemplateAreabrick
 
             $event = new NewsBrickEvent($info, $querySettings);
             $this->eventDispatcher->dispatch(NewsEvents::NEWS_BRICK_QUERY_BUILD, $event);
-            
-            $newsObjects = DataObject\NewsEntry::getEntriesPaging($event->getQuerySettings());
+
+            $querySettings = $event->getQuerySettings();
+            $additionalViewParams = $event->getAdditionalViewParams();
+
+            $newsObjects = DataObject\NewsEntry::getEntriesPaging($querySettings);
 
             $subParams = [
-                'main_classes'    => implode(' ', $mainClasses),
-                'category'        => $fieldConfiguration['category']['value'],
-                'show_pagination' => $fieldConfiguration['show_pagination']['value'],
-                'entry_type'      => $fieldConfiguration['entry_types']['value'],
-                'layout_name'     => $fieldConfiguration['layouts']['value'],
-                'paginator'       => $newsObjects,
-                'query_settings'  => $querySettings
+                'main_classes'           => implode(' ', $mainClasses),
+                'category'               => $fieldConfiguration['category']['value'],
+                'show_pagination'        => $fieldConfiguration['show_pagination']['value'],
+                'entry_type'             => $fieldConfiguration['entry_types']['value'],
+                'layout_name'            => $fieldConfiguration['layouts']['value'],
+                'paginator'              => $newsObjects,
+                'additional_view_params' => $additionalViewParams,
+                'query_settings'         => $querySettings
             ];
         }
 
