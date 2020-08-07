@@ -1,5 +1,11 @@
 # Upgrade Notes
 
+#### Update from Version 2.2.4 to Version 2.2.5
+- fix detail url slugify listener (remove detail url on copy, improved duplication check)
+
+#### Update from Version 2.2.3 to Version 2.2.4
+- use not found http exception in detail action
+
 #### Update from Version 2.2.2 to Version 2.2.3
 - add possibility to add additional view params (@Sarah-Hasler)
 
