@@ -31,8 +31,6 @@ class EntryTypeListener implements EventSubscriberInterface
     protected $entryTypeManager;
 
     /**
-     * RestrictionServiceListener constructor.
-     *
      * @param RequestStack     $requestStack
      * @param Configuration    $configuration
      * @param EntryTypeManager $entryTypeManager

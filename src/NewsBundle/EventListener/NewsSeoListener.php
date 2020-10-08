@@ -10,19 +10,30 @@ use Pimcore\Model\DataObject\NewsCategory;
 use Pimcore\Model\DataObject\NewsEntry;
 use NewsBundle\Configuration\Configuration;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class NewsSeoListener implements EventSubscriberInterface
 {
+    /**
+     * @var RequestStack
+     */
+    protected $requestStack;
+
     /**
      * @var Configuration
      */
     protected $configuration;
 
     /**
+     * @param RequestStack  $requestStack
      * @param Configuration $configuration
      */
-    public function __construct(Configuration $configuration)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        Configuration $configuration
+    ) {
+        $this->requestStack = $requestStack;
         $this->configuration = $configuration;
     }
 
@@ -53,7 +64,18 @@ class NewsSeoListener implements EventSubscriberInterface
             $object->setDetailUrl(null, $language);
         }
 
+        $masterRequest = $this->requestStack->getMasterRequest();
+        if (!$masterRequest instanceof Request) {
+            return;
+        }
+
         // in case it's a copy!
+        foreach (['sourceId', 'targetId', 'transactionId'] as $copyTransactionArgument) {
+            if ($masterRequest->request->has($copyTransactionArgument) === false) {
+                return;
+            }
+        }
+
         $object->setPublished(false);
     }
 
