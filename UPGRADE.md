@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#### Update from Version 2.2.5 to Version 2.2.6
+- fix forced unpublishing if no copy process is active [#44](https://github.com/dachcom-digital/pimcore-news/issues/44)
+
 #### Update from Version 2.2.4 to Version 2.2.5
 - fix detail url slugify listener (remove detail url on copy, improved duplication check)
 
