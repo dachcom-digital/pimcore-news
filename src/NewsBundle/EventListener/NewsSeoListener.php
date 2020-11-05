@@ -58,25 +58,30 @@ class NewsSeoListener implements EventSubscriberInterface
             return;
         }
 
-        $languages = \Pimcore\Tool::getValidLanguages();
-        foreach ($languages as $language) {
-            //always reset stored url if element just has been copied.
-            $object->setDetailUrl(null, $language);
-        }
-
+        $reset = false;
         $masterRequest = $this->requestStack->getMasterRequest();
-        if (!$masterRequest instanceof Request) {
-            return;
-        }
-
-        // in case it's a copy!
-        foreach (['sourceId', 'targetId', 'transactionId'] as $copyTransactionArgument) {
-            if ($masterRequest->request->has($copyTransactionArgument) === false) {
-                return;
+        if ($masterRequest instanceof Request) {
+            $reset = true;
+            foreach (['sourceId', 'targetId', 'transactionId'] as $copyTransactionArgument) {
+                if ($masterRequest->request->has($copyTransactionArgument) === false) {
+                    $reset = false;
+                    break;
+                }
             }
         }
 
-        $object->setPublished(false);
+        if ($reset === true) {
+            //always reset stored url and unpublish element if element just has been copied.
+            $object->setPublished(false);
+            $languages = \Pimcore\Tool::getValidLanguages();
+            foreach ($languages as $language) {
+                $object->setDetailUrl(null, $language);
+            }
+
+            return;
+        }
+
+        $this->parseUrl($object);
     }
 
     /**
