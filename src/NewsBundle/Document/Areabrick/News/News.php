@@ -46,14 +46,14 @@ class News extends AbstractTemplateAreabrick
      */
     protected $eventDispatcher;
 
-
     /**
-     * Form constructor.
+     * News constructor.
      *
-     * @param Configuration       $configuration
-     * @param EntryTypeManager    $entryTypeManager
-     * @param TranslatorInterface $translator
-     * @param PresetRegistry      $presetRegistry
+     * @param Configuration            $configuration
+     * @param EntryTypeManager         $entryTypeManager
+     * @param TranslatorInterface      $translator
+     * @param PresetRegistry           $presetRegistry
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         Configuration $configuration,
@@ -64,7 +64,6 @@ class News extends AbstractTemplateAreabrick
     ) {
         $this->configuration = $configuration;
         $this->entryTypeManager = $entryTypeManager;
-        $this->configuration = $configuration;
         $this->translator = $translator;
         $this->presetRegistry = $presetRegistry;
         $this->eventDispatcher = $eventDispatcher;
