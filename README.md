@@ -31,7 +31,7 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 ## Extending Entry Object
 - *Meta Information* Tab: Extend Entries with [classification store](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Classification_Store.html) data.
 - *Relations & Settings* Tab: Extend Entries with [Object Bricks](https://www.pimcore.org/docs/latest/Objects/Object_Classes/Data_Types/Object_Bricks.html).
-- Configure additional configuration fields with an [eventlistener and twig](.docs/40_CustomConfiguration.md)
+- Configure additional configuration fields with an [eventlistener and twig](./docs/40_CustomConfiguration.md)
 
 ### Further Information
 - [Head Meta Generator](./docs/10_HeadMetaGenerator.md)
