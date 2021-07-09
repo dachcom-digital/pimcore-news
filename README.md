@@ -15,7 +15,7 @@ Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~2.0.0"
+    "dachcom-digital/news" : "~2.2.0"
 }
 ```
 
