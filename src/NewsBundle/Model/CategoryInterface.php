@@ -2,59 +2,24 @@
 
 namespace NewsBundle\Model;
 
-use Zend\Paginator\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 
 interface CategoryInterface
 {
     /**
-     * Get all Categories
-     *
-     * @return array
+     * @throws \Exception
      */
-    public static function getAll();
+    public static function getAll(): array;
+
+    public function getFirstLevel(): CategoryInterface;
+
+    public static function getAllChildCategories(Category $category): array;
 
     /**
-     * Get localized fields -
-     *
-     * @return array
+     * @throws \Exception
      */
-    public function getLocalizedFields();
+    public function getEntries(bool $includeChildCategories = false): array;
 
-    /**
-     * Get first level of categories
-     *
-     * @return $this
-     */
-    public function getFirstLevel();
-
-    /**
-     * Returns all Child Categories from $category
-     *
-     * @param Category $category
-     *
-     * @return array
-     */
-    public static function getAllChildCategories(Category $category);
-
-    /**
-     * Get News from the Category
-     *
-     * @param bool $includeChildCategories
-     *
-     * @return array
-     */
-    public function getEntries($includeChildCategories = false);
-
-    /**
-     * Get Products from the Category with Paging
-     *
-     * @param int   $page
-     * @param int   $itemsPerPage
-     * @param array $sort
-     * @param bool  $includeChildCategories
-     *
-     * @return Paginator
-     */
     public function getEntriesPaging(
         $page = 0,
         $itemsPerPage = 10,
@@ -63,43 +28,15 @@ interface CategoryInterface
             'direction' => 'asc'
         ],
         $includeChildCategories = false
-    );
+    ): PaginatorInterface;
 
-    /**
-     * Checks if category is child of hierachy
-     *
-     * @param Category $category
-     * @param int      $level to check hierarchy (0 = topMost)
-     *
-     * @return bool
-     */
-    public function inCategory(Category $category, $level = 0);
+    public function inCategory(Category $category, int $level = 0): bool;
 
-    /**
-     * Get Level of Category
-     *
-     * @return int
-     */
-    public function getLevel();
+    public function getLevel(): int;
 
-    /**
-     * Returns all Children from this Category
-     *
-     * @return array
-     */
-    public function getCatChildren();
+    public function getCatChildren(): array;
 
-    /**
-     * Get Category hierarchy
-     *
-     * @return array
-     */
-    public function getHierarchy();
+    public function getHierarchy(): array;
 
-    /**
-     * Get all child Categories
-     *
-     * @return array
-     */
-    public function getChildCategories();
+    public function getChildCategories(): array;
 }

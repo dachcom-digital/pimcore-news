@@ -5,8 +5,16 @@ services:
         autoconfigure: true
         public: true
 
-    # tool: installer
-    NewsBundle\Tool\Install: ~
+    NewsBundle\Tool\Install:
+        arguments:
+            $bundle: "@=service('kernel').getBundle('NewsBundle')"
+        calls:
+            - [setTokenStorageUserResolver, ['@Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver']]
+            - [setSerializer, ['@serializer']]
 
-    # configuration
     NewsBundle\Configuration\Configuration: ~
+
+    NewsBundle\Controller\Admin\SettingsController:
+        public: true
+        autowire: true
+        tags: ['controller.service_arguments']

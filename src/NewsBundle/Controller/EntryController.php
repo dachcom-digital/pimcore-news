@@ -10,12 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EntryController extends FrontendController
 {
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function detailAction(Request $request)
+    public function detailAction(Request $request): Response
     {
         $newsFragment = $request->attributes->get('entry');
         $locale = $request->attributes->get('_locale');

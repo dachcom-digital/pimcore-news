@@ -3,33 +3,23 @@
 namespace NewsBundle\Twig\Extension;
 
 use Pimcore\Model\Asset;
-use Pimcore\Model\Document\Tag\Video;
+use Pimcore\Model\Document\Editable\Video;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class VideoTagExtension extends \Twig_Extension
+class VideoTagExtension extends AbstractExtension
 {
-    /**
-     * @return array
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('news_video_tag', [$this, 'generateVideoTag'], [
-                'is_safe' => ['html']
-            ])
+            new TwigFunction('news_video_tag', [$this, 'generateVideoTag'], ['is_safe' => ['html']])
         ];
     }
 
-    /**
-     * @param \Pimcore\Model\DataObject\Data\Video $videoType
-     * @param array                                $customOptions
-     *
-     * @return string
-     */
-    public function generateVideoTag($videoType, $customOptions = [])
+    public function generateVideoTag(Video $videoType, array $customOptions = []): string
     {
-        $videoData = $videoType->getData();
-
         $html = '';
+        $videoData = $videoType->getData();
 
         if (!$videoData) {
             return $html;
@@ -50,18 +40,23 @@ class VideoTagExtension extends \Twig_Extension
 
         $video->setOptions($videoOptions);
 
-        $video->type = $videoType->getType();
-        $video->id = ($videoData instanceof Asset) ? $videoData->getId() : $videoData;
-        $video->title = $videoType->getTitle();
-        $video->description = $videoType->getDescription();
+        $video->setTitle($videoType->getTitle());
+        $video->setDescription($videoType->getDescription());
+
+        $data = [
+            'id'          => $videoData instanceof Asset ? $videoData->getId() : $videoData,
+            'type'        => $videoType->getType(),
+            'title'       => $videoType->getTitle(),
+            'description' => $videoType->getDescription(),
+        ];
 
         if ($videoType->getPoster()) {
-            $video->poster = $videoType->getPoster()->getId();
+            $data['poster'] = $videoType->getPoster();
         }
 
-        $html = $video->frontend();
+        $video->setDataFromResource(\Pimcore\Tool\Serialize::serialize($data));
 
-        return $html;
+        return $video->frontend();
     }
 
 }

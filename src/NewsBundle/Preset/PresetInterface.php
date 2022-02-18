@@ -2,7 +2,7 @@
 
 namespace NewsBundle\Preset;
 
-use Pimcore\Model\Document\Tag\Area\Info;
+use Pimcore\Model\Document\Editable\Area\Info;
 
 interface PresetInterface
 {

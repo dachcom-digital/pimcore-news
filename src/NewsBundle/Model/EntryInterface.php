@@ -2,50 +2,24 @@
 
 namespace NewsBundle\Model;
 
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
-use Zend\Paginator\Paginator;
 
 interface EntryInterface
 {
     /**
-     * Get all News
-     *
-     * @return array
+     * @throws \Exception
      */
-    public static function getAll();
+    public static function getAll(): array;
 
-    /**
-     * Get News from the Category with Paging
-     *
-     * @param array $params
-     *
-     * @return Paginator
-     */
-    public static function getEntriesPaging(array $params = []);
+    public static function getEntriesPaging(array $params = []): PaginationInterface;
 
-    /**
-     * add query join if categories available.
-     *
-     * @param DataObject\NewsEntry\Listing $newsListing
-     * @param null                         $categories
-     * @param array                        $settings
-     */
-    public static function addCategorySelectorToQuery($newsListing, $categories = null, $settings = []);
+    public static function addCategorySelectorToQuery(DataObject\Listing\Concrete $newsListing, ?array $categories = null, array $settings = []): void;
 
-    /**
-     * @param DataObject\NewsCategory $category
-     * @param bool                    $includeSubCategories
-     *
-     * @return array|null
-     */
-    public static function getCategoriesRecursive($category, $includeSubCategories = false);
+    public static function getCategoriesRecursive(?CategoryInterface $category, bool $includeSubCategories = false): ?array;
 
-    /**
-     * Get single image for entry
-     *
-     * @return bool|\Pimcore\Model\Asset
-     */
-    public function getImage();
+    public function getImage(): ?Asset;
 
     public function getName($language = null);
 

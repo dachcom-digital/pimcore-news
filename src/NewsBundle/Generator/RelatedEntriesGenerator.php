@@ -15,7 +15,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
      * @return DataObject\NewsEntry[]|DataObject\NewsEntry\Listing
      * @throws \Exception
      */
-    public function generateRelatedEntries(EntryInterface $news, $params = [])
+    public function generateRelatedEntries(EntryInterface $news, array $params = [])
     {
         $settings = array_merge([
             'sort'                 => [

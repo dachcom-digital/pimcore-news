@@ -2,41 +2,26 @@
 
 namespace NewsBundle\Model;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use NewsBundle\Exception\ImplementedByPimcoreException;
-use Pimcore\Db\ZendCompatibility\QueryBuilder;
+use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Asset\Image;
-use Pimcore\Tool;
-use Zend\Paginator\Paginator;
 
 class Entry extends DataObject\Concrete implements EntryInterface
 {
-    /**
-     * Admin Element Style.
-     *
-     * @return \Pimcore\Model\Element\AdminStyle
-     */
-    public function getElementAdminStyle()
+    public function getElementAdminStyle(): AdminStyle
     {
         if (empty($this->o_elementAdminStyle)) {
-            $class = '\\NewsBundle\\Model\\AdminStyle';
-            if (Tool::classExists($class)) {
-                $this->o_elementAdminStyle = new AdminStyle($this);
-            } else {
-                return parent::getElementAdminStyle();
-            }
+            $this->o_elementAdminStyle = new AdminStyle($this);
         }
 
         return $this->o_elementAdminStyle;
     }
 
-    /**
-     * Get all News
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function getAll()
+    public static function getAll(): array
     {
         $newsListing = DataObject\NewsEntry::getList();
         static::modifyListing($newsListing);
@@ -44,15 +29,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         return $newsListing->getObjects();
     }
 
-    /**
-     * Get paged entries
-     *
-     * @param array $params
-     *
-     * @return Paginator
-     * @throws \Exception
-     */
-    public static function getEntriesPaging(array $params = [])
+    public static function getEntriesPaging(array $params = []): PaginationInterface
     {
         $settings = array_merge([
             'sort'                 => [
@@ -73,14 +50,15 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         ], $params);
 
-        /** @var DataObject\NewsEntry\Listing $newsListing */
         $newsListing = DataObject\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
         $newsListing->setGroupBy('o_id');
 
+        $paginator = \Pimcore::getContainer()->get(PaginatorInterface::class);
+
         $categories = null;
-        if ($settings['category'] && $settings['category'] instanceof Category) {
+        if (isset($settings['category']) && $settings['category'] instanceof Category) {
             $categories = static::getCategoriesRecursive($settings['category'], $settings['includeSubCategories']);
         }
 
@@ -92,10 +70,11 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         //add single entry types
         if (count($settings['singleObjects']) > 0) {
-            $singleObjectIds = implode(',', array_map(function ($object) {
-                return $object->getId();
-            }, $settings['singleObjects']));
-            $newsListing->addConditionParam('oo_id IN(' . $singleObjectIds . ')');
+            $newsListing->addConditionParam(
+                sprintf('oo_id IN(%s)', implode(',', array_map(static function ($object) {
+                    return $object->getId();
+                }, $settings['singleObjects'])))
+            );
         }
 
         //add entry type selector
@@ -126,20 +105,14 @@ class Entry extends DataObject\Concrete implements EntryInterface
         //allow listing modification.
         static::modifyListing($newsListing, $settings);
 
-        $paginator = new Paginator($newsListing);
-        $paginator->setCurrentPageNumber($settings['page']);
-        $paginator->setItemCountPerPage($settings['itemsPerPage']);
-
-        return $paginator;
+        return $paginator->paginate(
+            $newsListing,
+            $settings['page'] === 0 ? 1 : $settings['page'],
+            $settings['itemsPerPage'] === 0 ? 10 : $settings['itemsPerPage']
+        );
     }
 
-    /**
-     * add time range restriction
-     *
-     * @param DataObject\NewsEntry\Listing $newsListing
-     * @param array                        $settings
-     */
-    public static function addTimeRange($newsListing, $settings = [])
+    public static function addTimeRange(DataObject\NewsEntry\Listing $newsListing, array $settings = []): void
     {
         if (empty($settings['timeRange']) || $settings['timeRange'] === 'all') {
             return;
@@ -174,61 +147,41 @@ class Entry extends DataObject\Concrete implements EntryInterface
         );
     }
 
-    /**
-     * add query join if categories available.
-     *
-     * @param DataObject\NewsEntry\Listing $newsListing
-     * @param null                         $categories
-     * @param array                        $settings
-     */
-    public static function addCategorySelectorToQuery($newsListing, $categories = null, $settings = [])
+    public static function addCategorySelectorToQuery(DataObject\Listing\Concrete $newsListing, ?array $categories = null, array $settings = []): void
     {
-        $newsListing->onCreateQuery(function (QueryBuilder $query) use ($newsListing, $categories, $settings) {
+        $newsListing->onCreateQueryBuilder(function (QueryBuilder $query) use ($newsListing, $categories, $settings) {
             if (!empty($categories)) {
-                $query->join(
-                    ['relations' => 'object_relations_' . $newsListing->getClassId()],
-                    'relations.src_id = oo_id',
-                    ''
-                );
+                $aliasFrom = $newsListing->getDao()->getTableName();
+                $query->join($aliasFrom, 'object_relations_' . $newsListing->getClassId(), 'relations', 'relations.src_id = oo_id');
             }
 
             //allow query modification.
             static::modifyQuery($query, $newsListing, $settings);
+
         });
 
         if (!empty($categories)) {
-            $newsListing->addConditionParam('relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,',
-                    count($categories)), ',') . ')', $categories);
+            $newsListing->addConditionParam(
+                'relations.fieldname = "categories" AND relations.dest_id IN (' . rtrim(str_repeat('?,', count($categories)), ',') . ')',
+                $categories
+            );
         }
     }
 
-    /**
-     * @param QueryBuilder                 $query
-     * @param DataObject\NewsEntry\Listing $listing
-     * @param array                        $settings
-     */
-    protected static function modifyQuery($query, $listing, $settings = [])
+    protected static function modifyQuery(QueryBuilder $query, DataObject\Listing\Concrete $listing, array $settings = []): void
+    {
+    }
+
+    protected static function modifyListing(DataObject\Listing\Concrete $listing, array $settings = []): void
     {
     }
 
     /**
-     * @param DataObject\NewsEntry\Listing $listing
-     * @param array                        $settings
-     */
-    protected static function modifyListing($listing, $settings = [])
-    {
-    }
-
-    /**
-     * @param DataObject\NewsCategory $category
-     * @param bool                    $includeSubCategories
-     *
-     * @return array|null
      * @throws \Exception
      */
-    public static function getCategoriesRecursive($category, $includeSubCategories = false)
+    public static function getCategoriesRecursive(?CategoryInterface $category, $includeSubCategories = false): ?array
     {
-        if (!$category) {
+        if (!$category instanceof DataObject\AbstractObject) {
             return null;
         }
 
@@ -244,12 +197,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         return array_values($categories);
     }
 
-    /**
-     * Get single image for entry
-     *
-     * @return bool|\Pimcore\Model\Asset
-     */
-    public function getImage()
+    public function getImage(): ?Asset
     {
         $images = $this->getImages();
         if (count($images) > 0) {
@@ -259,10 +207,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         return null;
     }
 
-    /**
-     * @return array
-     */
-    public function getJsonLDData()
+    public function getJsonLDData(): array
     {
         $data = [
             '@context'      => 'http://schema.org/',
@@ -293,73 +238,46 @@ class Entry extends DataObject\Concrete implements EntryInterface
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLead($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRedirectLink($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDetailUrl($language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEntryType()
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCategories()
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMetaTitle()
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMetaDescription()
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);

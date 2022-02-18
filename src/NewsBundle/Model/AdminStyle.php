@@ -7,30 +7,21 @@ use Pimcore\Model;
 
 class AdminStyle extends Model\Element\AdminStyle
 {
-    /**
-     * @var Model\DataObject\AbstractObject
-     */
-    protected $element;
+    protected Model\DataObject\AbstractObject $element;
 
-    /**
-     * AdminStyle constructor.
-     *
-     * @param Model\DataObject\Concrete $element
-     */
     public function __construct($element)
     {
         $this->element = $element;
+
         parent::__construct($element);
     }
 
-    /**
-     * @return array
-     */
-    public function getElementQtipConfig()
+    public function getElementQtipConfig(): array
     {
         $entryTypeManager = \Pimcore::getContainer()->get(EntryTypeManager::class);
         $info = $entryTypeManager->getTypeInfo($this->element->getEntryType());
-        $name = isset($info['name']) ? $info['name'] : '--';
+        $name = $info['name'] ?? '--';
+
         if ($this->element instanceof Model\DataObject\NewsEntry) {
             return [
                 'title' => 'ID: ' . $this->element->getId(),

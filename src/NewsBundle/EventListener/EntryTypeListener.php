@@ -15,26 +15,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class EntryTypeListener implements EventSubscriberInterface
 {
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
+    protected Configuration $configuration;
+    protected EntryTypeManager $entryTypeManager;
 
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @var EntryTypeManager
-     */
-    protected $entryTypeManager;
-
-    /**
-     * @param RequestStack     $requestStack
-     * @param Configuration    $configuration
-     * @param EntryTypeManager $entryTypeManager
-     */
     public function __construct(
         RequestStack $requestStack,
         Configuration $configuration,
@@ -45,22 +29,16 @@ class EntryTypeListener implements EventSubscriberInterface
         $this->entryTypeManager = $entryTypeManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             AdminEvents::OBJECT_GET_PRE_SEND_DATA => 'setEntryTypeLayout'
         ];
     }
 
-    /**
-     * @param GenericEvent $e
-     */
-    public function setEntryTypeLayout(GenericEvent $e)
+    public function setEntryTypeLayout(GenericEvent $e): void
     {
-        /** @var \Pimcore\Model\DataObject\NewsEntry $object */
+        /** @var NewsEntry $object */
         $object = $e->getArgument('object');
         $data = $e->getArgument('data');
         $requestedLayoutId = $this->requestStack->getCurrentRequest()->get('layoutId');

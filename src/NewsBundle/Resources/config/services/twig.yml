@@ -5,19 +5,16 @@ services:
         autoconfigure: true
         public: false
 
-    # twig extension: links
     NewsBundle\Twig\Extension\NewsExtension:
         arguments:
             $imageThumbnails: '%image_thumbnails%'
         tags:
             - { name: twig.extension }
 
-    # twig extension: relations
     NewsBundle\Twig\Extension\RelatedEntriesExtension:
         tags:
             - { name: twig.extension }
 
-    # twig extension: video tag
     NewsBundle\Twig\Extension\VideoTagExtension:
         tags:
             - { name: twig.extension }

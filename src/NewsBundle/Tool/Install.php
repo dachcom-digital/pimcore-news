@@ -3,159 +3,59 @@
 namespace NewsBundle\Tool;
 
 use PackageVersions\Versions;
+use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
 use Pimcore\Tool;
 use Pimcore\Model\User;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Translation;
 use Pimcore\Model\Staticroute;
-use Pimcore\Extension\Bundle\Installer\AbstractInstaller;
 use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Serializer\Serializer;
 use NewsBundle\NewsBundle;
 use NewsBundle\Configuration\Configuration;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class Install extends AbstractInstaller
+class Install extends SettingsStoreAwareInstaller
 {
-    /**
-     * @var TokenStorageUserResolver
-     */
-    protected $resolver;
+    protected TokenStorageUserResolver $resolver;
+    private SerializerInterface $serializer;
+    private string $installSourcesPath;
+    private Filesystem $fileSystem;
 
-    /**
-     * @var Serializer
-     */
-    private $serializer;
-
-    /**
-     * @var string
-     */
-    private $installSourcesPath;
-
-    /**
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
-     * @var array
-     */
-    private $classes = [
+    private array $classes = [
         'NewsEntry',
         'NewsCategory',
     ];
 
-    /**
-     * @var string
-     */
-    private $currentVersion;
+    private string $currentVersion;
 
-    /**
-     * Install constructor.
-     *
-     * @param SerializerInterface      $serializer
-     * @param TokenStorageUserResolver $resolver
-     */
-    public function __construct(TokenStorageUserResolver $resolver, SerializerInterface $serializer)
+    public function setTokenStorageUserResolver(TokenStorageUserResolver $resolver): void
     {
-        parent::__construct();
         $this->resolver = $resolver;
+    }
+
+    public function setSerializer(SerializerInterface $serializer): void
+    {
         $this->serializer = $serializer;
+    }
+
+    public function install(): void
+    {
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
         $this->currentVersion = Versions::getVersion(NewsBundle::PACKAGE_NAME);
 
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function install()
-    {
         $this->installStaticRoutes();
         $this->installOrUpdateConfigFile();
         $this->installClasses();
         $this->installTranslations();
         $this->createFolders();
+
+        parent::install();
     }
 
-    /**
-     * For now, just update the config file to the current version.
-     * {@inheritdoc}
-     */
-    public function update()
-    {
-        $this->installOrUpdateConfigFile();
-        $this->installTranslations();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function uninstall()
-    {
-        if ($this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
-            $this->fileSystem->rename(
-                Configuration::SYSTEM_CONFIG_FILE_PATH,
-                PIMCORE_PRIVATE_VAR . '/bundles/NewsBundle/config_backup.yml'
-            );
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isInstalled()
-    {
-        return $this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canBeInstalled()
-    {
-        return !$this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canBeUninstalled()
-    {
-        return $this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function needsReloadAfterInstall()
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canBeUpdated()
-    {
-        $needUpdate = false;
-        if ($this->fileSystem->exists(Configuration::SYSTEM_CONFIG_FILE_PATH)) {
-            $config = Yaml::parse(file_get_contents(Configuration::SYSTEM_CONFIG_FILE_PATH));
-            if ($config['version'] !== $this->currentVersion) {
-                $needUpdate = true;
-            }
-        }
-
-        return $needUpdate;
-    }
-
-    /**
-     * install/update config file
-     */
-    private function installOrUpdateConfigFile()
+    private function installOrUpdateConfigFile(): void
     {
         if (!$this->fileSystem->exists(Configuration::SYSTEM_CONFIG_DIR_PATH)) {
             $this->fileSystem->mkdir(Configuration::SYSTEM_CONFIG_DIR_PATH);
@@ -166,10 +66,7 @@ class Install extends AbstractInstaller
         file_put_contents(Configuration::SYSTEM_CONFIG_FILE_PATH, $yml);
     }
 
-    /**
-     * @return bool
-     */
-    public function installClasses()
+    public function installClasses(): void
     {
         foreach ($this->getClasses() as $className => $path) {
 
@@ -184,24 +81,18 @@ class Install extends AbstractInstaller
             $class->setName($className);
 
             $data = file_get_contents($path);
-            $success = DataObject\ClassDefinition\Service::importClassDefinitionFromJson($class, $data);
+            DataObject\ClassDefinition\Service::importClassDefinitionFromJson($class, $data);
 
         }
     }
 
-    /**
-     *
-     */
-    public function installTranslations()
+    public function installTranslations(): void
     {
         $csv = $this->installSourcesPath . '/translations/data.csv';
-        Translation\Admin::importTranslationsFromFile($csv, true, Tool\Admin::getLanguages());
+        Translation::importTranslationsFromFile($csv, Translation::DOMAIN_ADMIN, true, Tool\Admin::getLanguages());
     }
 
-    /**
-     * @return bool
-     */
-    public function createFolders()
+    public function createFolders(): void
     {
         $root = DataObject\Folder::getByPath('/news');
         $entries = DataObject\Folder::getByPath('/news/entries');
@@ -239,17 +130,11 @@ class Install extends AbstractInstaller
                 'o_published'        => true,
             ]);
         }
-
-        return true;
-
     }
 
-    /**
-     * Creates News Static Routes
-     */
-    public function installStaticRoutes()
+    public function installStaticRoutes(): void
     {
-        $conf = file_get_contents(dirname(__FILE__) . '/../Resources/install/staticroutes.json');
+        $conf = file_get_contents(__DIR__ . '/../Resources/install/staticroutes.json');
         $routes = $this->serializer->decode($conf, 'json');
 
         foreach ($routes['routes'] as $def) {
@@ -258,9 +143,7 @@ class Install extends AbstractInstaller
                 $route->setName($def['name']);
                 $route->setPattern($def['pattern']);
                 $route->setReverse($def['reverse']);
-                $route->setModule($def['module']);
                 $route->setController($def['controller']);
-                $route->setAction($def['action']);
                 $route->setVariables($def['variables']);
                 $route->setPriority($def['priority']);
                 $route->save();
@@ -268,16 +151,13 @@ class Install extends AbstractInstaller
         }
     }
 
-    /**
-     * @return array
-     */
     protected function getClasses(): array
     {
         $result = [];
 
         foreach ($this->classes as $className) {
             $filename = sprintf('class_%s_export.json', $className);
-            $path = realpath(dirname(__FILE__) . '/../Resources/install/classes') . '/' . $filename;
+            $path = dirname(__DIR__) . '/Resources/install/classes' . '/' . $filename;
             $path = realpath($path);
 
             if (false === $path || !is_file($path)) {
@@ -293,10 +173,7 @@ class Install extends AbstractInstaller
         return $result;
     }
 
-    /**
-     * @return int
-     */
-    protected function getUserId()
+    protected function getUserId(): int
     {
         $userId = 0;
         $user = $this->resolver->getUser();
@@ -306,5 +183,4 @@ class Install extends AbstractInstaller
 
         return $userId;
     }
-
 }

@@ -2,64 +2,37 @@
 
 namespace NewsBundle\Event;
 
-use Pimcore\Model\Document\Tag\Area\Info;
-use Symfony\Component\EventDispatcher\Event;
+use Pimcore\Model\Document\Editable\Area\Info;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class NewsBrickEvent extends Event
 {
-    /**
-     * @var Info
-     */
-    protected $info;
+    protected Info $info;
+    protected array $querySettings;
+    protected array $additionalViewParams = [];
 
-    /**
-     * @var array
-     */
-    protected $querySettings;
-
-    /**
-     * @var array
-     */
-    protected $additionalViewParams;
-
-    /**
-     * @param Info  $info
-     * @param array $querySettings
-     */
     public function __construct(Info $info, array $querySettings)
     {
         $this->info = $info;
         $this->querySettings = $querySettings;
     }
 
-    /**
-     * @return Info
-     */
-    public function getInfo()
+    public function getInfo(): Info
     {
         return $this->info;
     }
 
-    /**
-     * @return array
-     */
-    public function getQuerySettings()
+    public function getQuerySettings(): array
     {
         return $this->querySettings;
     }
 
-    /**
-     * @param array $querySettings
-     */
-    public function setQuerySettings(array $querySettings)
+    public function setQuerySettings(array $querySettings): void
     {
         $this->querySettings = $querySettings;
     }
 
-    /**
-     * @return array
-     */
-    public function getAdditionalViewParams()
+    public function getAdditionalViewParams(): array
     {
         if (!is_array($this->additionalViewParams)) {
             return [];
@@ -68,10 +41,7 @@ class NewsBrickEvent extends Event
         return $this->additionalViewParams;
     }
 
-    /**
-     * @param array $additionalViewParams
-     */
-    public function addAdditionalViewParams(array $additionalViewParams)
+    public function addAdditionalViewParams(array $additionalViewParams): void
     {
         if (!is_array($this->additionalViewParams)) {
             $this->additionalViewParams = [];

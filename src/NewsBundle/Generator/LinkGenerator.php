@@ -11,35 +11,16 @@ use Pimcore\Tool;
 
 class LinkGenerator implements LinkGeneratorInterface
 {
-    /**
-     * @var EntryTypeManager
-     */
-    protected $entryTypeManager;
+    protected EntryTypeManager $entryTypeManager;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var UrlGeneratorInterface
-     */
-    protected $urlGenerator;
-
-    /**
-     * LinkGenerator constructor.
-     *
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param EntryTypeManager      $entryTypeManager
-     */
     public function __construct(UrlGeneratorInterface $urlGenerator, EntryTypeManager $entryTypeManager)
     {
         $this->entryTypeManager = $entryTypeManager;
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param EntryInterface $entry
-     * @param array          $additionalUrlParams
-     *
-     * @return string
-     */
-    public function generateDetailLink(EntryInterface $entry, $additionalUrlParams = [])
+    public function generateDetailLink(EntryInterface $entry, $additionalUrlParams = []): string
     {
         $path = null;
         $defaultParams = [
@@ -75,12 +56,7 @@ class LinkGenerator implements LinkGeneratorInterface
         return Tool::getHostUrl() . $path;
     }
 
-    /**
-     * @param EntryInterface $entry
-     *
-     * @return string
-     */
-    public function generateBackLink(EntryInterface $entry)
+    public function generateBackLink(EntryInterface $entry): string
     {
         $categories = $entry->getCategories();
         $backLink = '';
