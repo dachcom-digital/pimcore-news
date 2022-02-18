@@ -2,7 +2,7 @@
 Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md) like Events, Press or Event.
 
 ## Requirements
-⚠️⚠️ This bundle exists for legacy purposes only and **will not** be developed further.
+⚠️⚠️ This extension has reached its end of life and only receives compatibility update. It will not be developed further.
 
 ## Installation
 
