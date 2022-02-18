@@ -2,67 +2,31 @@
 
 namespace NewsBundle\Model;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Pimcore\Model\DataObject;
-use Zend\Paginator\Paginator;
 
 class Category extends DataObject\Concrete implements CategoryInterface
 {
-    /**
-     * Get all categories
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function getAll()
+    public static function getAll(): array
     {
         $list = DataObject\NewsCategory::getList();
+
         return $list->getObjects();
     }
 
-    /**
-     * Get localized fields
-     *
-     * @return array
-     */
-    public function getLocalizedFields()
-    {
-        $preValue = $this->preGetValue('localizedfields');
-        if ($preValue !== null && !\Pimcore::inAdmin()) {
-            return $preValue;
-        }
-
-        $data = $this->getClass()->getFieldDefinition('localizedfields')->preGetData($this);
-        return $data;
-    }
-
-    /**
-     * Get first level of categories
-     *
-     * @return $this
-     */
-    public function getFirstLevel()
+    public function getFirstLevel(): CategoryInterface
     {
         $mostTop = $this->getHierarchy();
         return $mostTop[0];
     }
 
-    /**
-     * Returns all child categories from $category
-     *
-     * @param Category $category
-     *
-     * @return array
-     */
-    public static function getAllChildCategories(Category $category)
+    public static function getAllChildCategories(Category $category): array
     {
         $allChildren = [$category->getId()];
-
-        $loopChildren = function (Category $child) use (&$loopChildren, &$allChildren) {
-            $children = $child->getChildCategories();
-
-            foreach ($children as $child) {
-                $allChildren[] = $child->getId();
-                $loopChildren($child);
+        $loopChildren = static function (Category $child) use (&$loopChildren, &$allChildren) {
+            foreach ($child->getChildCategories() as $subChild) {
+                $allChildren[] = $subChild->getId();
+                $loopChildren($subChild);
             }
         };
 
@@ -71,15 +35,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
         return $allChildren;
     }
 
-    /**
-     * Get news from the category
-     *
-     * @param bool $includeChildCategories
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function getEntries($includeChildCategories = false)
+    public function getEntries(bool $includeChildCategories = false): array
     {
         $list = DataObject\NewsEntry::getList();
 
@@ -100,14 +56,6 @@ class Category extends DataObject\Concrete implements CategoryInterface
     }
 
     /**
-     * Get paged entries from category
-     *
-     * @param int   $page
-     * @param int   $itemsPerPage
-     * @param array $sort
-     * @param bool  $includeChildCategories
-     *
-     * @return Paginator
      * @throws \Exception
      */
     public function getEntriesPaging(
@@ -118,7 +66,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
             'direction' => 'asc'
         ],
         $includeChildCategories = false
-    ) {
+    ): PaginatorInterface {
         $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
@@ -137,56 +85,34 @@ class Category extends DataObject\Concrete implements CategoryInterface
         $list->setOrderKey($sort['name']);
         $list->setOrder($sort['direction']);
 
-        $paginator = new Paginator($list);
-        $paginator->setCurrentPageNumber($page);
-        $paginator->setItemCountPerPage($itemsPerPage);
+        $paginator = \Pimcore::getContainer()->get(PaginatorInterface::class);
 
-        return $paginator;
+        return $paginator->paginate(
+            $list,
+            $page === 0 ? 1 : $page,
+            $itemsPerPage
+        );
     }
 
-    /**
-     * Checks if category is child of hierarchy
-     *
-     * @param Category $category
-     * @param int      $level to check hierarchy (0 = topMost)
-     *
-     * @return bool
-     */
-    public function inCategory(Category $category, $level = 0)
+    public function inCategory(Category $category, int $level = 0): bool
     {
         $mostTop = $this->getHierarchy();
         $mostTop = $mostTop[$level];
 
-        $children = self::getAllChildCategories($mostTop);
-        return in_array($category->getId(), $children);
+        return in_array($category->getId(), self::getAllChildCategories($mostTop), true);
     }
 
-    /**
-     * Get level of category
-     *
-     * @return int
-     */
-    public function getLevel()
+    public function getLevel(): int
     {
         return count($this->getHierarchy());
     }
 
-    /**
-     * Returns all children from this category
-     *
-     * @return array
-     */
-    public function getCatChildren()
+    public function getCatChildren(): array
     {
         return self::getAllChildCategories($this);
     }
 
-    /**
-     * Get category hierarchy
-     *
-     * @return array
-     */
-    public function getHierarchy()
+    public function getHierarchy(): array
     {
         $hierarchy = [];
         $category = $this;
@@ -194,18 +120,15 @@ class Category extends DataObject\Concrete implements CategoryInterface
         do {
             $hierarchy[] = $category;
             $category = $category->getParent();
-        } while ($category instanceof Category);
+        } while ($category instanceof CategoryInterface);
 
         return array_reverse($hierarchy);
     }
 
     /**
-     * Get all child categories
-     *
-     * @return array
      * @throws \Exception
      */
-    public function getChildCategories()
+    public function getChildCategories(): array
     {
         $list = DataObject\NewsCategory::getList();
         $list->setCondition('o_parentId = ?', [$this->getId()]);

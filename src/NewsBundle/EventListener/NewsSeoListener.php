@@ -15,20 +15,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class NewsSeoListener implements EventSubscriberInterface
 {
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
+    protected Configuration $configuration;
 
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @param RequestStack  $requestStack
-     * @param Configuration $configuration
-     */
     public function __construct(
         RequestStack $requestStack,
         Configuration $configuration
@@ -37,10 +26,7 @@ class NewsSeoListener implements EventSubscriberInterface
         $this->configuration = $configuration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             DataObjectEvents::PRE_ADD    => 'handleObjectSeoAdd',
@@ -48,10 +34,7 @@ class NewsSeoListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param DataObjectEvent $event
-     */
-    public function handleObjectSeoAdd(DataObjectEvent $event)
+    public function handleObjectSeoAdd(DataObjectEvent $event): void
     {
         $object = $event->getObject();
         if (!$object instanceof NewsEntry && !$object instanceof NewsCategory) {
@@ -84,10 +67,7 @@ class NewsSeoListener implements EventSubscriberInterface
         $this->parseUrl($object);
     }
 
-    /**
-     * @param DataObjectEvent $event
-     */
-    public function handleObjectSeoUpdate(DataObjectEvent $event)
+    public function handleObjectSeoUpdate(DataObjectEvent $event): void
     {
         $object = $event->getObject();
         if (!$object instanceof NewsEntry && !$object instanceof NewsCategory) {
@@ -97,10 +77,7 @@ class NewsSeoListener implements EventSubscriberInterface
         $this->parseUrl($object);
     }
 
-    /**
-     * @param AbstractObject $object
-     */
-    private function parseUrl($object)
+    private function parseUrl($object): void
     {
         $languages = \Pimcore\Tool::getValidLanguages();
 
@@ -166,13 +143,7 @@ class NewsSeoListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param $string
-     * @param $language
-     *
-     * @return string
-     */
-    protected function slugify($string, $language)
+    protected function slugify(string $string, ?string $language): string
     {
         //remove dashes first
         $string = preg_replace('/[-\s]+/', ' ', $string);
@@ -189,15 +160,7 @@ class NewsSeoListener implements EventSubscriberInterface
         return trim($string, '-');
     }
 
-    /**
-     * @param string $objectListingClass
-     * @param string $locale
-     * @param string $detailUrl
-     * @param int    $id
-     *
-     * @return bool
-     */
-    protected function otherElementsExists(string $objectListingClass, string $locale, string $detailUrl, int $id)
+    protected function otherElementsExists(string $objectListingClass, string $locale, string $detailUrl, int $id): bool
     {
         /** @var Listing $listing */
         $listing = new $objectListingClass();

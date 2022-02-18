@@ -1,12 +1,10 @@
 {
-    "routes":[
+    "routes": [
         {
             "name": "news_detail",
             "pattern": "/(\\b(?!admin\\b)[a-zA-Z0-9-_]+)\\/news\\/(.*?)$/",
             "reverse": "/%_locale/news/%entry",
-            "module": "News",
-            "controller": "entry",
-            "action": "detail",
+            "controller": "NewsBundle\\Controller\\EntryController::detailAction",
             "variables": "_locale,entry",
             "priority": "0"
         }

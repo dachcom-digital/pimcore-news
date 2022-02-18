@@ -9,58 +9,33 @@ use Pimcore\Tool;
 
 class HeadMetaGenerator implements HeadMetaGeneratorInterface
 {
-    /**
-     * @var LinkGeneratorInterface
-     */
-    protected $linkGenerator;
+    protected LinkGeneratorInterface $linkGenerator;
 
-    /**
-     * HeadMetaGenerator constructor.
-     *
-     * @param LinkGeneratorInterface $linkGenerator
-     */
     public function __construct(LinkGeneratorInterface $linkGenerator)
     {
         $this->linkGenerator = $linkGenerator;
     }
 
-    public function getTitlePosition()
+    public function getTitlePosition(): string
     {
         return Container::PREPEND;
     }
 
-    /**
-     * @param EntryInterface $entry
-     *
-     * @return string
-     */
-    public function generateTitle(EntryInterface $entry)
+    public function generateTitle(EntryInterface $entry): string
     {
         $mT = $entry->getMetaTitle();
-        $title = !empty($mT) ? $mT : $entry->getName();
 
-        return $title;
+        return !empty($mT) ? $mT : $entry->getName();
     }
 
-    /**
-     * @param EntryInterface $entry
-     *
-     * @return string
-     */
-    public function generateDescription(EntryInterface $entry)
+    public function generateDescription(EntryInterface $entry): string
     {
         $mD = $entry->getMetaDescription();
         $description = !empty($mD) ? $mD : ($entry->getLead() ? $entry->getLead() : $entry->getDescription());
-        $description = trim(substr($description, 0, 160));
 
-        return $description;
+        return trim(substr($description, 0, 160));
     }
 
-    /**
-     * @param EntryInterface $entry
-     *
-     * @return array
-     */
     public function generateMeta(EntryInterface $entry): array
     {
         $title = $this->generateTitle($entry);
@@ -79,14 +54,12 @@ class HeadMetaGenerator implements HeadMetaGeneratorInterface
             $ogImage = Tool::getHostUrl() . $entry->getImage()->getThumbnail('contentImage');
         }
 
-        $params = [
+        return [
             'og:title'       => $ogTitle,
             'og:description' => $ogDescription,
             'og:url'         => $ogUrl,
             'og:image'       => $ogImage,
             'og:type'        => $ogType
         ];
-
-        return $params;
     }
 }

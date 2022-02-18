@@ -7,32 +7,31 @@ use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Version;
 use Pimcore\Translation\Translator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SettingsController extends AdminController
 {
-    /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getEntryTypesAction(Request $request)
+    protected Translator $translator;
+    protected EntryTypeManager $entryTypeManager;
+
+    public function __construct(Translator $translator, EntryTypeManager $entryTypeManager)
     {
-        /** @var EntryTypeManager $configuration */
-        $entryTypeManager = $this->get(EntryTypeManager::class);
+        $this->translator = $translator;
+        $this->entryTypeManager = $entryTypeManager;
+    }
 
-        /** @var Translator $translator */
-        $translator = $this->get('pimcore.translator');
-
-        $newsObject = DataObject::getById(intval($request->get('objectId')));
+    public function getEntryTypesAction(Request $request): JsonResponse
+    {
+        $newsObject = DataObject::getById((int) $request->get('objectId'));
 
         $valueArray = [];
-        foreach ($entryTypeManager->getTypes($newsObject) as $typeName => $type) {
+        foreach ($this->entryTypeManager->getTypes($newsObject) as $typeName => $type) {
             $valueArray[] = [
                 'custom_layout_id' => $type['custom_layout_id'],
                 'value'            => $typeName,
-                'key'              => $translator->trans($type['name'], [], 'admin'),
-                'default'          => $entryTypeManager->getDefaultType()
+                'key'              => $this->translator->trans($type['name'], [], 'admin'),
+                'default'          => $this->entryTypeManager->getDefaultType()
             ];
         }
 
@@ -43,16 +42,10 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Exception
-     */
-    public function changeEntryTypeAction(Request $request)
+    public function changeEntryTypeAction(Request $request): JsonResponse
     {
         $entryTypeId = $request->get('entryTypeId');
-        $object = DataObject::getById(intval($request->get('objectId')));
+        $object = DataObject::getById((int) $request->get('objectId'));
 
         if ($object instanceof DataObject\NewsEntry) {
             $object->setEntryType($entryTypeId);
@@ -68,5 +61,4 @@ class SettingsController extends AdminController
             'message'     => ''
         ]);
     }
-
 }

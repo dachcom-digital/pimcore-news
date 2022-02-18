@@ -11,39 +11,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class NewsBundle extends AbstractPimcoreBundle
 {
     use PackageVersionTrait;
-    const PACKAGE_NAME = 'dachcom-digital/news';
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function build(ContainerBuilder $container)
+    public const PACKAGE_NAME = 'dachcom-digital/news';
+
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->addCompilerPass(new PresetPass());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getInstaller()
+    public function getInstaller(): Install
     {
         return $this->container->get(Install::class);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getEditmodeJsPaths()
-    {
-        return [
-            '/bundles/news/js/admin/area.js'
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getJsPaths()
+    public function getJsPaths(): array
     {
         return [
             '/bundles/news/js/startup.js',
@@ -52,19 +34,6 @@ class NewsBundle extends AbstractPimcoreBundle
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getEditmodeCssPaths()
-    {
-        return [
-            '/bundles/news/css/admin-editmode.css',
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     protected function getComposerPackageName(): string
     {
         return self::PACKAGE_NAME;

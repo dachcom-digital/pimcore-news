@@ -9,10 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class PresetPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->getDefinition(PresetRegistry::class);
         foreach ($container->findTaggedServiceIds('news.preset') as $id => $tags) {

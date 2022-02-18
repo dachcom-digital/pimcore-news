@@ -11,52 +11,21 @@ use Pimcore\Model\Staticroute;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Tool;
-use Symfony\Component\Translation\TranslatorInterface;
+use Pimcore\Translation\Translator;
 
 class EntryTypeManager
 {
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
+    protected Configuration $configuration;
+    protected Translator $translator;
+    protected SiteResolver $siteResolver;
+    protected EditmodeResolver $editmodeResolver;
+    protected DocumentResolver $documentResolver;
 
-    /**
-     * @var array
-     */
-    protected $routeData = [];
+    protected array $routeData = [];
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @var SiteResolver
-     */
-    protected $siteResolver;
-
-    /**
-     * @var EditmodeResolver
-     */
-    protected $editmodeResolver;
-
-    /**
-     * @var DocumentResolver
-     */
-    protected $documentResolver;
-
-    /**
-     * EntryTypeManager constructor.
-     *
-     * @param Configuration       $configuration
-     * @param TranslatorInterface $translator
-     * @param SiteResolver        $siteResolver
-     * @param EditmodeResolver    $editmodeResolver
-     * @param DocumentResolver    $documentResolver
-     */
     public function __construct(
         Configuration $configuration,
-        TranslatorInterface $translator,
+        Translator $translator,
         SiteResolver $siteResolver,
         EditmodeResolver $editmodeResolver,
         DocumentResolver $documentResolver
@@ -66,15 +35,9 @@ class EntryTypeManager
         $this->siteResolver = $siteResolver;
         $this->editmodeResolver = $editmodeResolver;
         $this->documentResolver = $documentResolver;
-
     }
 
-    /**
-     * @param null $object
-     *
-     * @return array|mixed|null
-     */
-    public function getTypes($object = null)
+    public function getTypes(mixed $object = null): array
     {
         $entryTypes = $this->getTypesFromConfig();
 
@@ -122,23 +85,14 @@ class EntryTypeManager
         return $entryTypes;
     }
 
-    /**
-     * Get Default Entry Type
-     *
-     * @return mixed
-     */
-    public function getDefaultType()
+    public function getDefaultType(): string
     {
         $entryTypeConfig = $this->configuration->getConfig('entry_types');
+
         return $entryTypeConfig['default'];
     }
 
-    /**
-     * @param $typeName
-     *
-     * @return array|mixed
-     */
-    public function getTypeInfo($typeName)
+    public function getTypeInfo(string $typeName): array
     {
         $info = [];
         $types = $this->getTypes();
@@ -152,10 +106,7 @@ class EntryTypeManager
         return $info;
     }
 
-    /**
-     * @return array|mixed|null
-     */
-    public function getTypesFromConfig()
+    public function getTypesFromConfig(): array
     {
         $entryTypeConfig = $this->configuration->getConfig('entry_types');
 
@@ -175,13 +126,7 @@ class EntryTypeManager
         return $types;
     }
 
-    /**
-     * @param $entryType
-     *
-     * @return array|mixed
-     * @throws \Exception
-     */
-    public function getRouteInfo($entryType)
+    public function getRouteInfo(string $entryType): array
     {
         //use cache.
         if (isset($this->routeData[$entryType])) {
@@ -215,6 +160,7 @@ class EntryTypeManager
         if (empty($route)) {
             throw new \Exception(sprintf('"%s" route is not available. please add it to your static routes', $routeData['name']));
         }
+
         $variables = explode(',', $route->getVariables());
 
         //remove default one

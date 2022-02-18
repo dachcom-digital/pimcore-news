@@ -1,23 +1,19 @@
 # Pimcore News
-Pimcore News Bundle. It's also possible to generate [custom entry types](docs/20_EntryTypes.md) like Press or Event.
+Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md) like Events, Press or Event.
 
 ## Requirements
-* Pimcore 5.
-
-#### Pimcore 4 
-Get the Pimcore4 Version [here](https://github.com/dachcom-digital/pimcore-news/tree/pimcore4).
+⚠️⚠️ This bundle exists for legacy purposes only and **will not** be developed further.
 
 ## Installation
 
-**Composer Installation**  
-1. Add code below to your `composer.json`    
-2. Activate & install it through backend
-
 ```json
 "require" : {
-    "dachcom-digital/news" : "~2.2.0"
+    "dachcom-digital/news" : "~3.0.0",
 }
 ```
+
+- Execute: `$ bin/console pimcore:bundle:enable NewsBundle`
+- Execute: `$ bin/console pimcore:bundle:install NewsBundle`
 
 ## Important to know
 - The detail url is based on the title for each language. If the detail url field is empty, the title will be transformed to a valid url slug.

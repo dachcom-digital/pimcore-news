@@ -4,44 +4,26 @@ namespace NewsBundle\Twig\Extension;
 
 use NewsBundle\Generator\RelatedEntriesGeneratorInterface;
 use NewsBundle\Model\EntryInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class RelatedEntriesExtension extends \Twig_Extension
+class RelatedEntriesExtension extends AbstractExtension
 {
-    /**
-     * @var RelatedEntriesGeneratorInterface
-     */
-    private $relatedEntriesGenerator;
+    private RelatedEntriesGeneratorInterface $relatedEntriesGenerator;
 
-    /**
-     * @param RelatedEntriesGeneratorInterface $relatedEntriesGenerator
-     */
     public function __construct(RelatedEntriesGeneratorInterface $relatedEntriesGenerator)
     {
         $this->relatedEntriesGenerator = $relatedEntriesGenerator;
     }
 
-    /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_Function(
-                'news_related_entries',
-                [$this, 'generateRelatedEntries']
-            ),
+            new TwigFunction('news_related_entries', [$this, 'generateRelatedEntries']),
         ];
     }
 
-    /**
-     * @param EntryInterface $entry
-     * @param array          $params
-     *
-     * @return string
-     */
-    public function generateRelatedEntries(EntryInterface $entry, $params = [])
+    public function generateRelatedEntries(EntryInterface $entry, array $params = []): array
     {
         return $this->relatedEntriesGenerator->generateRelatedEntries($entry, $params);
     }

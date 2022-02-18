@@ -5,35 +5,18 @@ namespace NewsBundle\EventListener;
 use NewsBundle\Generator\HeadMetaGeneratorInterface;
 use NewsBundle\Model\EntryInterface;
 use Pimcore\Model\DataObject\NewsEntry;
-use Pimcore\Templating\Helper\HeadMeta;
-use Pimcore\Templating\Helper\HeadTitle;
-use Pimcore\Templating\Helper\Placeholder\Container;
+use Pimcore\Twig\Extension\Templating\HeadMeta;
+use Pimcore\Twig\Extension\Templating\HeadTitle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class MetaDataListener implements EventSubscriberInterface
 {
-    /**
-     * @var HeadMeta
-     */
-    protected $headMeta;
+    protected HeadMeta $headMeta;
+    protected HeadTitle $headTitle;
+    protected HeadMetaGeneratorInterface $headMetaGenerator;
 
-    /**
-     * @var HeadTitle
-     */
-    protected $headTitle;
-
-    /**
-     * @var HeadMetaGeneratorInterface
-     */
-    protected $headMetaGenerator;
-
-    /**
-     * @param HeadMeta                   $headMeta
-     * @param HeadTitle                  $headTitle
-     * @param HeadMetaGeneratorInterface $headMetaGenerator
-     */
     public function __construct(
         HeadMeta $headMeta,
         HeadTitle $headTitle,
@@ -44,24 +27,18 @@ class MetaDataListener implements EventSubscriberInterface
         $this->headMetaGenerator = $headMetaGenerator;
     }
 
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest'],
         ];
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

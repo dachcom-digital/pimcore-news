@@ -6,15 +6,9 @@ use NewsBundle\Preset\PresetInterface;
 
 class PresetRegistry
 {
-    /**
-     * @var array
-     */
-    protected $registry = [];
+    protected array $registry = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function register($alias, $service)
+    public function register($alias, $service): void
     {
         if (!in_array(PresetInterface::class, class_implements($service), true)) {
             throw new \InvalidArgumentException(
@@ -26,23 +20,15 @@ class PresetRegistry
         $this->registry[$alias] = $service;
     }
 
-    /**
-     * @param $alias
-     *
-     * @return bool
-     */
-    public function has($alias)
+    public function has($alias): bool
     {
         return isset($this->registry[$alias]);
     }
 
     /**
-     * @param $alias
-     *
-     * @return PresetInterface
      * @throws \Exception
      */
-    public function get($alias)
+    public function get(string $alias)
     {
         if (!$this->has($alias)) {
             throw new \Exception('"' . $alias . '" preset does not exist');
@@ -58,5 +44,4 @@ class PresetRegistry
     {
         return $this->registry;
     }
-
 }

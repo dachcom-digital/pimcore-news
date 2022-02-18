@@ -50,3 +50,6 @@
 "news.time_range.all_entries","All Entries","Alle Beiträge",
 "news.time_range.current_entries","Current Entries","Aktuelle Einträge",
 "news.time_range.past_entries","Past Entries","Vergangene Einträge",
+"news.editable.first_tab","General","Allgemein",
+"news.editable.second_tab","Limits","Limits",
+"news.editable.third_tab","Additional","Erweitert",

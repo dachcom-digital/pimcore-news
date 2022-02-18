@@ -5,14 +5,11 @@ services:
         autoconfigure: true
         public: false
 
-    # generator entry links
     NewsBundle\Generator\LinkGeneratorInterface: '@NewsBundle\Generator\LinkGenerator'
     NewsBundle\Generator\LinkGenerator: ~
 
-    # generator related entries
     NewsBundle\Generator\RelatedEntriesGeneratorInterface: '@NewsBundle\Generator\RelatedEntriesGenerator'
     NewsBundle\Generator\RelatedEntriesGenerator: ~
 
-    # generator head meta
     NewsBundle\Generator\HeadMetaGeneratorInterface: '@NewsBundle\Generator\HeadMetaGenerator'
     NewsBundle\Generator\HeadMetaGenerator: ~

@@ -5,7 +5,6 @@ services:
         autoconfigure: true
         public: true
 
-    # area brick news.area.brick.form
     NewsBundle\Document\Areabrick\News\News:
         tags:
             - { name: pimcore.area.brick, id: news }

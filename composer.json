@@ -1,8 +1,8 @@
 {
     "name": "dachcom-digital/news",
     "type": "pimcore-bundle",
-    "license": "GPL-3.0+",
-    "description": "Pimcore 5.x News",
+    "license": "GPL-3.0-or-later",
+    "description": "Pimcore News",
     "keywords": ["pimcore", "news"],
     "homepage": "https://github.com/dachcom-digital/pimcore-news",
     "authors": [
@@ -13,13 +13,11 @@
             "role": "Developer"
         }
     ],
-
     "autoload": {
         "psr-4": {
             "NewsBundle\\": "src/NewsBundle"
         }
     },
-
     "extra": {
         "pimcore": {
             "bundles": [
@@ -28,5 +26,6 @@
         }
     },
     "require": {
+        "pimcore/pimcore": "^10.2"
     }
 }
