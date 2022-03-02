@@ -71,11 +71,15 @@ class Install extends SettingsStoreAwareInstaller
         foreach ($this->getClasses() as $className => $path) {
 
             $class = new DataObject\ClassDefinition();
-            $id = $class->getDao()->getIdByName($className);
+            
+            try {
+                $id = $class->getDao()->getIdByName($className);
+            } catch (\Pimcore\Model\Exception\NotFoundException $e) {
+                $id = false;
+            }
 
             if ($id !== false) {
                 continue;
-
             }
 
             $class->setName($className);
