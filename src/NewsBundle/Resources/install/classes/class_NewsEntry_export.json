@@ -1,28 +1,33 @@
 {
-	"description":null,
+    "description": "",
 	"parentClass":"NewsBundle\\Model\\Entry",
-	"useTraits":null,
+    "implementsInterfaces": "",
+    "listingParentClass": "",
+    "useTraits": "",
+    "listingUseTraits": "",
 	"allowInherit":false,
 	"allowVariants":false,
 	"showVariants":false,
 	"layoutDefinitions":{
 		"fieldtype":"panel",
-		"labelWidth":100,
 		"layout":null,
+        "border": false,
 		"name":"pimcore_root",
 		"type":null,
 		"region":null,
 		"title":null,
-		"width":null,
-		"height":null,
+        "width": 0,
+        "height": 0,
 		"collapsible":false,
-		"collapsed":null,
+        "collapsed": false,
 		"bodyStyle":null,
 		"datatype":"layout",
 		"permissions":null,
 		"childs":[
 			{
 				"fieldtype":"tabpanel",
+                "border": false,
+                "tabPosition": "top",
 				"name":"Layout",
 				"type":null,
 				"region":null,
@@ -37,8 +42,8 @@
 				"childs":[
 					{
 						"fieldtype":"panel",
-						"labelWidth":100,
 						"layout":null,
+                        "border": false,
 						"name":"Information",
 						"type":null,
 						"region":null,
@@ -54,9 +59,6 @@
 							{
 								"fieldtype":"checkbox",
 								"defaultValue":0,
-								"queryColumnType":"tinyint(1)",
-								"columnType":"tinyint(1)",
-								"phpdocType":"boolean",
 								"name":"latest",
 								"title":"Latest News",
 								"tooltip":"",
@@ -70,13 +72,13 @@
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"date",
 								"queryColumnType":"bigint(20)",
 								"columnType":"bigint(20)",
-								"phpdocType":"\\Carbon\\Carbon",
 								"defaultValue":null,
 								"useCurrentDate":false,
 								"name":"date",
@@ -92,13 +94,13 @@
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"date",
 								"queryColumnType":"bigint(20)",
 								"columnType":"bigint(20)",
-								"phpdocType":"\\Carbon\\Carbon",
 								"defaultValue":null,
 								"useCurrentDate":false,
 								"name":"dateTo",
@@ -114,13 +116,13 @@
 								"relationType":false,
 								"invisible":true,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"date",
 								"queryColumnType":"bigint(20)",
 								"columnType":"bigint(20)",
-								"phpdocType":"\\Carbon\\Carbon",
 								"defaultValue":null,
 								"useCurrentDate":false,
 								"name":"showEntryUntil",
@@ -136,16 +138,17 @@
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"input",
 								"width":300,
-								"queryColumnType":"varchar",
-								"columnType":"varchar",
+                                "defaultValue": null,
 								"columnLength":255,
-								"phpdocType":"string",
 								"regex":"",
+                                "unique": null,
+                                "showCharCount": null,
 								"name":"author",
 								"title":"Author",
 								"tooltip":"",
@@ -159,17 +162,18 @@
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"entryTypeSelect",
 								"options":null,
 								"width":300,
 								"defaultValue":null,
-								"queryColumnType":"varchar",
-								"columnType":"varchar",
+                                "optionsProviderClass": null,
+                                "optionsProviderData": null,
 								"columnLength": 190,
-								"phpdocType":"string",
+                                "dynamicOptions": false,
 								"name":"entryType",
 								"title":"Entry Type",
 								"tooltip":"",
@@ -183,20 +187,20 @@
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
-								"visibleSearch":false
+                                "visibleSearch": false,
+                                "defaultValueGenerator": ""
 							},
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"input",
 										"width":400,
-										"queryColumnType":"varchar",
-										"columnType":"varchar",
+                                        "defaultValue": null,
 										"columnLength":255,
-										"phpdocType":"string",
 										"regex":"",
+                                        "unique": null,
+                                        "showCharCount": null,
 										"name":"name",
 										"title":"Name",
 										"tooltip":"",
@@ -210,15 +214,16 @@
 										"relationType":false,
 										"invisible":false,
 										"visibleGridView":false,
-										"visibleSearch":false
+                                        "visibleSearch": false,
+                                        "defaultValueGenerator": ""
 									},
 									{
 										"fieldtype":"textarea",
 										"width":400,
 										"height":160,
-										"queryColumnType":"longtext",
-										"columnType":"longtext",
-										"phpdocType":"string",
+                                        "maxLength": null,
+                                        "showCharCount": null,
+                                        "excludeFromSearchIndex": false,
 										"name":"lead",
 										"title":"Lead",
 										"tooltip":"",
@@ -238,10 +243,9 @@
 										"fieldtype":"wysiwyg",
 										"width":"",
 										"height":400,
-										"queryColumnType":"longtext",
-										"columnType":"longtext",
-										"phpdocType":"string",
 										"toolbarConfig":"",
+                                        "excludeFromSearchIndex": false,
+                                        "maxCharacters": 0,
 										"name":"description",
 										"title":"Text",
 										"tooltip":"",
@@ -258,15 +262,10 @@
 										"visibleSearch":false
 									},
 									{
-										"fieldtype":"href",
+										"fieldtype":"manyToOneRelation",
 										"width":"",
 										"assetUploadPath":"",
 										"relationType":true,
-										"queryColumnType":{
-											"id":"int(11)",
-											"type":"enum('document','asset','object')"
-										},
-										"phpdocType":"\\Pimcore\\Model\\Document\\Page | \\Pimcore\\Model\\Document\\Snippet | \\Pimcore\\Model\\Document | \\Pimcore\\Model\\Asset | \\Pimcore\\Model\\DataObject\\AbstractObject",
 										"objectsAllowed":false,
 										"assetsAllowed":false,
 										"assetTypes":[
@@ -284,7 +283,6 @@
 												"documentTypes":"hardlink"
 											}
 										],
-										"lazyLoading":true,
 										"classes":[
 
 										],
@@ -299,7 +297,6 @@
 										"style":"",
 										"permissions":null,
 										"datatype":"data",
-										"columnType":null,
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
@@ -312,8 +309,13 @@
 								"width":"",
 								"height":"",
 								"maxTabs":null,
-								"labelWidth":null,
+                                "border": false,
+                                "provideSplitView": null,
+                                "tabPosition": "top",
+                                "hideLabelsWhenTabsReached": null,
 								"fieldDefinitionsCache":null,
+                                "permissionView": null,
+                                "permissionEdit": null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -322,20 +324,23 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":true,
-								"visibleSearch":true
+                                "visibleSearch": true,
+                                "labelWidth": 0,
+                                "labelAlign": "left"
 							}
 						],
-						"locked":false
+                        "locked": false,
+                        "icon": null,
+                        "labelWidth": 100,
+                        "labelAlign": "left"
 					},
 					{
 						"fieldtype":"panel",
-						"labelWidth":100,
 						"layout":"",
+                        "border": false,
 						"name":"SEO",
 						"type":null,
 						"region":"",
@@ -350,16 +355,15 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"input",
 										"width":null,
-										"queryColumnType":"varchar",
-										"columnType":"varchar",
+                                        "defaultValue": null,
 										"columnLength":255,
-										"phpdocType":"string",
 										"regex":"",
+                                        "unique": null,
+                                        "showCharCount": null,
 										"name":"metaTitle",
 										"title":"Seo Title",
 										"tooltip":"",
@@ -373,15 +377,16 @@
 										"relationType":false,
 										"invisible":false,
 										"visibleGridView":false,
-										"visibleSearch":false
+                                        "visibleSearch": false,
+                                        "defaultValueGenerator": ""
 									},
 									{
 										"fieldtype":"textarea",
 										"width":"",
 										"height":"",
-										"queryColumnType":"longtext",
-										"columnType":"longtext",
-										"phpdocType":"string",
+                                        "maxLength": null,
+                                        "showCharCount": null,
+                                        "excludeFromSearchIndex": false,
 										"name":"metaDescription",
 										"title":"Seo Description",
 										"tooltip":"",
@@ -400,11 +405,11 @@
 									{
 										"fieldtype":"input",
 										"width":null,
-										"queryColumnType":"varchar",
-										"columnType":"varchar",
+                                        "defaultValue": null,
 										"columnLength":190,
-										"phpdocType":"string",
 										"regex":"",
+                                        "unique": null,
+                                        "showCharCount": null,
 										"name":"detailUrl",
 										"title":"Detail Url",
 										"tooltip":"",
@@ -418,11 +423,15 @@
 										"relationType":false,
 										"invisible":false,
 										"visibleGridView":false,
-										"visibleSearch":false
+                                        "visibleSearch": false,
+                                        "defaultValueGenerator": ""
 									},
 									{
 										"fieldtype":"text",
 										"html":"Please <b>reload<\/b> your object after changing the detail url.<div>Keep in mind that changing the detail url itself will change the url to your detail page.<\/div>",
+                                        "renderingClass": null,
+                                        "renderingData": null,
+                                        "border": false,
 										"name":"info",
 										"type":null,
 										"region":null,
@@ -447,8 +456,13 @@
 								"width":"",
 								"height":"",
 								"maxTabs":null,
-								"labelWidth":null,
+                                "border": false,
+                                "provideSplitView": null,
+                                "tabPosition": "top",
+                                "hideLabelsWhenTabsReached": null,
 								"fieldDefinitionsCache":null,
+                                "permissionView": null,
+                                "permissionEdit": null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -457,20 +471,23 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":true,
-								"visibleSearch":true
+                                "visibleSearch": true,
+                                "labelWidth": 0,
+                                "labelAlign": "left"
 							}
 						],
-						"locked":false
+                        "locked": false,
+                        "icon": null,
+                        "labelWidth": 100,
+                        "labelAlign": "left"
 					},
 					{
 						"fieldtype":"panel",
-						"labelWidth":100,
 						"layout":null,
+                        "border": false,
 						"name":"Categories",
 						"type":null,
 						"region":null,
@@ -484,20 +501,24 @@
 						"permissions":null,
 						"childs":[
 							{
-								"fieldtype":"objects",
+								"fieldtype":"manyToManyRelation",
 								"width":"",
 								"height":"",
 								"maxItems":"",
-								"queryColumnType":"text",
-								"phpdocType":"array",
+                                "assetUploadPath": "",
 								"relationType":true,
-								"lazyLoading":true,
+                                "objectsAllowed": true,
+                                "assetsAllowed": false,
+                                "assetTypes": [],
+                                "documentsAllowed": false,
+                                "documentTypes": [],
+                                "enableTextSelection": false,
 								"classes":[
 									{
 										"classes":"NewsCategory"
 									}
 								],
-								"pathFormatterClass":null,
+                                "pathFormatterClass": "",
 								"name":"categories",
 								"title":"Categories",
 								"tooltip":"",
@@ -508,18 +529,20 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
 								"invisible":false,
 								"visibleGridView":false,
 								"visibleSearch":false
 							}
 						],
-						"locked":false
-					},
-					{
-						"fieldtype":"panel",
+                        "locked": false,
+                        "icon": null,
 						"labelWidth":100,
+                        "labelAlign": "left"
+                    },
+                    {
+                        "fieldtype": "panel",
 						"layout":null,
+                        "border": false,
 						"name":"Media",
 						"type":null,
 						"region":null,
@@ -534,16 +557,13 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
-										"fieldtype":"multihref",
+										"fieldtype":"manyToManyRelation",
 										"width":"",
 										"height":"",
 										"maxItems":"",
 										"assetUploadPath":"",
-										"queryColumnType":"text",
-										"phpdocType":"array",
 										"relationType":true,
 										"objectsAllowed":false,
 										"assetsAllowed":true,
@@ -556,10 +576,8 @@
 											}
 										],
 										"documentsAllowed":false,
-										"documentTypes":[
-
-										],
-										"lazyLoading":true,
+                                        "documentTypes": [],
+                                        "enableTextSelection": false,
 										"classes":[
 
 										],
@@ -574,19 +592,16 @@
 										"style":"",
 										"permissions":null,
 										"datatype":"data",
-										"columnType":null,
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
 									},
 									{
-										"fieldtype":"multihref",
+										"fieldtype":"manyToManyRelation",
 										"width":"",
 										"height":"",
 										"maxItems":"",
 										"assetUploadPath":"",
-										"queryColumnType":"text",
-										"phpdocType":"array",
 										"relationType":true,
 										"objectsAllowed":false,
 										"assetsAllowed":true,
@@ -602,10 +617,8 @@
 											}
 										],
 										"documentsAllowed":false,
-										"documentTypes":[
-
-										],
-										"lazyLoading":true,
+                                        "documentTypes": [],
+                                        "enableTextSelection": false,
 										"classes":[
 
 										],
@@ -620,7 +633,6 @@
 										"style":"",
 										"permissions":null,
 										"datatype":"data",
-										"columnType":null,
 										"invisible":false,
 										"visibleGridView":false,
 										"visibleSearch":false
@@ -629,9 +641,6 @@
 										"fieldtype":"video",
 										"width":"",
 										"height":"",
-										"queryColumnType":"text",
-										"columnType":"text",
-										"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Video",
 										"name":"video",
 										"title":"Video",
 										"tooltip":"",
@@ -655,8 +664,13 @@
 								"width":"",
 								"height":"",
 								"maxTabs":null,
-								"labelWidth":null,
+                                "border": false,
+                                "provideSplitView": null,
+                                "tabPosition": "top",
+                                "hideLabelsWhenTabsReached": null,
 								"fieldDefinitionsCache":null,
+                                "permissionView": null,
+                                "permissionEdit": null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -665,20 +679,23 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":true,
-								"visibleSearch":true
+                                "visibleSearch": true,
+                                "labelWidth": 0,
+                                "labelAlign": "left"
 							}
 						],
-						"locked":false
+                        "locked": false,
+                        "icon": null,
+                        "labelWidth": 100,
+                        "labelAlign": "left"
 					},
 					{
 						"fieldtype":"panel",
-						"labelWidth":100,
 						"layout":null,
+                        "border": false,
 						"name":"links",
 						"type":null,
 						"region":null,
@@ -693,23 +710,19 @@
 						"childs":[
 							{
 								"fieldtype":"localizedfields",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Localizedfield",
 								"childs":[
 									{
 										"fieldtype":"block",
+                                        "lazyLoading": null,
 										"disallowAddRemove":null,
 										"disallowReorder":null,
 										"collapsible":false,
 										"collapsed":false,
-										"queryColumnType":"longtext",
-										"columnType":"longtext",
-										"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Block",
+                                        "maxItems": null,
+                                        "styleElement": "",
 										"childs":[
 											{
 												"fieldtype":"link",
-												"queryColumnType":"text",
-												"columnType":"text",
-												"phpdocType":"\\Pimcore\\Model\\DataObject\\Data\\Link",
 												"name":"url",
 												"title":"Url",
 												"tooltip":"",
@@ -751,8 +764,13 @@
 								"width":"",
 								"height":"",
 								"maxTabs":null,
-								"labelWidth":null,
+                                "border": false,
+                                "provideSplitView": null,
+                                "tabPosition": "top",
+                                "hideLabelsWhenTabsReached": null,
 								"fieldDefinitionsCache":null,
+                                "permissionView": null,
+                                "permissionEdit": null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -761,20 +779,23 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":true,
-								"visibleSearch":true
+                                "visibleSearch": true,
+                                "labelWidth": 0,
+                                "labelAlign": "left"
 							}
 						],
-						"locked":false
-					},
-					{
-						"fieldtype":"panel",
+                        "locked": false,
+                        "icon": null,
 						"labelWidth":100,
+                        "labelAlign": "left"
+                    },
+                    {
+                        "fieldtype": "panel",
 						"layout":null,
+                        "border": false,
 						"name":"MetaData",
 						"type":null,
 						"region":null,
@@ -789,11 +810,8 @@
 						"childs":[
 							{
 								"fieldtype":"classificationstore",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Classificationstore",
-								"childs":[
-
-								],
-								"name":"MetaData",
+                                "childs": [],
+                                "name": "metaData",
 								"region":null,
 								"layout":null,
 								"title":"Meta Informationen",
@@ -803,8 +821,14 @@
 								"labelWidth":250,
 								"localized":true,
 								"storeId":1,
+                                "hideEmptyData": false,
+                                "disallowAddRemove": false,
 								"fieldDefinitionsCache":null,
-								"allowedGroupIds":null,
+                                "allowedGroupIds": [],
+                                "activeGroupDefinitions": [],
+                                "maxItems": 0,
+                                "permissionView": null,
+                                "permissionEdit": null,
 								"tooltip":"",
 								"mandatory":false,
 								"noteditable":false,
@@ -813,20 +837,21 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
 								"visibleSearch":false
 							}
 						],
-						"locked":false
-					},
-					{
-						"fieldtype":"panel",
+                        "locked": false,
+                        "icon": null,
 						"labelWidth":100,
+                        "labelAlign": "left"
+                    },
+                    {
+                        "fieldtype": "panel",
 						"layout":null,
+                        "border": false,
 						"name":"Relations",
 						"type":null,
 						"region":null,
@@ -841,11 +866,10 @@
 						"childs":[
 							{
 								"fieldtype":"objectbricks",
-								"phpdocType":"\\Pimcore\\Model\\DataObject\\Objectbrick",
-								"allowedTypes":[
-
-								],
-								"name":"Relations",
+                                "allowedTypes": [],
+                                "maxItems": "",
+                                "border": false,
+                                "name": "relations",
 								"title":"Relations & Settings",
 								"tooltip":"",
 								"mandatory":false,
@@ -855,27 +879,39 @@
 								"style":"",
 								"permissions":null,
 								"datatype":"data",
-								"columnType":null,
-								"queryColumnType":null,
 								"relationType":false,
 								"invisible":false,
 								"visibleGridView":false,
 								"visibleSearch":false
 							}
 						],
-						"locked":false
-					}
-				],
-				"locked":false
+                        "locked": false,
+                        "icon": null,
+                        "labelWidth": 100,
+                        "labelAlign": "left"
 			}
 		],
 		"locked":false
+            }
+        ],
+        "locked": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left"
 	},
 	"icon":"\/bundles\/news\/img\/entry.svg",
-	"previewUrl":null,
+    "previewUrl": "",
+    "group": "",
+    "showAppLoggerTab": false,
+    "linkGeneratorReference": "",
+    "previewGeneratorReference": "",
+    "compositeIndices": [],
+    "generateTypeDeclarations": true,
+    "showFieldLookup": false,
 	"propertyVisibility":{
 		"grid":{
 			"id":true,
+            "key": false,
 			"path":true,
 			"published":true,
 			"modificationDate":true,
@@ -883,10 +919,12 @@
 		},
 		"search":{
 			"id":true,
+            "key": false,
 			"path":true,
 			"published":true,
 			"modificationDate":true,
 			"creationDate":true
 		}
-	}
+    },
+    "enableGridLocking": false
 }
