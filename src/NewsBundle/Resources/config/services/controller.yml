@@ -1,0 +1,5 @@
+services:
+    NewsBundle\Controller\EntryController:
+        autowire: true
+        autoconfigure: true
+        tags: ['controller.service_arguments']
