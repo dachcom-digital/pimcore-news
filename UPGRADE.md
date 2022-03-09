@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+## 3.0.2
+- **[BUGFIX]**: missing service subscriber for EntryController [@pascalmoser](https://github.com/dachcom-digital/pimcore-news/pull/52)
+
 ## 3.0.1
 - **[BUGFIX]**: catch class not found exception during installation [@MyZik](https://github.com/dachcom-digital/pimcore-news/pull/50)
 
