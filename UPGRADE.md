@@ -1,4 +1,6 @@
 # Upgrade Notes
+## 3.0.3
+- **[BUGFIX]**: fix otherElementsExists method: allow null for parameter `$id` [@pascalmoser](https://github.com/dachcom-digital/pimcore-news/pull/53)
 
 ## 3.0.2
 - **[BUGFIX]**: missing service subscriber for EntryController [@pascalmoser](https://github.com/dachcom-digital/pimcore-news/pull/52)
