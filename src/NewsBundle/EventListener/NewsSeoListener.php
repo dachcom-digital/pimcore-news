@@ -160,7 +160,7 @@ class NewsSeoListener implements EventSubscriberInterface
         return trim($string, '-');
     }
 
-    protected function otherElementsExists(string $objectListingClass, string $locale, string $detailUrl, int $id): bool
+    protected function otherElementsExists(string $objectListingClass, string $locale, string $detailUrl, ?int $id): bool
     {
         /** @var Listing $listing */
         $listing = new $objectListingClass();
@@ -168,7 +168,10 @@ class NewsSeoListener implements EventSubscriberInterface
         $listing->setLocale($locale);
         $listing->setLimit(1);
         $listing->addConditionParam('detailUrl = ?', $detailUrl);
-        $listing->addConditionParam('ooo_id != ?', $id);
+
+        if (!is_null($id)) {
+            $listing->addConditionParam('ooo_id != ?', $id);
+        }
 
         return $listing->getCount() > 0;
     }
