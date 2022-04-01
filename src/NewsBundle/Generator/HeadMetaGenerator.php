@@ -4,7 +4,7 @@ namespace NewsBundle\Generator;
 
 use NewsBundle\Model\EntryInterface;
 use Pimcore\Model\Asset;
-use Pimcore\Templating\Helper\Placeholder\Container;
+use Pimcore\Twig\Extension\Templating\Placeholder\Container;
 use Pimcore\Tool;
 
 class HeadMetaGenerator implements HeadMetaGeneratorInterface

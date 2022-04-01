@@ -10,6 +10,7 @@ use Pimcore\Twig\Extension\Templating\HeadTitle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Pimcore\Twig\Extension\Templating\Placeholder\Container;
 
 class MetaDataListener implements EventSubscriberInterface
 {
