@@ -2,6 +2,7 @@
 
 ## 3.0.4
 - **[BUGFIX]**: fix event constant `NEWS_EDITABLE_DIALOG`
+- **[BUGFIX]**: fixed imports for `Pimcore\Twig\Extension\Templating\Placeholder\Container` [@rliebe](https://github.com/dachcom-digital/pimcore-news/pull/55)
 
 ## 3.0.3
 - **[BUGFIX]**: fix otherElementsExists method: allow null for parameter `$id` [@pascalmoser](https://github.com/dachcom-digital/pimcore-news/pull/53)
