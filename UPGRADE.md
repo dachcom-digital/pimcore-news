@@ -1,4 +1,8 @@
 # Upgrade Notes
+
+## 3.0.4
+- **[BUGFIX]**: fix event constant `NEWS_EDITABLE_DIALOG`
+
 ## 3.0.3
 - **[BUGFIX]**: fix otherElementsExists method: allow null for parameter `$id` [@pascalmoser](https://github.com/dachcom-digital/pimcore-news/pull/53)
 
