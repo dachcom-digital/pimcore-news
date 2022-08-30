@@ -44,7 +44,11 @@ class Install extends SettingsStoreAwareInstaller
     {
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
-        $this->currentVersion = Versions::getVersion(NewsBundle::PACKAGE_NAME);
+        if (class_exists(Versions::class)) {
+            $this->currentVersion = Versions::getVersion(NewsBundle::PACKAGE_NAME);
+        } else {
+            $this->currentVersion = '';
+        }
 
         $this->installStaticRoutes();
         $this->installOrUpdateConfigFile();
