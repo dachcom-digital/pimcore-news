@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SettingsController extends AdminController
 {
-    protected Translator $translator;
     protected EntryTypeManager $entryTypeManager;
 
     public function __construct(Translator $translator, EntryTypeManager $entryTypeManager)
