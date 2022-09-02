@@ -1,5 +1,9 @@
 # Upgrade Notes
 
+## 3.0.5
+- **[BUGFIX]**: Fix exception Type of `NewsBundle\Controller\Admin\SettingsController::$translator` must not be defined [@georgringer](https://github.com/dachcom-digital/pimcore-news/pull/57)
+- **[BUGFIX]**: Fix Attempted to load class `Versions` from namespace `PackageVersions` [@georgringer](https://github.com/dachcom-digital/pimcore-news/pull/58)
+
 ## 3.0.4
 - **[BUGFIX]**: fix event constant `NEWS_EDITABLE_DIALOG`
 - **[BUGFIX]**: fixed imports for `Pimcore\Twig\Extension\Templating\Placeholder\Container` [@rliebe](https://github.com/dachcom-digital/pimcore-news/pull/55)
