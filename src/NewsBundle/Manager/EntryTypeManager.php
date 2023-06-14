@@ -51,11 +51,11 @@ class EntryTypeManager
         }
 
         foreach ($entryTypes as $typeId => &$type) {
-            if ($type['custom_layout_id'] === 0) {
-                $type['custom_layout_id'] = null;
+            if (isset($type['custom_layout_id'])) {
+                $customLayoutId = $type['custom_layout_id'];
+            } else {
+                $customLayoutId = null;
             }
-
-            $customLayoutId = $type['custom_layout_id'];
             //if string (name) is given, get layout via listing
             if (is_string($customLayoutId)) {
                 $list = new ClassDefinition\CustomLayout\Listing();
