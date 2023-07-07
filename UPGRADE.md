@@ -1,5 +1,9 @@
 # Upgrade Notes
 
+## 3.0.6
+- **[BUGFIX]**: Fix paginator method call for px [#60](https://github.com/dachcom-digital/pimcore-news/issues/60)
+- **[BUGFIX]**: Fix undefined array key warning [#61](https://github.com/dachcom-digital/pimcore-news/issues/61)
+
 ## 3.0.5
 - **[BUGFIX]**: Fix exception Type of `NewsBundle\Controller\Admin\SettingsController::$translator` must not be defined [@georgringer](https://github.com/dachcom-digital/pimcore-news/pull/57)
 - **[BUGFIX]**: Fix Attempted to load class `Versions` from namespace `PackageVersions` [@georgringer](https://github.com/dachcom-digital/pimcore-news/pull/58)
