@@ -1,6 +1,6 @@
 {% block news_entries_paginator %}
 
-    {% set pages = paginator.getPages('Sliding') %}
+    {% set pages = paginator.getPaginationData('Sliding') %}
 
     {% if pages.pageCount > 0 %}
 
