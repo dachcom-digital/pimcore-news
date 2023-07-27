@@ -51,7 +51,7 @@ class EntryTypeManager
         }
 
         foreach ($entryTypes as $typeId => &$type) {
-            if (!array_key_exists('custom_layout_id', $type) ||$type['custom_layout_id'] === 0) {
+            if (!array_key_exists('custom_layout_id', $type) || $type['custom_layout_id'] === 0) {
                 $type['custom_layout_id'] = null;
             }
 
