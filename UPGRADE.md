@@ -1,6 +1,6 @@
 # Upgrade Notes
 
-## 3.0.8
+## 3.0.7
 
 - **[BUGFIX]**: Fix  custom layout resolving in EntryTypeManager [#63](https://github.com/dachcom-digital/pimcore-news/issues/63)
 
