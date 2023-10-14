@@ -1,16 +1,18 @@
 pimcore.registerNS('pimcore.plugin.news');
 
-pimcore.plugin.news = Class.create(pimcore.plugin.admin, {
+pimcore.plugin.news = Class.create({
+
     getClassName: function() {
         return 'pimcore.plugin.news';
     },
 
     initialize: function() {
-        pimcore.plugin.broker.registerPlugin(this);
+        document.addEventListener(pimcore.events.postOpenObject, this.postOpenObject.bind(this));
     },
 
-    postOpenObject: function (obj) {
-        if(obj.data.general.o_className === 'NewsEntry') {
+    postOpenObject: function (event) {
+        var obj = event.detail.object;
+        if(obj.data.general.className === 'NewsEntry') {
             if(obj.data._invalidEntryType === true) {
                 Ext.MessageBox.show({
                     title: t('news.permission_error'),

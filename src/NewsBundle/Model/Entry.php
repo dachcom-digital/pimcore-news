@@ -53,9 +53,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
         $newsListing = DataObject\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
-        $newsListing->setGroupBy('o_id');
+        $newsListing->setGroupBy('id');
 
-        $paginator = \Pimcore::getContainer()->get(PaginatorInterface::class);
+        $paginator = \Pimcore::getContainer()->get('knp_paginator');
 
         $categories = null;
         if (isset($settings['category']) && $settings['category'] instanceof Category) {
@@ -125,16 +125,16 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
         $newsListing->addConditionParam(sprintf('(
             CASE WHEN showEntryUntil IS NOT NULL
-                THEN 
+                THEN
                     showEntryUntil %1$s UNIX_TIMESTAMP(NOW())
                 ELSE
                     (CASE WHEN dateTo IS NOT NULL
-                        THEN 
-                            dateTo %1$s UNIX_TIMESTAMP(NOW()) 
+                        THEN
+                            dateTo %1$s UNIX_TIMESTAMP(NOW())
                         ELSE
                             (CASE WHEN date IS NOT NULL
-                                THEN 
-                                    date %1$s UNIX_TIMESTAMP(NOW())  
+                                THEN
+                                    date %1$s UNIX_TIMESTAMP(NOW())
                                 ELSE
                                     FALSE
                                 END
@@ -238,27 +238,27 @@ class Entry extends DataObject\Concrete implements EntryInterface
         return $data;
     }
 
-    public function getName($language = null)
+    public function getName(?string $language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    public function getLead($language = null)
+    public function getLead(?string $language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    public function getDescription($language = null)
+    public function getDescription(?string $language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    public function getRedirectLink($language = null)
+    public function getRedirectLink(?string $language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
 
-    public function getDetailUrl($language = null)
+    public function getDetailUrl(?string $language = null)
     {
         throw new ImplementedByPimcoreException(__CLASS__, __METHOD__);
     }
