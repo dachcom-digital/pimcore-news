@@ -1,9 +1,10 @@
 # Upgrade Notes
 
+## 3.0.8
+- **[BUGFIX]**: Fix video twig renderer
+
 ## 3.0.7
-
-- **[BUGFIX]**: Fix  custom layout resolving in EntryTypeManager [#63](https://github.com/dachcom-digital/pimcore-news/issues/63)
-
+- **[BUGFIX]**: Fix custom layout resolving in EntryTypeManager [#63](https://github.com/dachcom-digital/pimcore-news/issues/63)
 
 ## 3.0.6
 - **[BUGFIX]**: Fix paginator method call for px [#60](https://github.com/dachcom-digital/pimcore-news/issues/60)
