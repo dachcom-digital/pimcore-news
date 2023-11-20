@@ -4,6 +4,7 @@ namespace NewsBundle\Twig\Extension;
 
 use Pimcore\Model\Asset;
 use Pimcore\Model\Document\Editable\Video;
+use Pimcore\Tool\Serialize;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,7 +17,7 @@ class VideoTagExtension extends AbstractExtension
         ];
     }
 
-    public function generateVideoTag(Video $videoType, array $customOptions = []): string
+    public function generateVideoTag(\Pimcore\Model\DataObject\Data\Video $videoType, array $customOptions = []): string
     {
         $html = '';
         $videoData = $videoType->getData();
@@ -38,8 +39,7 @@ class VideoTagExtension extends AbstractExtension
             ]
         ], $customOptions);
 
-        $video->setOptions($videoOptions);
-
+        $video->setConfig($videoOptions);
         $video->setTitle($videoType->getTitle());
         $video->setDescription($videoType->getDescription());
 
@@ -48,15 +48,15 @@ class VideoTagExtension extends AbstractExtension
             'type'        => $videoType->getType(),
             'title'       => $videoType->getTitle(),
             'description' => $videoType->getDescription(),
+            'poster'      => null,
         ];
 
         if ($videoType->getPoster()) {
             $data['poster'] = $videoType->getPoster();
         }
 
-        $video->setDataFromResource(\Pimcore\Tool\Serialize::serialize($data));
+        $video->setDataFromResource(Serialize::serialize($data));
 
         return $video->frontend();
     }
-
 }
