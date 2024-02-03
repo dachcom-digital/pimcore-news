@@ -105,6 +105,14 @@ class Entry extends DataObject\Concrete implements EntryInterface
         //allow listing modification.
         static::modifyListing($newsListing, $settings);
 
+        if ($newsListing->getOffset()) {
+            $notList = clone $newsListing;
+            $notList->setOffset(0);
+            $notList->setLimit($newsListing->getOffset());
+            $notIdList = $notList->loadIdList();
+            $newsListing->filterById([$notIdList], 'NOT IN(?)');
+        }
+
         return $paginator->paginate(
             $newsListing,
             $settings['page'] === 0 ? 1 : $settings['page'],
