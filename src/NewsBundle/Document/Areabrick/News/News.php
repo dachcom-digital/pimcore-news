@@ -258,7 +258,7 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
         $querySettings['itemsPerPage'] = $calculatedItemsPerPage;
 
         //set paged
-        $querySettings['page'] = (int) $info->getRequest()->query->get('page');
+        $querySettings['page'] = (int) $querySettings['offset'] + (int) $info->getRequest()->query->get('page');
 
         //only latest
         if ($fieldConfiguration['latest']['value'] === true) {
