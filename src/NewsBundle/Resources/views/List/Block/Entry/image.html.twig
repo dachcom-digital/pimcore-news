@@ -6,7 +6,7 @@
 
         <div class="list-entry-image entry-image">
             <a href="{{ news_entry_permalink(news) }}">
-                {{ news.getImage().getThumbnail(news_thumbnail('content_image')).getHtml({'class': 'img-responsive'})|raw }}
+                {{ news.getImage().getThumbnail(news_thumbnail('content_image')).getHtml({'imgAttributes': {'class': 'img-responsive'}})|raw }}
             </a>
         </div>
 
