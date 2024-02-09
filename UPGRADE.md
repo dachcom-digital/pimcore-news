@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+## 3.0.9
+- **[BUGFIX]**: Refactor HTML class attribute in image templates according to Pimcore 10 requirements
+- 
 ## 3.0.8
 - **[BUGFIX]**: Fix video twig renderer
 
