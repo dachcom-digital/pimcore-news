@@ -42,7 +42,7 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         $reset = false;
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMainRequest();
         if ($masterRequest instanceof Request) {
             $reset = true;
             foreach (['sourceId', 'targetId', 'transactionId'] as $copyTransactionArgument) {
@@ -87,7 +87,7 @@ class NewsSeoListener implements EventSubscriberInterface
 
         $oldObject = null;
         if ($object->getId() > 0) {
-            $oldObject = $objectClass::getById($object->getId(), true);
+            $oldObject = $objectClass::getById($object->getId(), ['force' => true]);
         }
 
         foreach ($languages as $language) {

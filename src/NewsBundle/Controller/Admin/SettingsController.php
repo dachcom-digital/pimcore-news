@@ -3,14 +3,14 @@
 namespace NewsBundle\Controller\Admin;
 
 use NewsBundle\Manager\EntryTypeManager;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Version;
 use Pimcore\Translation\Translator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class SettingsController extends AdminController
+class SettingsController extends AdminAbstractController
 {
     protected EntryTypeManager $entryTypeManager;
 

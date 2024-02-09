@@ -2,14 +2,13 @@
 
 namespace NewsBundle\Tool;
 
-use PackageVersions\Versions;
+use Pimcore\Bundle\StaticRoutesBundle\Model\Staticroute;
 use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
+use Pimcore\Security\User\TokenStorageUserResolver;
 use Pimcore\Tool;
 use Pimcore\Model\User;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Translation;
-use Pimcore\Model\Staticroute;
-use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
 use Symfony\Component\Filesystem\Filesystem;
 use NewsBundle\NewsBundle;
 use NewsBundle\Configuration\Configuration;
@@ -44,11 +43,7 @@ class Install extends SettingsStoreAwareInstaller
     {
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
         $this->fileSystem = new Filesystem();
-        if (class_exists(Versions::class)) {
-            $this->currentVersion = Versions::getVersion(NewsBundle::PACKAGE_NAME);
-        } else {
-            $this->currentVersion = '';
-        }
+        $this->currentVersion = \Composer\InstalledVersions::getVersion(NewsBundle::PACKAGE_NAME);
 
         $this->installStaticRoutes();
         $this->installOrUpdateConfigFile();
@@ -75,7 +70,7 @@ class Install extends SettingsStoreAwareInstaller
         foreach ($this->getClasses() as $className => $path) {
 
             $class = new DataObject\ClassDefinition();
-            
+
             try {
                 $id = $class->getDao()->getIdByName($className);
             } catch (\Pimcore\Model\Exception\NotFoundException $e) {
@@ -108,34 +103,34 @@ class Install extends SettingsStoreAwareInstaller
 
         if (!$root instanceof DataObject\Folder) {
             $root = DataObject\Folder::create([
-                'o_parentId'         => 1,
-                'o_creationDate'     => time(),
-                'o_userOwner'        => $this->getUserId(),
-                'o_userModification' => $this->getUserId(),
-                'o_key'              => 'news',
-                'o_published'        => true,
+                'parentId'         => 1,
+                'creationDate'     => time(),
+                'userOwner'        => $this->getUserId(),
+                'userModification' => $this->getUserId(),
+                'key'              => 'news',
+                'published'        => true,
             ]);
         }
 
         if (!$entries instanceof DataObject\Folder) {
             DataObject\Folder::create([
-                'o_parentId'         => $root->getId(),
-                'o_creationDate'     => time(),
-                'o_userOwner'        => $this->getUserId(),
-                'o_userModification' => $this->getUserId(),
-                'o_key'              => 'entries',
-                'o_published'        => true,
+                'parentId'         => $root->getId(),
+                'creationDate'     => time(),
+                'userOwner'        => $this->getUserId(),
+                'userModification' => $this->getUserId(),
+                'key'              => 'entries',
+                'published'        => true,
             ]);
         }
 
         if (!$categories instanceof DataObject\Folder) {
             DataObject\Folder::create([
-                'o_parentId'         => $root->getId(),
-                'o_creationDate'     => time(),
-                'o_userOwner'        => $this->getUserId(),
-                'o_userModification' => $this->getUserId(),
-                'o_key'              => 'categories',
-                'o_published'        => true,
+                'parentId'         => $root->getId(),
+                'creationDate'     => time(),
+                'userOwner'        => $this->getUserId(),
+                'userModification' => $this->getUserId(),
+                'key'              => 'categories',
+                'published'        => true,
             ]);
         }
     }

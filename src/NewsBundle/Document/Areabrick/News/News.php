@@ -396,7 +396,7 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
         $adminSettings['paginate'] = ['items_per_page' => ['value' => $listConfig['paginate']['items_per_page']]];
         $itemsPerPageElement = $this->getDocumentField('numeric', 'itemsPerPage');
         if ($itemsPerPageElement->isEmpty()) {
-            $itemsPerPageElement->setDataFromResource($adminSettings['paginate']['items_per_page']['value']);
+            $itemsPerPageElement->setDataFromResource((string) $adminSettings['paginate']['items_per_page']['value']);
         } else {
             $adminSettings['paginate']['items_per_page']['value'] = (int) $itemsPerPageElement->getData();
         }
@@ -405,7 +405,7 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
         $adminSettings['max_items'] = ['value' => $listConfig['max_items']];
         $limitElement = $this->getDocumentField('numeric', 'limit');
         if ($limitElement->isEmpty() || $itemsPerPageElement->getData() < 0) {
-            $limitElement->setDataFromResource($adminSettings['max_items']['value']);
+            $limitElement->setDataFromResource((string) $adminSettings['max_items']['value']);
         } else {
             $adminSettings['max_items']['value'] = (int) $limitElement->getData();
         }
@@ -414,7 +414,7 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
         $adminSettings['offset'] = ['value' => 0];
         $offsetElement = $this->getDocumentField('numeric', 'offset');
         if ($offsetElement->isEmpty()) {
-            $offsetElement->setDataFromResource($adminSettings['offset']['value']);
+            $offsetElement->setDataFromResource((string) $adminSettings['offset']['value']);
         } else {
             $adminSettings['offset']['value'] = (int) $offsetElement->getData();
         }

@@ -4,8 +4,8 @@ namespace NewsBundle\EventListener;
 
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
+use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Tool\Admin as AdminTool;
-use Pimcore\Event\AdminEvents;
 use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
 use Pimcore\Model\DataObject\NewsEntry;
 use Pimcore\Model\DataObject\Service;

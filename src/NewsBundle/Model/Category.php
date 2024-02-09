@@ -85,7 +85,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
         $list->setOrderKey($sort['name']);
         $list->setOrder($sort['direction']);
 
-        $paginator = \Pimcore::getContainer()->get(PaginatorInterface::class);
+        $paginator = \Pimcore::getContainer()->get('knp_paginator');
 
         return $paginator->paginate(
             $list,
