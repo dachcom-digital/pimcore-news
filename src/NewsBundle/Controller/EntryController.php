@@ -15,7 +15,7 @@ class EntryController extends FrontendController
         $newsFragment = $request->attributes->get('entry');
         $locale = $request->attributes->get('_locale');
 
-        $entry = DataObject\NewsEntry::getByLocalizedfields('detailUrl', $newsFragment, $locale, ['limit' => 1]);
+        $entry = DataObject\NewsEntry::getByLocalizedfields(field: 'detailUrl', value: $newsFragment, locale: $locale, limit: 1);
 
         if (!$entry instanceof DataObject\NewsEntry) {
             throw new NotFoundHttpException(sprintf('Entry %s not found', $newsFragment));

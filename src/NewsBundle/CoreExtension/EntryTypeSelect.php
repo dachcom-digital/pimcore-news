@@ -6,5 +6,5 @@ use Pimcore\Model\DataObject\ClassDefinition\Data\Select;
 
 class EntryTypeSelect extends Select
 {
-    public $fieldtype = 'entryTypeSelect';
+    public string $fieldtype = 'entryTypeSelect';
 }

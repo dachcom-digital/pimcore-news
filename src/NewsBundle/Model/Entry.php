@@ -14,11 +14,11 @@ class Entry extends DataObject\Concrete implements EntryInterface
 {
     public function getElementAdminStyle(): AdminStyle
     {
-        if (empty($this->o_elementAdminStyle)) {
-            $this->o_elementAdminStyle = new AdminStyle($this);
+        if (empty($this->elementAdminStyle)) {
+            $this->elementAdminStyle = new AdminStyle($this);
         }
 
-        return $this->o_elementAdminStyle;
+        return $this->elementAdminStyle;
     }
 
     public static function getAll(): array
@@ -53,7 +53,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         $newsListing = DataObject\NewsEntry::getList();
         $newsListing->setOrderKey($settings['sort']['field']);
         $newsListing->setOrder($settings['sort']['dir']);
-        $newsListing->setGroupBy('o_id');
+        $newsListing->setGroupBy('id');
 
         $paginator = \Pimcore::getContainer()->get(PaginatorInterface::class);
 
@@ -188,7 +188,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         $categories = [$category->getId()];
         if ($includeSubCategories === true) {
             $entries = DataObject\NewsCategory::getList();
-            $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
+            $entries->setCondition('path LIKE "' . $category->getFullPath() . '%"');
             foreach ($entries->load() as $entry) {
                 $categories[] = $entry->getId();
             }

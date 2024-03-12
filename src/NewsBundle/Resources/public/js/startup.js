@@ -10,7 +10,7 @@ pimcore.plugin.news = Class.create(pimcore.plugin.admin, {
     },
 
     postOpenObject: function (obj) {
-        if(obj.data.general.o_className === 'NewsEntry') {
+        if(obj.data.general.className === 'NewsEntry') {
             if(obj.data._invalidEntryType === true) {
                 Ext.MessageBox.show({
                     title: t('news.permission_error'),
