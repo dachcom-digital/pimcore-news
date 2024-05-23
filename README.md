@@ -8,7 +8,7 @@ Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md)
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~3.0.0",
+    "dachcom-digital/news" : "~4.0.0",
 }
 ```
 
