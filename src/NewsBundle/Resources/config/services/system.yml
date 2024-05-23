@@ -9,7 +9,7 @@ services:
         arguments:
             $bundle: "@=service('kernel').getBundle('NewsBundle')"
         calls:
-            - [setTokenStorageUserResolver, ['@Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver']]
+            - [setTokenStorageUserResolver, ['@Pimcore\Security\User\TokenStorageUserResolver']]
             - [setSerializer, ['@serializer']]
 
     NewsBundle\Configuration\Configuration: ~

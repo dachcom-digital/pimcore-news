@@ -26,6 +26,6 @@
         }
     },
     "require": {
-        "pimcore/pimcore": "^10.2"
+        "pimcore/pimcore": "^11.0"
     }
 }

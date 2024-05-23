@@ -42,7 +42,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
         }
 
         $newsListing->addConditionParam('name <> ""');
-        $newsListing->setGroupBy('o_id');
+        $newsListing->setGroupBy($newsListing->getDao()->getTableName().'.id', false);
 
         $categories = [];
         if (count($news->getCategories()) > 0 && !$settings['ignoreCategory']) {
@@ -57,7 +57,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
         }
 
-        $newsListing->addConditionParam('o_id != ?', $news->getId());
+        $newsListing->addConditionParam($newsListing->getDao()->getTableName().'.id != ?', $news->getId());
 
         //add additional where clauses.
         if (count($settings['where'])) {

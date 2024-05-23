@@ -5,10 +5,11 @@ namespace NewsBundle;
 use NewsBundle\DependencyInjection\CompilerPass\PresetPass;
 use NewsBundle\Tool\Install;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Pimcore\Extension\Bundle\PimcoreBundleAdminClassicInterface;
 use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class NewsBundle extends AbstractPimcoreBundle
+class NewsBundle extends AbstractPimcoreBundle implements PimcoreBundleAdminClassicInterface
 {
     use PackageVersionTrait;
 
@@ -25,6 +26,11 @@ class NewsBundle extends AbstractPimcoreBundle
         return $this->container->get(Install::class);
     }
 
+    protected function getComposerPackageName(): string
+    {
+        return self::PACKAGE_NAME;
+    }
+
     public function getJsPaths(): array
     {
         return [
@@ -34,8 +40,19 @@ class NewsBundle extends AbstractPimcoreBundle
         ];
     }
 
-    protected function getComposerPackageName(): string
+
+    public function getCssPaths(): array
     {
-        return self::PACKAGE_NAME;
+        return [];
+    }
+
+    public function getEditmodeJsPaths(): array
+    {
+        return [];
+    }
+
+    public function getEditmodeCssPaths(): array
+    {
+        return [];
     }
 }

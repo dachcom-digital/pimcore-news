@@ -21,19 +21,19 @@ interface EntryInterface
 
     public function getImage(): ?Asset;
 
-    public function getName($language = null);
+    public function getName(?string $language = null);
 
-    public function getLead($language = null);
+    public function getLead(?string $language = null);
 
-    public function getDescription($language = null);
+    public function getDescription(?string $language = null);
 
     public function getJsonLDData();
 
     public function getEntryType();
 
-    public function getRedirectLink($language = null);
+    public function getRedirectLink(?string $language = null);
 
-    public function getDetailUrl($language = null);
+    public function getDetailUrl(?string $language = null);
 
     public function getCategories();
 
