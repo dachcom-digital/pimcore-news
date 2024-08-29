@@ -1,9 +1,15 @@
 # Upgrade Notes
---
+
+---
+
+## 4.0.1
+- [IMPROVEMENT] Update Typehint in News areabrick to be more specific [#69](https://github.com/dachcom-digital/pimcore-news/issues/69)
+  - If you have overwritten the `News` areabrick, please check you setup and make adjustments if necessary.
 
 ## Migrating from Version 3.x to Version 4.0.0
 
 ### Global Changes
---
+
+---
 
 News 3.x Upgrade Notes: https://github.com/dachcom-digital/pimcore-news/blob/3.x/UPGRADE.md
