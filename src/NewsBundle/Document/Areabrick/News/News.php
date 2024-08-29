@@ -19,7 +19,7 @@ use Pimcore\Model\Document;
 
 class News extends AbstractAreabrick implements EditableDialogBoxInterface
 {
-    protected Document $document;
+    protected Document\PageSnippet $document;
     protected Configuration $configuration;
     protected EntryTypeManager $entryTypeManager;
     protected Translator $translator;
