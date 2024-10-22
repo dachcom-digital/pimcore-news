@@ -2,6 +2,9 @@
 
 ---
 
+## 4.0.2
+- [BUGFIX] remove `o_`-Prefixes for object columns [#71](https://github.com/dachcom-digital/pimcore-news/issues/71)
+
 ## 4.0.1
 - [IMPROVEMENT] Update Typehint in News areabrick to be more specific [#69](https://github.com/dachcom-digital/pimcore-news/issues/69)
   - If you have overwritten the `News` areabrick, please check you setup and make adjustments if necessary.

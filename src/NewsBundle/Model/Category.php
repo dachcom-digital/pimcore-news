@@ -40,7 +40,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
         $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition('o_published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
+            $list->setCondition('published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
@@ -49,7 +49,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
                 $categoriesWhere[] = 'categories LIKE ",' . $cat . ',%"';
             }
 
-            $list->setCondition('o_published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
+            $list->setCondition('published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         return $list->getObjects();
@@ -70,7 +70,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
         $list = DataObject\NewsEntry::getList();
 
         if (!$includeChildCategories) {
-            $list->setCondition('o_published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
+            $list->setCondition('published = 1 AND categories LIKE "%,' . $this->getId() . ',%"');
         } else {
             $categories = $this->getCatChilds();
             $categoriesWhere = [];
@@ -79,7 +79,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
                 $categoriesWhere[] = 'categories LIKE "%,' . $cat . ',%"';
             }
 
-            $list->setCondition('o_published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
+            $list->setCondition('published = 1 AND (' . implode(' OR ', $categoriesWhere) . ')');
         }
 
         $list->setOrderKey($sort['name']);
@@ -131,7 +131,7 @@ class Category extends DataObject\Concrete implements CategoryInterface
     public function getChildCategories(): array
     {
         $list = DataObject\NewsCategory::getList();
-        $list->setCondition('o_parentId = ?', [$this->getId()]);
+        $list->setCondition('parentId = ?', [$this->getId()]);
 
         return $list->getObjects();
     }

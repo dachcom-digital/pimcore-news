@@ -196,7 +196,7 @@ class Entry extends DataObject\Concrete implements EntryInterface
         $categories = [$category->getId()];
         if ($includeSubCategories === true) {
             $entries = DataObject\NewsCategory::getList();
-            $entries->setCondition('o_path LIKE "' . $category->getFullPath() . '%"');
+            $entries->setCondition('path LIKE "' . $category->getFullPath() . '%"');
             foreach ($entries->load() as $entry) {
                 $categories[] = $entry->getId();
             }
