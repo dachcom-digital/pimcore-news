@@ -36,8 +36,11 @@ Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md)
 - [The Amazing Entry Types](./docs/20_EntryTypes.md)
 - [Presets](./docs/30_Presets.md) (new!)
 
-## Copyright and license
-Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  
+## License
+**DACHCOM.DIGITAL AG**, Löwenhofstrasse 15, 9424 Rheineck, Schweiz  
+[dachcom.com](https://www.dachcom.com), dcdi@dachcom.ch  
+Copyright © 2024 DACHCOM.DIGITAL. All rights reserved.  
+
 For licensing details please visit [LICENSE.md](LICENSE.md)  
 
 ## Upgrade Info
