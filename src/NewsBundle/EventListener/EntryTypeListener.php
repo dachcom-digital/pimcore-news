@@ -1,14 +1,25 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\EventListener;
 
 use NewsBundle\Configuration\Configuration;
 use NewsBundle\Manager\EntryTypeManager;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
-use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
 use Pimcore\Model\DataObject\NewsEntry;
 use Pimcore\Model\DataObject\Service;
+use Pimcore\Tool\Admin as AdminTool;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -56,6 +67,7 @@ class EntryTypeListener implements EventSubscriberInterface
             $requestedLayoutId !== '0'
         ) {
             $e->setArgument('data', $data);
+
             return;
         }
 
@@ -76,13 +88,13 @@ class EntryTypeListener implements EventSubscriberInterface
             $data['currentLayoutId'] = 0;
             $data['layout'] = $object->getClass()->getLayoutDefinitions();
             $e->setArgument('data', $data);
+
             return;
         }
 
         //watch out, a new object is coming in!
         if (is_null($layoutType)) {
             $layoutType = $defaultLayoutType;
-
         }
 
         foreach ($entryTypes as $typeName => $type) {
@@ -92,6 +104,7 @@ class EntryTypeListener implements EventSubscriberInterface
 
             if ($layoutType === $typeName) {
                 $layoutId = $type['custom_layout_id'];
+
                 break;
             }
         }
@@ -104,12 +117,14 @@ class EntryTypeListener implements EventSubscriberInterface
                 $data['layout'] = null;
                 $data['currentLayoutId'] = null;
                 $e->setArgument('data', $data);
+
                 return;
             }
         }
 
         if ($layoutId !== 0) {
             $customLayout = null;
+
             try {
                 $customLayout = CustomLayout::getById($layoutId);
             } catch (\Exception $e) {

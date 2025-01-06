@@ -1,14 +1,25 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\EventListener;
 
-use Pimcore\Model\DataObject\Listing;
-use Pimcore\Event\Model\DataObjectEvent;
+use NewsBundle\Configuration\Configuration;
 use Pimcore\Event\DataObjectEvents;
+use Pimcore\Event\Model\DataObjectEvent;
 use Pimcore\Model\DataObject\AbstractObject;
+use Pimcore\Model\DataObject\Listing;
 use Pimcore\Model\DataObject\NewsCategory;
 use Pimcore\Model\DataObject\NewsEntry;
-use NewsBundle\Configuration\Configuration;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -48,6 +59,7 @@ class NewsSeoListener implements EventSubscriberInterface
             foreach (['sourceId', 'targetId', 'transactionId'] as $copyTransactionArgument) {
                 if ($masterRequest->request->has($copyTransactionArgument) === false) {
                     $reset = false;
+
                     break;
                 }
             }
@@ -91,7 +103,6 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         foreach ($languages as $language) {
-
             $oldDetailUrl = null;
 
             $title = $object->getName($language);
@@ -110,6 +121,7 @@ class NewsSeoListener implements EventSubscriberInterface
             if (empty($title) && !empty($currentDetailUrl)) {
                 $currentDetailUrl = null;
                 $object->setDetailUrl($currentDetailUrl, $language);
+
                 return;
             }
 
@@ -128,6 +140,7 @@ class NewsSeoListener implements EventSubscriberInterface
 
             if ($this->otherElementsExists($objectListingClass, $language, $currentDetailUrl, $object->getId()) === false) {
                 $object->setDetailUrl($currentDetailUrl, $language);
+
                 continue;
             }
 
@@ -153,7 +166,7 @@ class NewsSeoListener implements EventSubscriberInterface
         }
 
         $string = preg_replace(['/®/', '/©/'], '', $string);
-        $string = transliterator_transliterate("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
+        $string = transliterator_transliterate('Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();', $string);
         // Remove repeating hyphens and spaces (e.g. 'foo---bar' becomes 'foo-bar')
         $string = preg_replace('/[-\s]+/', '-', $string);
 

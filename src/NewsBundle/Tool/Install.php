@@ -1,17 +1,28 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\Tool;
 
+use NewsBundle\Configuration\Configuration;
+use NewsBundle\NewsBundle;
 use Pimcore\Bundle\StaticRoutesBundle\Model\Staticroute;
 use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
-use Pimcore\Security\User\TokenStorageUserResolver;
-use Pimcore\Tool;
-use Pimcore\Model\User;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Translation;
+use Pimcore\Model\User;
+use Pimcore\Security\User\TokenStorageUserResolver;
+use Pimcore\Tool;
 use Symfony\Component\Filesystem\Filesystem;
-use NewsBundle\NewsBundle;
-use NewsBundle\Configuration\Configuration;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -21,12 +32,10 @@ class Install extends SettingsStoreAwareInstaller
     private SerializerInterface $serializer;
     private string $installSourcesPath;
     private Filesystem $fileSystem;
-
     private array $classes = [
         'NewsEntry',
         'NewsCategory',
     ];
-
     private string $currentVersion;
 
     public function setTokenStorageUserResolver(TokenStorageUserResolver $resolver): void
@@ -68,7 +77,6 @@ class Install extends SettingsStoreAwareInstaller
     public function installClasses(): void
     {
         foreach ($this->getClasses() as $className => $path) {
-
             $class = new DataObject\ClassDefinition();
 
             try {
@@ -85,7 +93,6 @@ class Install extends SettingsStoreAwareInstaller
 
             $data = file_get_contents($path);
             DataObject\ClassDefinition\Service::importClassDefinitionFromJson($class, $data);
-
         }
     }
 
@@ -166,7 +173,8 @@ class Install extends SettingsStoreAwareInstaller
             if (false === $path || !is_file($path)) {
                 throw new \RuntimeException(sprintf(
                     'Class export for class "%s" was expected in "%s" but file does not exist',
-                    $className, $path
+                    $className,
+                    $path
                 ));
             }
 

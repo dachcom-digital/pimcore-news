@@ -1,14 +1,24 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\Model;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use NewsBundle\Exception\ImplementedByPimcoreException;
 use Pimcore\Model\Asset;
-use Pimcore\Model\DataObject;
 use Pimcore\Model\Asset\Image;
+use Pimcore\Model\DataObject;
 
 class Entry extends DataObject\Concrete implements EntryInterface
 {
@@ -47,7 +57,6 @@ class Entry extends DataObject\Concrete implements EntryInterface
             'singleObjects'        => [],
             'where'                => [],
             'request'              => []
-
         ], $params);
 
         $newsListing = DataObject\NewsEntry::getList();
@@ -131,7 +140,8 @@ class Entry extends DataObject\Concrete implements EntryInterface
             $identifier = '<';
         }
 
-        $newsListing->addConditionParam(sprintf('(
+        $newsListing->addConditionParam(
+            sprintf('(
             CASE WHEN showEntryUntil IS NOT NULL
                 THEN
                     showEntryUntil %1$s UNIX_TIMESTAMP(NOW())
@@ -165,7 +175,6 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
             //allow query modification.
             static::modifyQuery($query, $newsListing, $settings);
-
         });
 
         if (!empty($categories)) {
