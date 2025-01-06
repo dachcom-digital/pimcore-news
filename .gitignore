@@ -40,7 +40,6 @@ atlassian-ide-plugin.xml
 .project
 ehthumbs.db
 Thumbs.db
-Vagrantfile
-.vagrant
 php-cgi.core
-.sass-cache
+/vendor/
+/composer.lock
