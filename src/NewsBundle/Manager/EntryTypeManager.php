@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\Manager;
 
 use NewsBundle\Configuration\Configuration;
@@ -7,9 +18,9 @@ use Pimcore\Bundle\StaticRoutesBundle\Model\Staticroute;
 use Pimcore\Http\Request\Resolver\DocumentResolver;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Http\Request\Resolver\SiteResolver;
-use Pimcore\Model\Site;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
+use Pimcore\Model\Site;
 use Pimcore\Tool;
 use Pimcore\Translation\Translator;
 
@@ -20,7 +31,6 @@ class EntryTypeManager
     protected SiteResolver $siteResolver;
     protected EditmodeResolver $editmodeResolver;
     protected DocumentResolver $documentResolver;
-
     protected array $routeData = [];
 
     public function __construct(
@@ -63,7 +73,7 @@ class EntryTypeManager
                 $list->setCondition('name = ?', $type['custom_layout_id']);
                 $list = $list->load();
                 if (isset($list[0]) && $list[0] instanceof DataObject\ClassDefinition\CustomLayout) {
-                    $customLayoutId = (int)$list[0]->getId();
+                    $customLayoutId = (int) $list[0]->getId();
                 } else {
                     $customLayoutId = 0; //reset layout to default -> custom layout is not available!
                 }

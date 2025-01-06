@@ -1,21 +1,32 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\Document\Areabrick\News;
 
+use NewsBundle\Configuration\Configuration;
 use NewsBundle\Event\NewsBrickEvent;
+use NewsBundle\Manager\EntryTypeManager;
 use NewsBundle\NewsEvents;
 use NewsBundle\Registry\PresetRegistry;
 use Pimcore\Extension\Document\Areabrick\AbstractAreabrick;
 use Pimcore\Extension\Document\Areabrick\EditableDialogBoxConfiguration;
 use Pimcore\Extension\Document\Areabrick\EditableDialogBoxInterface;
+use Pimcore\Model\DataObject;
+use Pimcore\Model\Document;
 use Pimcore\Translation\Translator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
-use NewsBundle\Configuration\Configuration;
-use NewsBundle\Manager\EntryTypeManager;
-use Pimcore\Model\DataObject;
-use Pimcore\Model\Document;
 
 class News extends AbstractAreabrick implements EditableDialogBoxInterface
 {
@@ -139,7 +150,6 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
             'config' => $fieldConfiguration['single_objects']['relations_config']
         ];
 
-
         $secondTabItems[] = [
             'type'   => 'numeric',
             'label'  => $this->translator->trans('news.entries_per_page', [], 'admin'),
@@ -226,7 +236,7 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
         $presetParams = [];
 
         //check if preset has been selected at first
-        if($this->isPresetMode($fieldConfiguration)) {
+        if ($this->isPresetMode($fieldConfiguration)) {
             $isPresetMode = true;
             $preset = $this->presetRegistry->get($fieldConfiguration['presets']['value']);
             $preset->setInfo($info);
@@ -278,9 +288,9 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
 
         if ($fieldConfiguration['entry_types']['value'] !== 'all') {
             $mainClasses[] = 'entry-type-' . str_replace([
-                    '_',
-                    ' '
-                ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
+                '_',
+                ' '
+            ], ['-'], strtolower($fieldConfiguration['entry_types']['value']));
         }
 
         $event = new NewsBrickEvent($info, $querySettings);
@@ -580,5 +590,4 @@ class News extends AbstractAreabrick implements EditableDialogBoxInterface
     {
         return '';
     }
-
 }

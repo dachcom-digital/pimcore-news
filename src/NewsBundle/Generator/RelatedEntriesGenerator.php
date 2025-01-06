@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace NewsBundle\Generator;
 
 use NewsBundle\Model\Entry;
@@ -13,6 +24,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
      * @param array          $params
      *
      * @return DataObject\NewsEntry[]|DataObject\NewsEntry\Listing
+     *
      * @throws \Exception
      */
     public function generateRelatedEntries(EntryInterface $news, array $params = [])
@@ -27,7 +39,6 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
             'entryType'            => $news->getEntryType(),
             'includeSubCategories' => false,
             'ignoreCategory'       => false
-
         ], $params);
 
         /** @var DataObject\NewsEntry\Listing $newsListing */
@@ -42,7 +53,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
         }
 
         $newsListing->addConditionParam('name <> ""');
-        $newsListing->setGroupBy($newsListing->getDao()->getTableName().'.id', false);
+        $newsListing->setGroupBy($newsListing->getDao()->getTableName() . '.id', false);
 
         $categories = [];
         if (count($news->getCategories()) > 0 && !$settings['ignoreCategory']) {
@@ -57,7 +68,7 @@ class RelatedEntriesGenerator implements RelatedEntriesGeneratorInterface
             $newsListing->addConditionParam('entryType = ?', $settings['entryType']);
         }
 
-        $newsListing->addConditionParam($newsListing->getDao()->getTableName().'.id != ?', $news->getId());
+        $newsListing->addConditionParam($newsListing->getDao()->getTableName() . '.id != ?', $news->getId());
 
         //add additional where clauses.
         if (count($settings['where'])) {
