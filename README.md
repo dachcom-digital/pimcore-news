@@ -1,4 +1,7 @@
 # Pimcore News
+[![Software License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-DCL-white.svg?style=flat-square&color=%23ff5c5c)](LICENSE.md)
+
 Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md) like Events, Press or Event.
 
 ## Requirements
@@ -8,7 +11,7 @@ Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md)
 
 ```json
 "require" : {
-    "dachcom-digital/news" : "~4.0.0",
+    "dachcom-digital/news" : "~4.1.0",
 }
 ```
 
@@ -36,12 +39,12 @@ Pimcore News Bundle. Generate simple [custom entry types](docs/20_EntryTypes.md)
 - [The Amazing Entry Types](./docs/20_EntryTypes.md)
 - [Presets](./docs/30_Presets.md) (new!)
 
+## Upgrade Info
+Before updating, please [check our upgrade notes!](UPGRADE.md)
+
 ## License
 **DACHCOM.DIGITAL AG**, Löwenhofstrasse 15, 9424 Rheineck, Schweiz  
 [dachcom.com](https://www.dachcom.com), dcdi@dachcom.ch  
-Copyright © 2024 DACHCOM.DIGITAL. All rights reserved.  
+Copyright © 2025 DACHCOM.DIGITAL. All rights reserved.  
 
 For licensing details please visit [LICENSE.md](LICENSE.md)  
-
-## Upgrade Info
-Before updating, please [check our upgrade notes!](UPGRADE.md)

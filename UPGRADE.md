@@ -1,6 +1,7 @@
 # Upgrade Notes
 
----
+## 4.1.0
+- [LICENSE] Dual-License with GPL and Dachcom Commercial License (DCL) added
 
 ## 4.0.2
 - [BUGFIX] remove `o_`-Prefixes for object columns [#71](https://github.com/dachcom-digital/pimcore-news/issues/71)
