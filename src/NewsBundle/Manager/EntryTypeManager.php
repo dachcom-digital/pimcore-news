@@ -68,12 +68,9 @@ class EntryTypeManager
             $customLayoutId = $type['custom_layout_id'];
             //if string (name) is given, get layout via listing
             if (is_string($customLayoutId)) {
-                $list = new ClassDefinition\CustomLayout\Listing();
-                $list->setLimit(1);
-                $list->setCondition('name = ?', $type['custom_layout_id']);
-                $list = $list->load();
-                if (isset($list[0]) && $list[0] instanceof DataObject\ClassDefinition\CustomLayout) {
-                    $customLayoutId = (int) $list[0]->getId();
+                $customLayout = ClassDefinition\CustomLayout::getByName($type['custom_layout_id']);
+                if ($customLayout instanceof DataObject\ClassDefinition\CustomLayout) {
+                    $customLayoutId = (int) $customLayout->getId();
                 } else {
                     $customLayoutId = 0; //reset layout to default -> custom layout is not available!
                 }
