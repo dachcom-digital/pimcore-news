@@ -1,5 +1,6 @@
 # Upgrade Notes
-
+## 4.1.2
+- [BUGFIX] Fix Poster Property Assignment
 ## 4.1.1
 - [BUGFIX] Fix Custom Layout Loader
 ## 4.1.0

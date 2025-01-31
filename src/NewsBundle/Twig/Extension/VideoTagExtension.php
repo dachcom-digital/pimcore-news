@@ -62,8 +62,8 @@ class VideoTagExtension extends AbstractExtension
             'poster'      => null,
         ];
 
-        if ($videoType->getPoster()) {
-            $data['poster'] = $videoType->getPoster();
+        if ($videoType->getPoster() instanceof Asset) {
+            $data['poster'] = $videoType->getPoster()->getId();
         }
 
         $video->setDataFromResource(Serialize::serialize($data));
