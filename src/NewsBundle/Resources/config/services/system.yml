@@ -17,4 +17,6 @@ services:
     NewsBundle\Controller\Admin\SettingsController:
         public: true
         autowire: true
+        arguments:
+            $adminTranslator: '@Pimcore\Bundle\AdminBundle\Translation\AdminUserTranslator'
         tags: ['controller.service_arguments']

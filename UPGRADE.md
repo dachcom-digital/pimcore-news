@@ -1,4 +1,6 @@
 # Upgrade Notes
+## 4.1.3
+- [BUGFIX] Fix Translation Service Injection
 ## 4.1.2
 - [BUGFIX] Fix Poster Property Assignment
 ## 4.1.1

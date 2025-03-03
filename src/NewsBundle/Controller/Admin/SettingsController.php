@@ -17,17 +17,21 @@ use NewsBundle\Manager\EntryTypeManager;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Version;
-use Pimcore\Translation\Translator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SettingsController extends AdminAbstractController
 {
+    protected TranslatorInterface $adminTranslator;
     protected EntryTypeManager $entryTypeManager;
 
-    public function __construct(Translator $translator, EntryTypeManager $entryTypeManager)
+    public function __construct(
+        TranslatorInterface $adminTranslator,
+        EntryTypeManager $entryTypeManager
+    )
     {
-        $this->translator = $translator;
+        $this->adminTranslator = $adminTranslator;
         $this->entryTypeManager = $entryTypeManager;
     }
 
@@ -40,7 +44,7 @@ class SettingsController extends AdminAbstractController
             $valueArray[] = [
                 'custom_layout_id' => $type['custom_layout_id'],
                 'value'            => $typeName,
-                'key'              => $this->translator->trans($type['name'], [], 'admin'),
+                'key'              => $this->adminTranslator->trans($type['name'], [], 'admin'),
                 'default'          => $this->entryTypeManager->getDefaultType()
             ];
         }
