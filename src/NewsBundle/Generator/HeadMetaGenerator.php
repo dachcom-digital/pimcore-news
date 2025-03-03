@@ -44,6 +44,10 @@ class HeadMetaGenerator implements HeadMetaGeneratorInterface
         $mD = $entry->getMetaDescription();
         $description = !empty($mD) ? $mD : ($entry->getLead() ? $entry->getLead() : $entry->getDescription());
 
+        if ($description === null) {
+            return '';
+        }
+
         return trim(substr($description, 0, 160));
     }
 
