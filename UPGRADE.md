@@ -1,6 +1,7 @@
 # Upgrade Notes
 ## 4.1.3
 - [BUGFIX] Fix Translation Service Injection
+- [BUGFIX] Omit passing null value to substr method
 ## 4.1.2
 - [BUGFIX] Fix Poster Property Assignment
 ## 4.1.1
