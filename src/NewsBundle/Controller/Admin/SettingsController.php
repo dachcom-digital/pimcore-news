@@ -29,8 +29,7 @@ class SettingsController extends AdminAbstractController
     public function __construct(
         TranslatorInterface $adminTranslator,
         EntryTypeManager $entryTypeManager
-    )
-    {
+    ) {
         $this->adminTranslator = $adminTranslator;
         $this->entryTypeManager = $entryTypeManager;
     }
