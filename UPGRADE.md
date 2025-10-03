@@ -1,5 +1,6 @@
 # Upgrade Notes
-
+## 4.2.1
+- [BUGFIX] "remove deferred block from layout_head_meta
 ## 4.2.0
 - [CHORE] Update codebase for Pimcore 11.4 compatibility; add `AdminStyleListener` and bind `image_thumbnails` parameter
 - [BUGFIX] Replace `in_array` with `array_key_exists` in `getNewsThumbnail` twig extension `news_thumbnail`
