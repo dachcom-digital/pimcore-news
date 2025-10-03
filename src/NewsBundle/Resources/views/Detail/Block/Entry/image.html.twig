@@ -2,12 +2,14 @@
 
 {% block news_detail_entry_image %}
 
-    {% if entry.image is not null %}
+    {% if entry.getImage() is not null %}
+
         <div class="detail-entry-image entry-image">
-            <a href="{{ entry.fullPath }}" class="item" data-src="{{ entry.image.thumbnail(news_thumbnail('content_image')) }}">
-                {{ entry.image.thumbnail(news_thumbnail('gallery_image')).html({imgAttributes: {class: 'img-responsive'}})|raw }}
+            <a href="{{ entry.getFullPath() }}" class="item" data-src="{{ entry.getImage().getThumbnail('contentImage') }}">
+                {{ entry.getImage().getThumbnail(news_thumbnail('gallery_image')).getHtml({'imgAttributes': {'class': 'img-responsive'}})|raw }}
             </a>
         </div>
+
     {% endif %}
 
 {% endblock news_detail_entry_image %}

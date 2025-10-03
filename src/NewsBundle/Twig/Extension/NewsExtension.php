@@ -50,6 +50,6 @@ class NewsExtension extends AbstractExtension
 
     public function getNewsThumbnail(string $thumbnail): string
     {
-        return array_key_exists($thumbnail, $this->imageThumbnails) ? $this->imageThumbnails[$thumbnail] : '';
+        return in_array($thumbnail, $this->imageThumbnails, true) ? $this->imageThumbnails[$thumbnail] : '';
     }
 }

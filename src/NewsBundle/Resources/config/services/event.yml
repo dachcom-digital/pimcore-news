@@ -16,7 +16,3 @@ services:
     NewsBundle\EventListener\MetaDataListener:
         tags:
             - { name: kernel.event_subscriber }
-
-    NewsBundle\EventListener\AdminStyleListener:
-        tags:
-            - { name: kernel.event_subscriber }

@@ -29,7 +29,7 @@
         }
     },
     "require": {
-        "pimcore/pimcore": "^11.4"
+        "pimcore/pimcore": "^11.0"
     },
     "require-dev": {
         "symplify/easy-coding-standard": "~12.2.0"
