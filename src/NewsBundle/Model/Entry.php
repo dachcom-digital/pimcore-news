@@ -22,15 +22,6 @@ use Pimcore\Model\DataObject;
 
 class Entry extends DataObject\Concrete implements EntryInterface
 {
-    public function getElementAdminStyle(): AdminStyle
-    {
-        if (empty($this->o_elementAdminStyle)) {
-            $this->o_elementAdminStyle = new AdminStyle($this);
-        }
-
-        return $this->o_elementAdminStyle;
-    }
-
     public static function getAll(): array
     {
         $newsListing = DataObject\NewsEntry::getList();
@@ -226,6 +217,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
 
     public function getJsonLDData(): array
     {
+        $thumbnailDefinition = \Pimcore::getContainer()->getParameter('image_thumbnails');
+        $galleryImageThumbnailName = $thumbnailDefinition['gallery_image'];
+
         $data = [
             '@context'      => 'http://schema.org/',
             '@type'         => 'NewsArticle',
@@ -245,9 +239,9 @@ class Entry extends DataObject\Concrete implements EntryInterface
             if ($image instanceof Image) {
                 $data['image'] = [
                     '@type'  => 'ImageObject',
-                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail('galleryImage')->getPath(),
-                    'width'  => $image->getThumbnail('galleryImage')->getWidth(),
-                    'height' => $image->getThumbnail('galleryImage')->getHeight(),
+                    'url'    => \Pimcore\Tool::getHostUrl() . $image->getThumbnail($galleryImageThumbnailName)->getPath(),
+                    'width'  => $image->getThumbnail($galleryImageThumbnailName)->getWidth(),
+                    'height' => $image->getThumbnail($galleryImageThumbnailName)->getHeight(),
                 ];
             }
         }

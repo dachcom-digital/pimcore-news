@@ -2,16 +2,14 @@
 
 {% block news_detail_entry_gallery %}
 
-    {% if entry.getImages() is iterable and entry.getImages()|length > 0 %}
-
+    {% if entry.images is iterable and entry.images|length > 0 %}
         <div class="detail-entry-gallery light-box entry-gallery">
-            {% for image in entry.getImages() %}
-                <a href="{{ image.getFullPath() }}" class="item{{ loop.index > 1 ? ' hidden'  : '' }}" data-src="{{ image.getThumbnail('contentImage') }}">
-                    {{ image.getThumbnail(news_thumbnail('gallery_image')).getHtml({'imgAttributes': {'class': 'img-responsive'}})|raw }}
+            {% for image in entry.images %}
+                <a href="{{ image.fullPath }}" class="item{{ loop.index > 1 ? ' hidden'  : '' }}" data-src="{{ image.thumbnail(news_thumbnail('content_image')) }}">
+                    {{ image.thumbnail(news_thumbnail('gallery_image')).html({imgAttributes: {class: 'img-responsive'}})|raw }}
                 </a>
             {% endfor %}
         </div>
-
     {% endif %}
 
 {% endblock news_detail_entry_gallery %}
