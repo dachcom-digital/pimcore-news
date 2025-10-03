@@ -21,10 +21,12 @@ use Pimcore\Twig\Extension\Templating\Placeholder\Container;
 class HeadMetaGenerator implements HeadMetaGeneratorInterface
 {
     protected LinkGeneratorInterface $linkGenerator;
+    protected array $imageThumbnails;
 
-    public function __construct(LinkGeneratorInterface $linkGenerator)
+    public function __construct(LinkGeneratorInterface $linkGenerator, array $imageThumbnails)
     {
         $this->linkGenerator = $linkGenerator;
+        $this->imageThumbnails = $imageThumbnails;
     }
 
     public function getTitlePosition(): string
@@ -66,7 +68,7 @@ class HeadMetaGenerator implements HeadMetaGeneratorInterface
         $ogImage = null;
 
         if ($entry->getImage() instanceof Asset\Image) {
-            $ogImage = Tool::getHostUrl() . $entry->getImage()->getThumbnail('contentImage');
+            $ogImage = Tool::getHostUrl() . $entry->getImage()->getThumbnail($this->imageThumbnails['content_image']);
         }
 
         return [
